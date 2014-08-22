@@ -35,3 +35,18 @@
 ;;; most important property list ;-)
 
 (defconstant +H5P-DEFAULT+ 0)
+
+(defvar +H5-VERS-MAJOR+   0)
+(defvar +H5-VERS-MINOR+   0)
+(defvar +H5-VERS-RELEASE+ 0)
+
+(with-foreign-object (nums :uint 3)
+  (let ((ierr (foreign-funcall "H5get_libversion"
+			       (:pointer :uint) (mem-aptr nums :uint 0)
+			       (:pointer :uint) (mem-aptr nums :uint 1)
+			       (:pointer :uint) (mem-aptr nums :uint 2))))
+    (if (or (not ierr)  (< ierr 0))
+	(error "H5get_libversion failed.")
+	(setq +H5-VERS-MAJOR+   (mem-aref nums :uint 0)
+	      +H5-VERS-MINOR+   (mem-aref nums :uint 1)
+	      +H5-VERS-RELEASE+ (mem-aref nums :uint 2)))))
