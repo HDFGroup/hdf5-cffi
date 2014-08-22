@@ -9,3 +9,10 @@
 
 ;;; make sure the HDF5 library is initialized
 (foreign-funcall "H5open")
+
+;;; "sizing up the environment"
+
+(defconstant +SIZE-OF-INT+ (foreign-type-size :int))
+(defconstant +SIZE-OF-LONG+ (foreign-type-size :long))
+(defconstant +SIZE-OF-LONG-LONG+ (foreign-type-size :long-long))
+(defconstant +SIZE-OF-SIZE-T+ (foreign-type-size :pointer))

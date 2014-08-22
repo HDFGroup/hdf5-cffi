@@ -10,22 +10,19 @@
 
 ;;; This is our best shot at size_t and ssize_t.
 
-(ecase (foreign-type-size :pointer)
+(ecase +SIZE-OF-SIZE-T+
   (4 (defctype size-t :uint32))
   (8 (defctype size-t :uint64)))
 
-(if (eq (foreign-type-size :pointer)
-        (foreign-type-size :int))
+(if (eq +SIZE-OF-SIZE-T+ +SIZE-OF-INT+)
     (defctype ssize-t :int)
-    (if (eq (foreign-type-size :pointer)
-	    (foreign-type-size :long))
+    (if (eq +SIZE-OF-SIZE-T+ +SIZE-OF-LONG+)
 	(defctype ssize-t :long)
-	(if (eq (foreign-type-size :pointer)
-		(foreign-type-size :long-long))
+	(if (eq +SIZE-OF-SIZE-T+ +SIZE-OF-LONG-LONG+)
 	    (defctype ssize-t :long-long)
 	    (error "Nothing appropriate for ssize_t found."))))
 
-(if (>= (foreign-type-size :long-long) 8)
+(if (>= +SIZE-OF-LONG-LONG+ 8)
     (progn
       (defctype hsize-t :unsigned-long-long)
       (defctype hssize-t :long-long))
@@ -35,5 +32,6 @@
 (defconstant +HADDR-UNDEF+ (1- (ash 1 64)))
 (defconstant +HADDR-MAX+ (1- +HADDR-UNDEF+))
 
-(defconstant +H5P-DEFAULT+ 0)
+;;; most important property list ;-)
 
+(defconstant +H5P-DEFAULT+ 0)
