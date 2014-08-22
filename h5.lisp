@@ -36,6 +36,13 @@
 
 (defconstant +H5P-DEFAULT+ 0)
 
+;;; make sure the HDF5 library is initialized
+(let ((ierr (foreign-funcall "H5open" herr-t)))
+  (if (or (not ierr) (< ierr 0))
+      (error "H5open failed.")))
+
+;;; get version information
+
 (defvar +H5-VERS-MAJOR+   0)
 (defvar +H5-VERS-MINOR+   0)
 (defvar +H5-VERS-RELEASE+ 0)
@@ -44,9 +51,43 @@
   (let ((ierr (foreign-funcall "H5get_libversion"
 			       (:pointer :uint) (mem-aptr nums :uint 0)
 			       (:pointer :uint) (mem-aptr nums :uint 1)
-			       (:pointer :uint) (mem-aptr nums :uint 2))))
-    (if (or (not ierr)  (< ierr 0))
+			       (:pointer :uint) (mem-aptr nums :uint 2)
+			       herr-t)))
+    (if (or (not ierr) (< ierr 0))
 	(error "H5get_libversion failed.")
 	(setq +H5-VERS-MAJOR+   (mem-aref nums :uint 0)
 	      +H5-VERS-MINOR+   (mem-aref nums :uint 1)
 	      +H5-VERS-RELEASE+ (mem-aref nums :uint 2)))))
+
+;;; functions
+
+(defcfun "H5close" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-Close")
+
+(defcfun "H5dont-atexit" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-DontAtExit")
+
+(defcfun "H5free-memory" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-FreeMemory"
+  (buf :pointer))
+
+(defcfun "H5garbage_collect" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-GarbageCollect")
+
+(defcfun "H5get_libversion" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-Version"
+  (majnum (:pointer :unsigned-int))
+  (minnum (:pointer :unsigned-int))
+  (relnum (:pointer :unsigned-int)))
+
+(defcfun "H5open" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-Open")
+
+(defcfun "H5set_free_list_limits" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-SetFreeListLimits"
+  (reg-global-lim :int)
+  (reg-list-lim :int)
+  (arr-global-lim :int)
+  (arr-list-lim :int)
+  (blk-global-lim :int)
+  (blk-list-lim :int))

@@ -8,6 +8,7 @@
   :components ((:file "package")
                (:file "hdf5-cffi")
                (:file "h5")
-	       (:file "h5i"))
+	       (:file "h5i")
+	       (:file "h5f"))
   :depends-on ("cffi"))
 
