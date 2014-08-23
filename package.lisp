@@ -177,6 +177,7 @@
 
    :h5o-hdr-info-t
    :h5o-info-t
+   :h5o-msg-crt-idx-t
    :h5o-type-t
    
    :h5oclose
@@ -248,5 +249,33 @@
    :h5gget-info
    :h5gget-info-by-name
    :h5gopen1
-   :h5gopen2))
+   :h5gopen2
+
+   ;; == h5a ===============================================================
+
+   :h5a-info-t
+   
+   :h5aclose
+   :h5acreate1
+   :h5acreate2
+   :h5acreate-by-name
+   :h5adelete
+   :h5adelete-by-name
+   :h5aexists
+   :h5aexists-by-name
+   :h5aget-create-plist
+   :h5aget-info
+   :h5aget-info-by-name
+   :h5aget-name
+   :h5aget-space
+   :h5aget-storage-size
+   :h5aget-type
+   :h5aiterate2
+   :h5aopen
+   :h5aopen-by-name
+   :h5aread
+   :h5arename
+   :h5arename-by-name
+   :h5awrite
+   ))
 

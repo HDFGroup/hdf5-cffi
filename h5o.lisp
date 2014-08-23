@@ -44,6 +44,8 @@
   (hdr h5o-hdr-info-t)
   (meta-size h5o-info-struct-t))
 
+(defctype h5o-msg-crt-idx-t :uint32)
+
 (defcfun "H5Oclose" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-Close"
   (object-id hid-t))
