@@ -59,6 +59,27 @@
 	      +H5-VERS-MINOR+   (mem-aref nums :uint 1)
 	      +H5-VERS-RELEASE+ (mem-aref nums :uint 2)))))
 
+(defcenum h5-iter-order-t
+  (:H5-ITER-UNKNOWN -1)
+  :H5-ITER-INC
+  :H5-ITER-DEC
+  :H5-ITER-NATIVE
+  :H5-ITER-N)
+
+(defconstant +H5-ITER-ERROR+ -1)
+(defconstant +H5-ITER-CONT    0)
+(defconstant +H5-ITER-STOP    1)
+
+(defcenum h5-index-t
+  (:H5-INDEX-UNKNOWN -1)
+  :H5-INDEX-NAME
+  :H5-INDEX-CRT-ORDER
+  :H5-INDEX-N)
+
+(defcstruct h5-ih-info-t
+    (index-size hsize-t)
+    (heap-size hsize-t))
+
 ;;; functions
 
 (defcfun "H5close" herr-t

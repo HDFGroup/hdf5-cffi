@@ -14,14 +14,21 @@
    :htri-t
    :size-t
    :ssize-t
-      
-   :+HADDR-UNDEF+
-   :+HADDR-MAX+
-   :+H5P-DEFAULT+
+
+   :h5-ih-info-t
+   :h5-index-t
+   :h5-iter-order-t
+   
+   :+H5-ITER-ERROR+
+   :+H5-ITER-CONT+
+   :+H5-ITER-STOP+
    :+H5-VERS-MAJOR+
    :+H5-VERS-MINOR+
    :+H5-VERS-RELEASE+
-
+   :+HADDR-UNDEF+
+   :+HADDR-MAX+
+   :+H5P-DEFAULT+
+   
    :h5close
    :h5dont-atexit
    :h5free-memory
@@ -145,5 +152,23 @@
    :h5tget-nmembers
    :h5tget-size
    :h5tinsert
-   :h5tget-super))
+   :h5tget-super
+
+   ;; h5l
+
+   :+H5L-MAX-LINK-NAME-LEN+
+
+   :h5l-type-t
+   :h5l-info-t
+
+   :h5lcreate-external
+   :h5lcreate-hard
+   :h5lcreate-soft
+   :h5ldelete
+   :h5lexists
+   :h5lvisit
+   :h5lvisit-by-name
+
+
+   ))
 
