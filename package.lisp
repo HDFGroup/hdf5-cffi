@@ -212,7 +212,6 @@
    :h5sselect-valid
 
    ;; == h5d ===============================================================
-
    
    :h5d-alloc-time-t
    :h5d-fill-time-t
@@ -236,7 +235,18 @@
    :h5dvlen-reclaim
    :h5dwrite
 
+   ;; == h5g ===============================================================
 
+   :h5g-storage-type-t
+   :h5g-info-type-t
 
-   ))
+   :h5gclose
+   :h5gcreate1
+   :h5gcreate2
+   :h5gcreate-anon
+   :h5gcreate-plist
+   :h5gget-info
+   :h5gget-info-by-name
+   :h5gopen1
+   :h5gopen2))
 
