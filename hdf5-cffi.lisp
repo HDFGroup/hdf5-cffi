@@ -13,3 +13,7 @@
 (defconstant +SIZE-OF-LONG+ (foreign-type-size :long))
 (defconstant +SIZE-OF-LONG-LONG+ (foreign-type-size :long-long))
 (defconstant +SIZE-OF-SIZE-T+ (foreign-type-size :pointer))
+
+;;; time's a mystery
+
+(defctype time-t :long)

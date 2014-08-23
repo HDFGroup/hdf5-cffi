@@ -3,6 +3,8 @@
 (defpackage #:hdf5-cffi
   (:use #:cl #:cffi)
   (:export
+
+   :time-t
    
    ;; == h5 ===================================================================
    
@@ -154,7 +156,7 @@
    :h5tinsert
    :h5tget-super
 
-   ;; h5l
+   ;; == h5l ===============================================================
 
    :+H5L-MAX-LINK-NAME-LEN+
 
@@ -169,6 +171,17 @@
    :h5lvisit
    :h5lvisit-by-name
 
+   ;; == h5o ===============================================================
 
-   ))
+   :h5o-hdr-info-t
+   :h5o-info-t
+   :h5o-type-t
+   
+   :h5oclose
+   :h5ocopy
+   :h5oexists-by-name
+   :h5oget-info
+   :h5oget-info-by-name
+   :h5olink
+   :h5oopen))
 
