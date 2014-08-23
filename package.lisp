@@ -211,5 +211,32 @@
    :h5sselect-hyperslab
    :h5sselect-valid
 
+   ;; == h5d ===============================================================
+
+   
+   :h5d-alloc-time-t
+   :h5d-fill-time-t
+   :h5d-fill-value-t
+   :h5d-layout-t
+   :h5d-space-status-t
+   
+   :h5dclose
+   :h5dcreate1
+   :h5dcreate2
+   :h5dcreate-anon
+   :h5dfill
+   :h5dget-create-plist
+   :h5dget-space
+   :h5dget-storage-size
+   :h5dget-type
+   :h5dopen2
+   :h5dread
+   :h5dset-extent
+   :h5dvlen-get-buf-size
+   :h5dvlen-reclaim
+   :h5dwrite
+
+
+
    ))
 
