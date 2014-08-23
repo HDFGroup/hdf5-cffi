@@ -30,6 +30,8 @@
    :+HADDR-UNDEF+
    :+HADDR-MAX+
    :+H5P-DEFAULT+
+   :+SIZE-OF-HSIZE-T+
+   :+SIZE-OF-HSSIZE-T+
    
    :h5close
    :h5dont-atexit
@@ -183,5 +185,31 @@
    :h5oget-info
    :h5oget-info-by-name
    :h5olink
-   :h5oopen))
+   :h5oopen
+   
+   ;; == h5s ===============================================================
+
+   :+H5S-ALL+
+   :+H5S-MAX-RANK+
+   :+H5S-UNLIMITED+
+
+   :h5s-class-t
+   :h5s-sel-type
+   :h5s-seloper-t
+
+   :h5s.close
+   :h5scopy
+   :h5screate
+   :h5screate-simple
+   :h5sget-select-bounds
+   :h5sget-select-type
+   :h5sget-simple-extent-dims
+   :h5sget-simple-extent-ndims
+   :h5sget-simple-extent-npoints
+   :h5sget-simple-extent-type
+   :h5sis-simple
+   :h5sselect-hyperslab
+   :h5sselect-valid
+
+   ))
 
