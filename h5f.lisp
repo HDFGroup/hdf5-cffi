@@ -16,8 +16,8 @@
 
 (defcenum h5f-scope-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-Flush"
-  (:H5F_SCOPE_LOCAL  0)
-  (:H5F_SCOPE_GLOBAL 1))
+  (:H5F-SCOPE-LOCAL  0)
+  (:H5F-SCOPE-GLOBAL 1))
 
 ;;; functions
 
