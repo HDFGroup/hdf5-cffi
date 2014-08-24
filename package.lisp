@@ -57,6 +57,7 @@
    ;; == h5f ==================================================================
 
    :h5f-intent-flags
+   :h5f-libver-t
    :h5f-scope-t
 
    :h5fclose
@@ -289,5 +290,70 @@
    :h5rdereference
    :h5rget-name
    :h5rget-obj-type2
-   :h5rget-region))
+   :h5rget-region
+
+   ;; == h5p ==================================================================
+
+   :+H5P-ROOT+
+   :+H5P-OBJECT-CREATE+
+   :+H5P-FILE-CREATE+
+   :+H5P-FILE-ACCESS+
+   :+H5P-DATASET-CREATE+
+   :+H5P-DATASET-ACCESS+
+   :+H5P-DATASET-XFER+
+   :+H5P-FILE-MOUNT+
+   :+H5P-GROUP-CREATE+
+   :+H5P-GROUP-ACCESS+
+   :+H5P-DATATYPE-CREATE+
+   :+H5P-DATATYPE-ACCESS+
+   :+H5P-STRING-CREATE+
+   :+H5P-ATTRIBUTE-CREATE+
+   :+H5P-OBJECT-COPY+
+   :+H5P-LINK-CREATE+
+   :+H5P-LINK-ACCESS+
+   :+H5P-FILE-CREATE-DEFAULT+
+   :+H5P-FILE-ACCESS-DEFAULT+
+   :+H5P-DATASET-CREATE-DEFAULT+
+   :+H5P-DATASET-ACCESS-DEFAULT+
+   :+H5P-DATASET-XFER-DEFAULT+
+   :+H5P-FILE-MOUNT-DEFAULT+
+   :+H5P-GROUP-CREATE-DEFAULT+
+   :+H5P-GROUP-ACCESS-DEFAULT+
+   :+H5P-DATATYPE-CREATE-DEFAULT+
+   :+H5P-DATATYPE-ACCESS-DEFAULT+
+   :+H5P-ATTRIBUTE-CREATE-DEFAULT+
+   :+H5P-OBJECT-COPY-DEFAULT+
+   :+H5P-LINK-CREATE-DEFAULT+
+   :+H5P-LINK-ACCESS-DEFAULT+
+
+   :h5pclose
+   :h5pcreate
+   :h5pcopy
+   :h5pget-char-encoding
+   :h5pget-chunk
+   :h5pget-class
+   :h5pget-create-intermediate-group
+   :h5pget-external
+   :h5pget-external-count
+   :h5pget-fapl-core
+   :h5pget-file-image
+   :h5pget-fill-value
+   :h5pget-layout
+   :h5pget-libver-bounds
+   :h5pget-sizes
+   :h5pget-userblock
+   :h5pget-version
+   :h5pset-char-encoding
+   :h5pset-chunk
+   :h5pset-create-intermediate-group
+   :h5pset-deflate
+   :h5pset-external
+   :h5pset-fapl-core
+   :h5pset-file-image
+   :h5pset-fill-value
+   :h5pset-fletcher32
+   :h5pset-layout
+   :h5pset-libver-bounds
+   :h5pset-shuffle
+   :h5pset-userblock))
 

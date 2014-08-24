@@ -2,6 +2,10 @@
 
 (in-package #:hdf5-cffi)
 
+(defcenum h5f-libver-t
+  :H5F-LIBVER-EARLIEST
+  :H5F-LIBVER-LATEST)
+
 ;;; flags for h5fcreate and h5fopen
 
 (defbitfield h5f-intent-flags :unsigned-int

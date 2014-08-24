@@ -17,3 +17,7 @@
 ;;; time's a mystery
 
 (defctype time-t :long)
+
+;;; off_t is another one
+
+(defctype off-t :long)
