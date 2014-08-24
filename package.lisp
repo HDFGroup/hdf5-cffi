@@ -277,5 +277,17 @@
    :h5arename
    :h5arename-by-name
    :h5awrite
-   ))
+
+   ;; == h5r ===============================================================
+
+   :h5r-type-t
+
+   :+H5R-OBJ-REF-BUF-SIZE+
+   :+H5R-DSET-REG-REF-BUF-SIZE+
+
+   :h5rcreate
+   :h5rdereference
+   :h5rget-name
+   :h5rget-obj-type2
+   :h5rget-region))
 

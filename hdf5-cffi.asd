@@ -16,6 +16,7 @@
 	       (:file "h5s")
 	       (:file "h5d")
 	       (:file "h5g")
-	       (:file "h5a"))
+	       (:file "h5a")
+	       (:file "h5r"))
   :depends-on ("cffi"))
 

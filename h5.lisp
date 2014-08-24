@@ -31,6 +31,7 @@
     (error "Nothing appropriate for hsize_t and hssize_t found."))
 
 (defctype haddr-t :uint64)
+(defconstant +SIZE-OF-HADDR-T+ (foreign-type-size :uint64))
 (defconstant +HADDR-UNDEF+ (1- (ash 1 64)))
 (defconstant +HADDR-MAX+ (1- +HADDR-UNDEF+))
 

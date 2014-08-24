@@ -115,8 +115,7 @@
     (op-data :pointer))
   (progn
     (format t attr-name)
-    0)
-  )
+    0))
 
 (defcfun "H5Aopen" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-Open"
