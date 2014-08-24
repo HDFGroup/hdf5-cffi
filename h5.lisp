@@ -22,13 +22,13 @@
 	    (defctype ssize-t :long-long)
 	    (error "Nothing appropriate for ssize_t found."))))
 
-(if (>= +SIZE-OF-LONG-LONG+ 8)
-    (progn
-      (defctype hsize-t :unsigned-long-long)
-      (defctype hssize-t :long-long)
-      (defconstant +SIZE-OF-HSIZE-T+ (foreign-type-size :unsigned-long-long))
-      (defconstant +SIZE-OF-HSSIZE-T+ (foreign-type-size :long-long)))
+(if (< +SIZE-OF-LONG-LONG+ 8)
     (error "Nothing appropriate for hsize_t and hssize_t found."))
+
+(defctype hsize-t :unsigned-long-long)
+(defctype hssize-t :long-long)
+(defconstant +SIZE-OF-HSIZE-T+ (foreign-type-size :unsigned-long-long))
+(defconstant +SIZE-OF-HSSIZE-T+ (foreign-type-size :long-long))
 
 (defctype haddr-t :uint64)
 (defconstant +SIZE-OF-HADDR-T+ (foreign-type-size :uint64))
