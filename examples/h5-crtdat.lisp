@@ -8,8 +8,8 @@
 (let*
     ((f (h5fcreate "dset.h5" '(:trunc) +H5P-DEFAULT+ +H5P-DEFAULT+)) ; file
      (s (with-foreign-object (dims 'hsize-t 2)
-	  (setf (mem-aref dims 'hsize-t 0) 4)
-	  (setf (mem-aref dims 'hsize-t 1) 6)
+	  (setf (mem-aref dims 'hsize-t 0) 4
+		(mem-aref dims 'hsize-t 1) 6)
 	  (h5screate-simple 2 dims (null-pointer))))                 ; shape
      (d (h5dcreate2 f "/dset" +H5T-STD-I32BE+ s +H5P-DEFAULT+
 		    +H5P-DEFAULT+ +H5P-DEFAULT+)))                   ; dataset

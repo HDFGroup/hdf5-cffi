@@ -1,7 +1,7 @@
 ;;;; h5-crtatt.lisp
 
 ;;; This example illustrates how to create an attribute attached to a
-;;  dataset.
+;;; dataset.
 
 (in-package :hdf5-cffi)
 
@@ -16,8 +16,8 @@
 
   ;; initialize the attribute dims and data
   (with-foreign-object (data :int 2)
-    (setf (mem-aref data :int 0) 100)
-    (setf (mem-aref data :int 1) 200)
+    (setf (mem-aref data :int 0) 100
+	  (mem-aref data :int 1) 200)
     ;; write the attribute value
     (h5awrite a +H5T-NATIVE-INT+ data))
 
