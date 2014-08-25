@@ -1,13 +1,13 @@
 ;;;; h5-rdwr.lisp
 
 ;;; This example illustrates how to write and read data in an existing
-;;; dataset.  It is used in the HDF5 Tutorial.
+;;; dataset.
 
 (in-package :hdf5-cffi)
 
 (let*
-    ((f (h5fopen "dset.h5" '(:rdwr) +H5P-DEFAULT+)) ; file
-     (d (h5dopen2 f "/dset" +H5P-DEFAULT+)))
+    ((f (h5fopen "dset.h5" '(:rdwr) +H5P-DEFAULT+)) ; open file
+     (d (h5dopen2 f "/dset" +H5P-DEFAULT+)))        ; open dataset
 
   ;; initialize the array to be written
   (with-foreign-object (data :int (* 4 6))
@@ -17,7 +17,6 @@
 
     ;; write dataset
     (h5dwrite d +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ data)
-
     ;; read it back
     (h5dread d +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ data))
 
