@@ -31,6 +31,7 @@
    :+HADDR-UNDEF+
    :+HADDR-MAX+
    :+H5P-DEFAULT+
+   :+SIZE-OF-HADDR-T+
    :+SIZE-OF-HSIZE-T+
    :+SIZE-OF-HSSIZE-T+
    

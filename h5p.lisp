@@ -3,68 +3,68 @@
 (in-package #:hdf5-cffi)
 
 (defconstant +H5P-ROOT+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_ROOT_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_ROOT_g") 'hid-t))
 (defconstant +H5P-OBJECT-CREATE+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_OBJECT_CREATE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_OBJECT_CREATE_g") 'hid-t))
 (defconstant +H5P-FILE-CREATE+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_FILE_CREATE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_FILE_CREATE_g") 'hid-t))
 (defconstant +H5P-FILE-ACCESS+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_FILE_ACCESS_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_FILE_ACCESS_g") 'hid-t))
 (defconstant +H5P-DATASET-CREATE+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_DATASET_CREATE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_DATASET_CREATE_g") 'hid-t))
 (defconstant +H5P-DATASET-ACCESS+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_DATASET_ACCESS_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_DATASET_ACCESS_g") 'hid-t))
 (defconstant +H5P-DATASET-XFER+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_DATASET_XFER_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_DATASET_XFER_g") 'hid-t))
 (defconstant +H5P-FILE-MOUNT+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_FILE_MOUNT_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_FILE_MOUNT_g") 'hid-t))
 (defconstant +H5P-GROUP-CREATE+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_GROUP_CREATE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_GROUP_CREATE_g") 'hid-t))
 (defconstant +H5P-GROUP-ACCESS+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_GROUP_ACCESS_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_GROUP_ACCESS_g") 'hid-t))
 (defconstant +H5P-DATATYPE-CREATE+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_DATATYPE_CREATE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_DATATYPE_CREATE_g") 'hid-t))
 (defconstant +H5P-DATATYPE-ACCESS+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_DATATYPE_ACCESS_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_DATATYPE_ACCESS_g") 'hid-t))
 (defconstant +H5P-STRING-CREATE+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_STRING_CREATE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_STRING_CREATE_g") 'hid-t))
 (defconstant +H5P-ATTRIBUTE-CREATE+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_ATTRIBUTE_CREATE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_ATTRIBUTE_CREATE_g") 'hid-t))
 (defconstant +H5P-OBJECT-COPY+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_OBJECT_COPY_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_OBJECT_COPY_g") 'hid-t))
 (defconstant +H5P-LINK-CREATE+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_LINK_CREATE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_LINK_CREATE_g") 'hid-t))
 (defconstant +H5P-LINK-ACCESS+
-  (mem-ref (foreign-symbol-pointer "H5P_CLS_LINK_ACCESS_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_CLS_LINK_ACCESS_g") 'hid-t))
 
 (defconstant +H5P-FILE-CREATE-DEFAULT+
-  (mem-ref (foreign-symbol-pointer "H5P_LST_FILE_CREATE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_LST_FILE_CREATE_g") 'hid-t))
 (defconstant +H5P-FILE-ACCESS-DEFAULT+
-  (mem-ref (foreign-symbol-pointer "H5P_LST_FILE_ACCESS_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_LST_FILE_ACCESS_g") 'hid-t))
 (defconstant +H5P-DATASET-CREATE-DEFAULT+
-  (mem-ref (foreign-symbol-pointer "H5P_LST_DATASET_CREATE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_LST_DATASET_CREATE_g") 'hid-t))
 (defconstant +H5P-DATASET-ACCESS-DEFAULT+
-  (mem-ref (foreign-symbol-pointer "H5P_LST_DATASET_ACCESS_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_LST_DATASET_ACCESS_g") 'hid-t))
 (defconstant +H5P-DATASET-XFER-DEFAULT+
-  (mem-ref (foreign-symbol-pointer "H5P_LST_DATASET_XFER_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_LST_DATASET_XFER_g") 'hid-t))
 (defconstant +H5P-FILE-MOUNT-DEFAULT+
-  (mem-ref (foreign-symbol-pointer "H5P_LST_FILE_MOUNT_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_LST_FILE_MOUNT_g") 'hid-t))
 (defconstant +H5P-GROUP-CREATE-DEFAULT+
-  (mem-ref (foreign-symbol-pointer "H5P_LST_GROUP_CREATE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_LST_GROUP_CREATE_g") 'hid-t))
 (defconstant +H5P-GROUP-ACCESS-DEFAULT+
-  (mem-ref (foreign-symbol-pointer "H5P_LST_GROUP_ACCESS_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_LST_GROUP_ACCESS_g") 'hid-t))
 (defconstant +H5P-DATATYPE-CREATE-DEFAULT+
-  (mem-ref (foreign-symbol-pointer "H5P_LST_DATATYPE_CREATE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_LST_DATATYPE_CREATE_g") 'hid-t))
 (defconstant +H5P-DATATYPE-ACCESS-DEFAULT+
-  (mem-ref (foreign-symbol-pointer "H5P_LST_DATATYPE_ACCESS_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_LST_DATATYPE_ACCESS_g") 'hid-t))
 (defconstant +H5P-ATTRIBUTE-CREATE-DEFAULT+
-  (mem-ref (foreign-symbol-pointer "H5P_LST_ATTRIBUTE_CREATE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_LST_ATTRIBUTE_CREATE_g") 'hid-t))
 (defconstant +H5P-OBJECT-COPY-DEFAULT+
-  (mem-ref (foreign-symbol-pointer "H5P_LST_OBJECT_COPY_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_LST_OBJECT_COPY_g") 'hid-t))
 (defconstant +H5P-LINK-CREATE-DEFAULT+
-  (mem-ref (foreign-symbol-pointer "H5P_LST_LINK_CREATE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_LST_LINK_CREATE_g") 'hid-t))
 (defconstant +H5P-LINK-ACCESS-DEFAULT+
-  (mem-ref (foreign-symbol-pointer "H5P_LST_LINK_ACCESS_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5P_LST_LINK_ACCESS_g") 'hid-t))
 
 ;;; functions
 

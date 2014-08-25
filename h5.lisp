@@ -27,11 +27,11 @@
 
 (defctype hsize-t :unsigned-long-long)
 (defctype hssize-t :long-long)
-(defconstant +SIZE-OF-HSIZE-T+ (foreign-type-size :unsigned-long-long))
-(defconstant +SIZE-OF-HSSIZE-T+ (foreign-type-size :long-long))
+(defconstant +SIZE-OF-HSIZE-T+ (foreign-type-size 'hsize-t))
+(defconstant +SIZE-OF-HSSIZE-T+ (foreign-type-size 'hssize-t))
 
 (defctype haddr-t :uint64)
-(defconstant +SIZE-OF-HADDR-T+ (foreign-type-size :uint64))
+(defconstant +SIZE-OF-HADDR-T+ (foreign-type-size 'haddr-t))
 (defconstant +HADDR-UNDEF+ (1- (ash 1 64)))
 (defconstant +HADDR-MAX+ (1- +HADDR-UNDEF+))
 

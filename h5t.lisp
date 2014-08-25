@@ -105,121 +105,121 @@
 ;;; IEEE
 
 (defconstant +H5T-IEEE-F32BE+
-  (mem-ref (foreign-symbol-pointer "H5T_IEEE_F32BE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_IEEE_F32BE_g") 'hid-t))
 (defconstant +H5T-IEEE-F32LE+
-  (mem-ref (foreign-symbol-pointer "H5T_IEEE_F32LE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_IEEE_F32LE_g") 'hid-t))
 (defconstant +H5T-IEEE-F64BE+
-  (mem-ref (foreign-symbol-pointer "H5T_IEEE_F64BE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_IEEE_F64BE_g") 'hid-t))
 (defconstant +H5T-IEEE-F64LE+
-  (mem-ref (foreign-symbol-pointer "H5T_IEEE_F64LE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_IEEE_F64LE_g") 'hid-t))
 
 ;;; standard
 
 (defconstant +H5T-STD-I8BE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_I8BE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_I8BE_g") 'hid-t))
 (defconstant +H5T-STD-I8LE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_I8LE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_I8LE_g") 'hid-t))
 (defconstant +H5T-STD-I16BE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_I16BE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_I16BE_g") 'hid-t))
 (defconstant +H5T-STD-I16LE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_I16LE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_I16LE_g") 'hid-t))
 (defconstant +H5T-STD-I32BE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_I32BE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_I32BE_g") 'hid-t))
 (defconstant +H5T-STD-I32LE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_I32LE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_I32LE_g") 'hid-t))
 (defconstant +H5T-STD-I64BE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_I64BE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_I64BE_g") 'hid-t))
 (defconstant +H5T-STD-I64LE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_I64LE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_I64LE_g") 'hid-t))
 
 (defconstant +H5T-STD-U8BE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_U8BE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_U8BE_g") 'hid-t))
 (defconstant +H5T-STD-U8LE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_U8LE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_U8LE_g") 'hid-t))
 (defconstant +H5T-STD-U16BE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_U16BE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_U16BE_g") 'hid-t))
 (defconstant +H5T-STD-U16LE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_U16LE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_U16LE_g") 'hid-t))
 (defconstant +H5T-STD-U32BE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_U32BE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_U32BE_g") 'hid-t))
 (defconstant +H5T-STD-U32LE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_U32LE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_U32LE_g") 'hid-t))
 (defconstant +H5T-STD-U64BE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_U64BE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_U64BE_g") 'hid-t))
 (defconstant +H5T-STD-U64LE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_U64LE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_U64LE_g") 'hid-t))
 
 (defconstant +H5T-STD-B8BE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_B8BE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_B8BE_g") 'hid-t))
 (defconstant +H5T-STD-B8LE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_B8LE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_B8LE_g") 'hid-t))
 (defconstant +H5T-STD-B16BE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_B16BE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_B16BE_g") 'hid-t))
 (defconstant +H5T-STD-B16LE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_B16LE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_B16LE_g") 'hid-t))
 (defconstant +H5T-STD-B32BE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_B32BE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_B32BE_g") 'hid-t))
 (defconstant +H5T-STD-B32LE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_B32LE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_B32LE_g") 'hid-t))
 (defconstant +H5T-STD-B64BE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_B64BE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_B64BE_g") 'hid-t))
 (defconstant +H5T-STD-B64LE+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_B64LE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_B64LE_g") 'hid-t))
 
 (defconstant +H5T-STD-REF-OBJ+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_REF_OBJ_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_REF_OBJ_g") 'hid-t))
 (defconstant +H5T-STD-REF-DSETREG+
-  (mem-ref (foreign-symbol-pointer "H5T_STD_REF_DSETREG_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_STD_REF_DSETREG_g") 'hid-t))
 
 ;;; native
 
 (defconstant +H5T-NATIVE-CHAR+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_SCHAR_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_SCHAR_g") 'hid-t))
 (defconstant +H5T-NATIVE-UCHAR+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_UCHAR_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_UCHAR_g") 'hid-t))
 (defconstant +H5T-NATIVE-SHORT+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_SHORT_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_SHORT_g") 'hid-t))
 (defconstant +H5T-NATIVE-USHORT+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_USHORT_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_USHORT_g") 'hid-t))
 (defconstant +H5T-NATIVE-INT+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_INT_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_INT_g") 'hid-t))
 (defconstant +H5T-NATIVE-UINT+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_UINT_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_UINT_g") 'hid-t))
 (defconstant +H5T-NATIVE-LONG+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_LONG_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_LONG_g") 'hid-t))
 (defconstant +H5T-NATIVE-ULONG+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_ULONG_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_ULONG_g") 'hid-t))
 (defconstant +H5T-NATIVE-LLONG+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_LLONG_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_LLONG_g") 'hid-t))
 (defconstant +H5T-NATIVE-ULLONG+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_ULLONG_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_ULLONG_g") 'hid-t))
 
 (defconstant +H5T-NATIVE-FLOAT+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_FLOAT_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_FLOAT_g") 'hid-t))
 (defconstant +H5T-NATIVE-DOUBLE+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_DOUBLE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_DOUBLE_g") 'hid-t))
 
 (defconstant +H5T-NATIVE-B8+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_B8_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_B8_g") 'hid-t))
 (defconstant +H5T-NATIVE-B16+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_B16_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_B16_g") 'hid-t))
 (defconstant +H5T-NATIVE-B32+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_B32_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_B32_g") 'hid-t))
 (defconstant +H5T-NATIVE-B64+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_B64_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_B64_g") 'hid-t))
 
 (defconstant +H5T-NATIVE-OPAQUE+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_OPAQUE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_OPAQUE_g") 'hid-t))
 (defconstant +H5T-NATIVE-HADDR+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_HADDR_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_HADDR_g") 'hid-t))
 (defconstant +H5T-NATIVE-HSIZE+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_HSIZE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_HSIZE_g") 'hid-t))
 (defconstant +H5T-NATIVE-HSSIZE+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_HSSIZE_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_HSSIZE_g") 'hid-t))
 (defconstant +H5T-NATIVE-HERR+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_HERR_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_HERR_g") 'hid-t))
 (defconstant +H5T-NATIVE-HBOOL+
-  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_HBOOL_g") :int))
+  (mem-ref (foreign-symbol-pointer "H5T_NATIVE_HBOOL_g") 'hid-t))
 
 ;;; H5T API functions
 
