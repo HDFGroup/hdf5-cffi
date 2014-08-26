@@ -88,10 +88,10 @@
 (defcfun "H5close" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-Close")
 
-(defcfun "H5dont-atexit" herr-t
+(defcfun "H5dont_atexit" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-DontAtExit")
 
-(defcfun "H5free-memory" herr-t
+(defcfun "H5free_memory" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-FreeMemory"
   (buf :pointer))
 

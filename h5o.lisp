@@ -24,12 +24,12 @@
   (nmesgs :unsigned-int)
   (nchunks :unsigned-int)
   (flags :unsigned-int)
-  (space h5o-hdr-info-struct1-t)
-  (mesg h5o-hdr-info-struct2-t))
+  (space (:struct h5o-hdr-info-struct1-t))
+  (mesg (:struct h5o-hdr-info-struct2-t)))
 
 (defcstruct h5o-info-struct-t
-  (obj h5-ih-info-t)
-  (attr h5-ih-info-t))
+  (obj (:struct h5-ih-info-t))
+  (attr (:struct h5-ih-info-t)))
 
 (defcstruct h5o-info-t
   (fileno :unsigned-long)
@@ -41,8 +41,8 @@
   (ctime time-t)
   (btime time-t)
   (num-attrs hsize-t)
-  (hdr h5o-hdr-info-t)
-  (meta-size h5o-info-struct-t))
+  (hdr (:struct h5o-hdr-info-t))
+  (meta-size (:struct h5o-info-struct-t)))
 
 (defctype h5o-msg-crt-idx-t :uint32)
 
@@ -68,13 +68,13 @@
 (defcfun "H5Oget_info" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-GetInfo"
   (object-id hid-t)
-  (object-info (:pointer h5o-info-t)))
+  (object-info (:pointer (:struct h5o-info-t))))
 
 (defcfun "H5Oget_info_by_name" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-GetInfoByName"
   (loc-id hid-t)
   (object-name :string)
-  (object-info (:pointer h5o-info-t))
+  (object-info (:pointer (:struct h5o-info-t)))
   (lapl-id hid-t))
 
 (defcfun "H5Olink" herr-t

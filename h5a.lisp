@@ -71,14 +71,14 @@
 (defcfun "H5Aget_info" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-GetInfo"
   (attr-id hid-t)
-  (info (:pointer h5a-info-t)))
+  (info (:pointer (:struct h5a-info-t))))
 
 (defcfun "H5Aget_info_by_name" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-GetInfoByName"
   (loc-id hid-t)
   (obj-name :string)
   (attr-name :string)
-  (info (:pointer h5a-info-t))
+  (info (:pointer (:struct h5a-info-t)))
   (lapl-id hid-t))
 
 (defcfun "H5Aget_name" ssize-t
@@ -111,7 +111,7 @@
 (defcallback H5A-operator2-t herr-t
    ((location-id hid-t)
     (attr-name :string)
-    (ainfo (:pointer h5a-info-t))
+    (ainfo (:pointer (:struct h5a-info-t)))
     (op-data :pointer))
   (progn
     (format t attr-name)
@@ -143,7 +143,7 @@
   (old-attr-name :string)
   (new-attr-name :string))
 
-(defcfun "H5Arename-by-name" herr-t
+(defcfun "H5Arename_by_name" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-RenameByName"
   (loc-id hid-t)
   (obj-name :string)

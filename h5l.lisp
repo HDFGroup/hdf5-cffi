@@ -20,7 +20,7 @@
   (corder-valid hbool-t)
   (corder :int64)
   (cset h5t-cset-t)
-  (u h5l-info-union-t))
+  (u (:union h5l-info-union-t)))
 
 (defcfun "H5Lcreate_external" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-CreateExternal"
@@ -64,7 +64,7 @@
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-GetInfo"
   (link-loc-id hid-t)
   (link-name :string)
-  (link-buff (:pointer h5l-info-t))
+  (link-buff (:pointer (:struct h5l-info-t)))
   (lapl-id hid-t))
 
 (defcfun "H5Lvisit" herr-t
@@ -75,7 +75,7 @@
   (op :pointer)
   (op-data :pointer))
 
-(defcfun "H5Lvisit-by-name" herr-t
+(defcfun "H5Lvisit_by_name" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-VisitByName"
   (loc-id hid-t)
   (group-name :string)
@@ -88,7 +88,7 @@
 (defcallback h5l-iterate-cb herr-t
     ((group-id hid-t)
      (name :string)
-     (info (:pointer h5l-info-t))
+     (info (:pointer (:struct h5l-info-t)))
      (op-data :pointer))
   (progn
     (format t name)
