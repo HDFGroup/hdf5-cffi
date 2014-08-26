@@ -10,15 +10,18 @@
      (d (h5dopen2 f "/dset" +H5P-DEFAULT+)))        ; open dataset
 
   ;; initialize the array to be written
-  (with-foreign-object (data :int (* 4 6))
-    (dotimes (i 4)
-      (dotimes (j 6)
-	(setf (mem-aref data :int (+ (* i 6) j)) (+ (* i 6) j 1))))
+  (let ((rows 4) (cols 6))
+    (with-foreign-object (data :int (* rows cols))
+      (flet ((pos (cols i j) (+ (* cols i) j)))     ; 2D array access
+	(dotimes (i rows)
+	  (dotimes (j cols)
+	    (let ((pos (pos cols i j)))
+	      (setf (mem-aref data :int pos) (1+ pos))))))
 
     ;; write dataset
     (h5dwrite d +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ data)
     ;; read it back
-    (h5dread d +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ data))
+    (h5dread d +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ data)))
 
   ;; close all open handles
   (h5dclose d)

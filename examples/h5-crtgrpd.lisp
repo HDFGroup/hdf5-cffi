@@ -17,12 +17,12 @@
 		      +H5P-DEFAULT+ +H5P-DEFAULT+)))
 
     ;; initialize and wite the data
-    (with-foreign-object (data :int (* 4 6))
-      (dotimes (i 3)
-	(dotimes (j 3)
-	  (setf (mem-aref data :int (+ (* i 3) j)) (+ j 1))))
-      
-      (h5dwrite d +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ data))
+    (let ((rows 3) (cols 3))
+      (with-foreign-object (data :int (* rows cols))
+	(dotimes (i rows)
+	  (dotimes (j cols)
+	    (setf (mem-aref data :int (+ (* i cols) j)) (1+ j))))
+	(h5dwrite d +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ data)))
     
     (h5dclose d)
     (h5sclose s))
@@ -40,12 +40,13 @@
 		      +H5P-DEFAULT+ +H5P-DEFAULT+)))
 
     ;; intialize and write the data
-    (with-foreign-object (data :int (* 2 10))
-      (dotimes (i 2)
-	(dotimes (j 10)
-	  (setf (mem-aref data :int (+ (* i 10) j)) (+ j 1))))
+    (let ((rows 2) (cols 10))
+      (with-foreign-object (data :int (* rows cols))
+	(dotimes (i rows)
+	  (dotimes (j cols)
+	    (setf (mem-aref data :int (+ (* i cols) j)) (1+ j))))
       
-      (h5dwrite d +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ data))
+	(h5dwrite d +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ data)))
     
     (h5dclose d)
     (h5sclose s)
