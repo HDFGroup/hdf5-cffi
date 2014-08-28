@@ -5,8 +5,10 @@
 
 (in-package :hdf5-cffi)
 
+(defparameter *FILE* "groups.h5")
+
 (let*
-    ((f (h5fcreate "groups.h5" '(:trunc) +H5P-DEFAULT+ +H5P-DEFAULT+)) ; file
+    ((f (h5fcreate *FILE* '(:trunc) +H5P-DEFAULT+ +H5P-DEFAULT+))
 
      ;; Create group "MyGroup" in the root group using absolute name.
      (g1 (h5gcreate2 f "/MyGroup" +H5P-DEFAULT+ +H5P-DEFAULT+
