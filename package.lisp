@@ -294,6 +294,45 @@
    :h5rget-obj-type2
    :h5rget-region
 
+   ;; == h5z ==================================================================
+
+   :h5z-edc-t
+   :h5z-filter-t
+   :h5z-flags
+   :h5z-so-scale-type-t
+
+   :+H5Z-FILTER-ERROR+
+   :+H5Z-FILTER-NONE+ 
+   :+H5Z-FILTER-DEFLAT+
+   :+H5Z-FILTER-SHUFFLE+ 
+   :+H5Z-FILTER-FLETCHER32+
+   :+H5Z-FILTER-SZIP+      
+   :+H5Z-FILTER-NBIT+   
+   :+H5Z-FILTER-SCALEOFFSET+
+   :+H5Z-FILTER-RESERVED+
+   :+H5Z-FILTER-MAX+    
+   :+H5Z-FILTER-ALL+    
+   :+H5Z-MAX-NFILTERS+  
+   :+H5-SZIP-ALLOW-K13-OPTION-MASK+
+   :+H5-SZIP-CHIP-OPTION-MASK+ 
+   :+H5-SZIP-EC-OPTION-MASK+   
+   :+H5-SZIP-NN-OPTION-MASK+   
+   :+H5-SZIP-MAX-PIXELS-PER-BLOCK+
+   :+H5Z-SHUFFLE-USER-NPARMS+
+   :+H5Z-SHUFFLE-TOTAL-NPARMS+
+   :+H5Z-SZIP-USER-NPARMS+
+   :+H5Z-SZIP-TOTAL-NPARMS+
+   :+H5Z-SZIP-PARM-MASK+ 
+   :+H5Z-SZIP-PARM-PPB+  
+   :+H5Z-SZIP-PARM-BPP+  
+   :+H5Z-SZIP-PARM-PPS+  
+   :+H5Z-NBIT-USER-NPARMS+
+   :+H5Z-SCALEOFFSET-USER-NPARMS+
+   :+H5Z-SO-INT-MINBITS-DEFAULT+
+   :+H5Z-CLASS-T-VERS+
+   :+H5Z-FILTER-CONFIG-ENCODE-ENABLED
+   :+H5Z-FILTER-CONFIG-DECODE-ENABLED
+
    ;; == h5p ==================================================================
 
    :+H5P-ROOT+
@@ -334,19 +373,23 @@
    :h5pget-char-encoding
    :h5pget-chunk
    :h5pget-class
+   :h5pget-core-write-tracking
    :h5pget-create-intermediate-group
    :h5pget-external
    :h5pget-external-count
    :h5pget-fapl-core
    :h5pget-file-image
    :h5pget-fill-value
+   :h5pget-filter2
    :h5pget-layout
    :h5pget-libver-bounds
+   :h5pget-nfilters
    :h5pget-sizes
    :h5pget-userblock
    :h5pget-version
    :h5pset-char-encoding
    :h5pset-chunk
+   :h5pset-core-write-tracking
    :h5pset-create-intermediate-group
    :h5pset-deflate
    :h5pset-external
@@ -356,6 +399,7 @@
    :h5pset-fletcher32
    :h5pset-layout
    :h5pset-libver-bounds
+   :h5pset-szip
    :h5pset-shuffle
    :h5pset-userblock))
 

@@ -95,6 +95,13 @@
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-GetClass"
   (plist hid-t))
 
+(if (foreign-symbol-pointer "H5Pget_core_write_tracking")
+    (defcfun "H5Pget_core_write_tracking" herr-t
+      "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-GetCoreWriteTracking"
+      (fapl-id hid-t)
+      (is-enabled (:pointer hbool-t))
+      (page-size (:pointer size-t))))
+
 (defcfun "H5Pget_create_intermediate_group" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-GetCreateIntermediateGroup"
   (lcpl-d hid-t)
@@ -131,6 +138,17 @@
   (type-id hid-t)
   (value :pointer))
 
+(defcfun "H5Pget_filter2" h5z-filter-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-GetFilter2"
+  (plist-id hid-t)
+  (idx :unsigned-int)
+  (flags (:pointer :unsigned-int))
+  (cd-nelmts (:pointer size-t))
+  (cd-values (:pointer :unsigned-int))
+  (namelen size-t)
+  (name (:pointer :char))
+  (filter-config (:pointer :unsigned-int)))
+
 (defcfun "H5Pget_layout" h5d-layout-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-GetLayout"
   (plist hid-t))
@@ -140,6 +158,10 @@
   (fapl-id hid-t)
   (libver-low (:pointer h5f-libver-t))
   (libver-high (:pointer h5f-libver-t)))
+
+(defcfun "H5Pget_nfilters" :int
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-GetNFilters"
+  (plist hid-t))
 
 (defcfun "H5Pget_sizes" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-GetSizes"
@@ -170,6 +192,13 @@
   (plist hid-t)
   (ndims :int)
   (dim (:pointer hsize-t)))
+
+(if (foreign-symbol-pointer "H5Pset_core_write_tracking")
+    (defcfun "H5Pset_core_write_tracking" herr-t
+      "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetCoreWriteTracking"
+      (fapl-id hid-t)
+      (is-enabled hbool-t)
+      (page-size size-t)))
 
 (defcfun "H5Pset_create_intermediate_group" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetCreateIntermediateGroup"
@@ -224,6 +253,13 @@
 (defcfun "H5Pset_shuffle" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetShuffle"
   (plist-id hid-t))
+
+(if (foreign-symbol-pointer "H5Pset_szip")
+    (defcfun "H5Pset_zip" herr-t
+      "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetSzip"
+      (plist hid-t)
+      (options-mask :unsigned-int)
+      (pixels-per-block :unsigned-int)))
 
 (defcfun "H5Pset_userblock" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetUserblock"
