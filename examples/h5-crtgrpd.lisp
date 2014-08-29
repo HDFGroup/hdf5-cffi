@@ -1,58 +1,58 @@
 ;;;; h5-crtgrpd.lisp
 
 ;;; This example illustrates how to create a dataset in a group.
+;;; It depends on the HDF5 file created by h5-crtgrpar.lisp.
+
 
 (in-package :hdf5-cffi)
 
-(let
-    ((f (h5fopen "groups.h5" '(:rdwr) +H5P-DEFAULT+))
-     (rows 3)
-     (cols 3))
-  (let*
-      ((s (with-foreign-object (dims 'hsize-t 2)
-	    (setf (mem-aref dims 'hsize-t 0) rows
-		  (mem-aref dims 'hsize-t 1) cols)
-	    (h5screate-simple 2 dims (null-pointer))))
+(defparameter *FILE* "groups.h5")
 
-       ;; create a dataset in "MyGroup"
-       (d (h5dcreate2 f "/MyGroup/dset1" +H5T-STD-I32BE+ s +H5P-DEFAULT+
-		      +H5P-DEFAULT+ +H5P-DEFAULT+)))
-
-    ;; initialize and wite the data
-    (with-foreign-object (data :int (* rows cols))
-      (dotimes (i rows)
-	(dotimes (j cols)
-	  (setf (mem-aref data :int (+ (* i cols) j)) (1+ j))))
-      (h5dwrite d +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ data))
-    
-    (h5dclose d)
-    (h5sclose s))
-
-  (setq rows 2 cols 10)
+(with-foreign-objects ((dims 'hsize-t 2)
+		       (dset1-data :int (* 3 3))
+		       (dset2-data :int (* 2 10)))
   
-  (let*
-      ;; open an exisitng group
-      ((g (h5gopen2 f "/MyGroup/Group_A" +H5P-DEFAULT+))
-       (s (with-foreign-object (dims 'hsize-t 2)
-	    (setf (mem-aref dims 'hsize-t 0) rows
-		  (mem-aref dims 'hsize-t 1) cols)
-	    (h5screate-simple 2 dims (null-pointer))))
-
-       ;; create a second dataset in "Group_A"
-       (d (h5dcreate2 g "dset2" +H5T-STD-I32BE+ s +H5P-DEFAULT+
-		      +H5P-DEFAULT+ +H5P-DEFAULT+)))
-
-    ;; intialize and write the data
-    (with-foreign-object (data :int (* rows cols))
-      (dotimes (i rows)
-	(dotimes (j cols)
-	  (setf (mem-aref data :int (+ (* i cols) j)) (1+ j)))
-	(h5dwrite d +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ data)))
-    
-    (h5dclose d)
-    (h5sclose s)
-    (h5gclose g))
+  ;; initialize the data of the first dataset
+  (dotimes (i 3)
+    (dotimes (j 3)
+      (setf (mem-aref dset1-data :int (+ (* i 3) j)) (1+ j))))
   
-  (h5fclose f))
+  ;; initialize the data of the second dataset
+  (dotimes (i 2)
+    (dotimes (j 10)
+      (setf (mem-aref dset2-data :int (+ (* i 10) j)) (1+ j))))
+
+  (let
+      ((f (h5fopen *FILE* '(:rdwr) +H5P-DEFAULT+)))
+
+    ;; create a first dataset in group '/MyGroup' 
+    (let*
+	((s (progn
+	      (setf (mem-aref dims 'hsize-t 0) 3
+		    (mem-aref dims 'hsize-t 1) 3)
+	      (h5screate-simple 2 dims (null-pointer))))
+	 (d (h5dcreate2 f "/MyGroup/dset1" +H5T-STD-I32BE+ s +H5P-DEFAULT+
+			+H5P-DEFAULT+ +H5P-DEFAULT+)))
+      
+      (h5dwrite d +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ dset1-data)
+      (h5dclose d)
+      (h5sclose s))
+
+    ;; create a secon dataset in '/MyGroup/Group_A'
+    (let*
+	((g (h5gopen2 f "/MyGroup/Group_A" +H5P-DEFAULT+))
+	 (s (progn
+	      (setf (mem-aref dims 'hsize-t 0) 2
+		    (mem-aref dims 'hsize-t 1) 10)
+	      (h5screate-simple 2 dims (null-pointer))))
+	 (d (h5dcreate2 g "dset2" +H5T-STD-I32BE+ s +H5P-DEFAULT+
+			+H5P-DEFAULT+ +H5P-DEFAULT+)))
+
+      (h5dwrite d +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ dset2-data)
+      (h5dclose d)
+      (h5sclose s)
+      (h5gclose g))
+    
+    (h5fclose f)))
 
 (in-package :cl-user)
