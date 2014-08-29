@@ -255,7 +255,7 @@
   (plist-id hid-t))
 
 (if (foreign-symbol-pointer "H5Pset_szip")
-    (defcfun "H5Pset_zip" herr-t
+    (defcfun "H5Pset_szip" herr-t
       "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetSzip"
       (plist hid-t)
       (options-mask :unsigned-int)
