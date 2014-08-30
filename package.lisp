@@ -378,6 +378,7 @@
    :h5pget-external
    :h5pget-external-count
    :h5pget-fapl-core
+   :h5pget-fclose-degree
    :h5pget-file-image
    :h5pget-fill-value
    :h5pget-filter2
@@ -394,6 +395,7 @@
    :h5pset-deflate
    :h5pset-external
    :h5pset-fapl-core
+   :h5pset-fclose-degree
    :h5pset-file-image
    :h5pset-fill-value
    :h5pset-fletcher32

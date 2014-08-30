@@ -126,6 +126,11 @@
   (increment (:pointer size-t))
   (backing-store (:pointer hbool-t)))
 
+(defcfun "H5Pget_fclose_degree" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-GetFcloseDegree"
+  (fapl-id hid-t)
+  (fc-degree (:pointer h5f-close-degree-t)))
+
 (defcfun "H5Pget_file_image" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-GetFileImage"
   (fapl-id hid-t)
@@ -222,6 +227,11 @@
   (fapl-id hid-t)
   (increment size-t)
   (backing-store hbool-t))
+
+(defcfun "H5Pset_fclose_degree" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetFcloseDegree"
+  (fapl-id hid-t)
+  (fc-degree h5f-close-degree-t))
 
 (defcfun "H5Pset_file_image" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetFileImage"

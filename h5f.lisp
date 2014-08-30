@@ -23,6 +23,13 @@
   (:H5F-SCOPE-LOCAL  0)
   (:H5F-SCOPE-GLOBAL 1))
 
+(defcenum h5f-close-degree-t
+    "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetFcloseDegree"
+  (:H5F-CLOSE-DEFAULT 0)
+  :H5F-CLOSE-WEAK
+  :H5F-CLOSE-SEMI
+  :H5F-CLOSE-STRONG)
+
 ;;; functions
 
 (defcfun "H5Fclose" herr-t
