@@ -80,10 +80,17 @@
   :H5-INDEX-N)
 
 (defcstruct h5-ih-info-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetInfo"
     (index-size hsize-t)
     (heap-size hsize-t))
 
 ;;; functions
+
+(defcfun "H5check_version" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-VersCheck"
+  (majnum :unsigned-int)
+  (minnum :unsigned-int)
+  (relnum :unsigned-int))
 
 (defcfun "H5close" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-Close")
@@ -91,9 +98,10 @@
 (defcfun "H5dont_atexit" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-DontAtExit")
 
-(defcfun "H5free_memory" herr-t
-  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-FreeMemory"
-  (buf :pointer))
+(if (foreign-symbol-pointer "H5free_memory")
+    (defcfun "H5free_memory" herr-t
+      "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-FreeMemory"
+      (buf :pointer)))
 
 (defcfun "H5garbage_collect" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-GarbageCollect")

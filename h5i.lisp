@@ -53,3 +53,7 @@
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5I.html#Identify-NMembers"
   (type h5i-type-t)
   (num-members (:pointer hsize-t)))
+
+(defcfun "H5Itype_exists" htri-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5I.html#Identify-TypeExists"
+  (type h5i-type-t))

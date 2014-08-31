@@ -16,6 +16,17 @@
              (:debug  #x0008)
              (:creat  #x0010))
 
+;;; flags for h5fget-obj-count and h5fget-obj-ids
+
+(defbitfield h5f-obj-flags :unsigned-int
+             (:file #x0001)
+             (:dataset   #x0002)
+             (:group     #x0004)
+             (:datatype  #x0008)
+             (:attribute #x0010)
+             (:all       #x001F)
+	     (:local     #x0020))
+
 ;;; enumeration for flush scope
 
 (defcenum h5f-scope-t
@@ -29,6 +40,16 @@
   :H5F-CLOSE-WEAK
   :H5F-CLOSE-SEMI
   :H5F-CLOSE-STRONG)
+
+(defcstruct h5f-sohm-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetInfo"
+  (hdr-size hsize-t)
+  (msgs-info (:struct h5-ih-info-t)))
+
+(defcstruct h5f-info-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetInfo"
+  (super-ext-size hsize-t)
+  (sohm (:struct h5f-sohm-t)))
 
 ;;; functions
 
@@ -56,10 +77,25 @@
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetCreatePlist"
   (file-id hid-t))
 
+(defcfun "H5Fget_file_image" ssize-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetFileImage"
+  (file-id hid-t)
+  (buf-ptr :pointer)
+  (buf-len (:pointer size-t)))
+
 (defcfun "H5Fget_filesize" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetFilesize"
   (file-id hid-t)
   (size (:pointer hsize-t)))
+
+(defcfun "H5Fget_freespace" hssize-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetFreespace"
+  (file-id hid-t))
+
+(defcfun "H5Fget_info" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetInfo"
+  (obj-id hid-t)
+  (file-info (:pointer (:struct h5f-info-t))))
 
 (defcfun "H5Fget_intent" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetIntent"
@@ -71,6 +107,22 @@
   (obj-id hid-t)
   (name (:pointer :char))
   (size size-t))
+
+(defcfun "H5Fget_obj_count" ssize-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetObjCount"
+  (file-id hid-t)
+  (types h5f-obj-flags))
+
+(defcfun "H5Fget_obj_ids" ssize-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetObjIDs"
+  (file-id hid-t)
+  (types h5f-obj-flags)
+  (max-objs size-t)
+  (obj-id-list (:pointer hid-t)))
+
+(defcfun "H5Fis_hdf5" htri-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-IsHDF5"
+  (name :string))
 
 (defcfun "H5Fmount" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-Mount"

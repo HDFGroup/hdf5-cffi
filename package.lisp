@@ -34,7 +34,8 @@
    :+SIZE-OF-HADDR-T+
    :+SIZE-OF-HSIZE-T+
    :+SIZE-OF-HSSIZE-T+
-   
+
+   :h5check-version
    :h5close
    :h5dont-atexit
    :h5free-memory
@@ -55,9 +56,11 @@
    :h5iget-type
    :h5iis-valid
    :h5inmembers
+   :h5itype-exists
 
    ;; == h5f ==================================================================
 
+   :h5f-info-t
    :h5f-intent-flags
    :h5f-libver-t
    :h5f-scope-t
@@ -66,10 +69,16 @@
    :h5fcreate
    :h5fflush
    :h5fget-access-plist
-   :h5fcreate-plist
+   :h5fget-create-plist
+   :h5fget-file-image
    :h5fget-filesize
+   :h5fget-freespace
+   :h5fget-obj-count
+   :h5fget-obj-ids
+   :h5fget-info
    :h5fget-intent
    :h5fget-name
+   :h5fis-hdf5
    :h5fmount
    :h5fopen
    :h5freopen
