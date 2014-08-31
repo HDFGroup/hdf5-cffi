@@ -156,19 +156,36 @@
 
    :h5tarray-create2
    :h5tclose
+   :h5tcommit2
+   :h5tcommit-anon
+   :h5tcommitted
+   :h5tcopy
    :h5tcreate
+   :h5tdecode
+   :h5tdetect-class
+   :h5tencode
    :h5tequal
    :h5tget-array-dims2
    :h5tget-array-ndims
    :h5tget-class
+   :h5tget-create-plist
+   :h5tget-cset
    :h5tget-member-name
    :h5tget-member-offset
    :h5tget-member-type
    :h5tget-native-type
    :h5tget-nmembers
    :h5tget-size
-   :h5tinsert
+   :h5tget-strpad
    :h5tget-super
+   :h5tget-tag
+   :h5tinsert
+   :h5tis-variable-string
+   :h5topen2
+   :h5tset-cset
+   :h5tset-strpad
+   :h5tset-tag
+   :h5tvlen-create
 
    ;; == h5l ===============================================================
 

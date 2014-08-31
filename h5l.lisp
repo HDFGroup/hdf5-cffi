@@ -84,12 +84,3 @@
   (op :pointer)
   (op-data :pointer)
   (lapl-id hid-t))
-
-(defcallback h5l-iterate-cb herr-t
-    ((group-id hid-t)
-     (name :string)
-     (info (:pointer (:struct h5l-info-t)))
-     (op-data :pointer))
-  (progn
-    (format t name)
-    1))

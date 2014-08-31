@@ -108,15 +108,6 @@
   (op :pointer)
   (op-data :pointer))
 
-(defcallback H5A-operator2-t herr-t
-   ((location-id hid-t)
-    (attr-name :string)
-    (ainfo (:pointer (:struct h5a-info-t)))
-    (op-data :pointer))
-  (progn
-    (format t attr-name)
-    0))
-
 (defcfun "H5Aopen" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-Open"
   (obj-id hid-t)

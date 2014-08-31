@@ -233,10 +233,49 @@
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-Close"
   (dtype-id hid-t))
 
+(defcfun "H5Tcommit2" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-Commit"
+  (loc-id hid-t)
+  (name :string)
+  (dtype-id hid-t)
+  (lcpl-id hid-t)
+  (tcpl-id hid-t)
+  (tapl-id hid-t))
+
+(defcfun "H5Tcommit_anon" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-CommitAnon"
+  (loc-id hid-t)
+  (dtype-id hid-t)
+  (tcpl-id hid-t)
+  (tapl-id hid-t))
+
+(defcfun "H5Tcommitted" htri-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-Committed"
+  (dtype-id hid-t))
+
+(defcfun "H5Tcopy" hid-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-Copy"
+  (dtype-id hid-t))
+
 (defcfun "H5Tcreate" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-Create"
   (class h5t-class-t)
   (size size-t))
+
+(defcfun "H5Tdecode" hid-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-Decode"
+  (buf (:pointer :unsigned-char)))
+
+(defcfun "H5Tdetect_class" htri-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-DetectClass"
+  (dtype-id hid-t)
+  (class h5t-class-t))
+
+(defcfun "H5Tencode" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-Encode"
+  (obj-id hid-t)
+  (buf (:pointer :unsigned-char))
+  (nalloc (:pointer size-t)))
 
 (defcfun "H5Tequal" htri-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-Equal"
@@ -254,6 +293,14 @@
 
 (defcfun "H5Tget_class" h5t-class-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-GetClass"
+  (dtype-id hid-t))
+
+(defcfun "H5Tget_create_plist" hid-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-GetCreatePlist"
+  (dtype-id hid-t))
+
+(defcfun "H5Tget_cset" h5t-cset-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-GetCset"
   (dtype-id hid-t))
 
 (defcfun "H5Tget_member_name" :string
@@ -284,6 +331,18 @@
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-GetSize"
   (dtype-id hid-t))
 
+(defcfun "H5Tget_strpad" h5t-str-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-GetStrpad"
+  (dtype-id hid-t))
+
+(defcfun "H5Tget_super" hid-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-GetSuper"
+  (type hid-t))
+
+(defcfun "H5Tget_tag" (:pointer :char)
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-GetTag"
+  (dtype-id hid-t))
+
 (defcfun "H5Tinsert" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-Insert"
   (dtype-id hid-t)
@@ -291,6 +350,31 @@
   (offset size-t)
   (field-id hid-t))
 
-(defcfun "H5Tget_super" hid-t
-  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-GetSuper"
-  (type hid-t))
+(defcfun "H5Tis_variable_str" htri-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-IsVariableString"
+  (dtype-id hid-t))
+
+(defcfun "H5Topen2" hid-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-Open2"
+  (loc-id hid-t)
+  (name :string)
+  (tapl-id hid-t))
+
+(defcfun "H5Tset_cset" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-SetCset"
+  (dtype-id hid-t)
+  (cset h5t-cset-t))
+
+(defcfun "H5Tset_strpad" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-SetStrpad"
+  (dtype-id hid-t)
+  (cset h5t-str-t))
+
+(defcfun "H5Tset_tag" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-SetTag"
+  (dtype-id hid-t)
+  (tag :string))
+
+(defcfun "H5Tvlen_create" hid-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-VLCreate"
+  (base-type-id hid-t))
