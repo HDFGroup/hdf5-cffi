@@ -171,6 +171,29 @@
 (defconstant +H5T-STD-REF-DSETREG+
   (mem-ref (foreign-symbol-pointer "H5T_STD_REF_DSETREG_g") 'hid-t))
 
+;;; UNIX
+
+(if (foreign-symbol-pointer "H5T_UNIX_D32BE_g")
+    (defconstant +H5T-UNIX-D32BE+
+      (mem-ref (foreign-symbol-pointer "H5T_UNIX_D32BE_g") 'hid-t)))
+(if (foreign-symbol-pointer "H5T_UNIX_D32LE_g")
+    (defconstant +H5T-UNIX-D32LE+
+      (mem-ref (foreign-symbol-pointer "H5T_UNIX_D32LE_g") 'hid-t)))
+(if (foreign-symbol-pointer "H5T_UNIX_D64BE_g")
+    (defconstant +H5T-UNIX-D64BE+
+      (mem-ref (foreign-symbol-pointer "H5T_UNIX_D64BE_g") 'hid-t)))
+(if (foreign-symbol-pointer "H5T_UNIX_D64LE_g")
+    (defconstant +H5T-UNIX-D64LE+
+      (mem-ref (foreign-symbol-pointer "H5T_UNIX_D64LE_g") 'hid-t)))
+
+;;; C and FORTRAN strings
+
+(defconstant +H5T-C-S1+
+  (mem-ref (foreign-symbol-pointer "H5T_C_S1_g") 'hid-t))
+
+(defconstant +H5T-FORTRAN-S1+
+  (mem-ref (foreign-symbol-pointer "H5T_FORTRAN_S1_g") 'hid-t))
+
 ;;; native
 
 (defconstant +H5T-NATIVE-CHAR+
