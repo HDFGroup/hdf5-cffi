@@ -1,6 +1,16 @@
-;;;; Most API types related types are defined in H5public.h.
-;;;; The defintions are driven by the H5_SIZEOF_* macros in H5pubconf.h
-;;;; Check your installation and modify the definitions accordingly!
+;;;; Copyright by The HDF Group.                                              
+;;;; All rights reserved.
+;;;;
+;;;; This file is part of hdf5-cffi.
+;;;; The full hdf5-cffi copyright notice, including terms governing
+;;;; use, modification, and redistribution, is contained in the file COPYING,
+;;;; which can be found at the root of the source code distribution tree.
+;;;; If you do not have access to this file, you may request a copy from
+;;;; help @hdfgroup.org.
+
+;;; Most API types related types are defined in H5public.h.
+;;; The defintions are driven by the H5_SIZEOF_* macros in H5pubconf.h
+;;; Check your installation and modify the definitions accordingly!
 
 (in-package #:hdf5-cffi)
 
