@@ -432,6 +432,11 @@
   (dtype-id hid-t)
   (cset h5t-cset-t))
 
+(defcfun "H5Tset_size" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-SetSize"
+  (dtype-id hid-t)
+  (size size-t))
+
 (defcfun "H5Tset_strpad" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-SetStrpad"
   (dtype-id hid-t)

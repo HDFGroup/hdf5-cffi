@@ -203,6 +203,7 @@
    :h5tis-variable-string
    :h5topen2
    :h5tset-cset
+   :h5tset-size
    :h5tset-strpad
    :h5tset-tag
    :h5tvlen-create
