@@ -55,6 +55,15 @@
   (loc-id hid-t)
   (attr-name :string))
 
+(defcfun "H5Adelete_by_idx" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-DeleteByIdx"
+  (loc-id hid-t)
+  (obj-name :string)
+  (idx-type h5-index-t)
+  (order h5-iter-order-t)
+  (n hsize-t)
+  (lapl-id hid-t))
+
 (defcfun "H5Adelete_by_name" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-DeleteByName"
   (loc-id hid-t)
@@ -83,6 +92,16 @@
   (attr-id hid-t)
   (info (:pointer (:struct h5a-info-t))))
 
+(defcfun "H5Aget_info_by_idx" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-GetInfoByIdx"
+  (loc-id hid-t)
+  (obj-name :string)
+  (idx-type h5-index-t)
+  (order h5-iter-order-t)
+  (n hsize-t)
+  (info (:pointer (:struct h5a-info-t)))
+  (lapl-id hid-t))
+
 (defcfun "H5Aget_info_by_name" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-GetInfoByName"
   (loc-id hid-t)
@@ -96,6 +115,17 @@
   (attr-id hid-t)
   (buf-size size-t)
   (buf (:pointer :char)))
+
+(defcfun "H5Aget_name_by_idx" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-GetNameByIdx"
+  (loc-id hid-t)
+  (obj-name :string)
+  (idx-type h5-index-t)
+  (order h5-iter-order-t)
+  (n hsize-t)
+  (name (:pointer :char))
+  (size size-t)
+  (lapl-id hid-t))
 
 (defcfun "H5Aget_space" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-GetSpace"
@@ -118,11 +148,32 @@
   (op :pointer)
   (op-data :pointer))
 
+(defcfun "H5Aiterate_by_name" herr-t
+    "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-IterateByName"
+  (loc-id hid-t)
+  (obj-name :string)
+  (idx-type h5-index-t)
+  (order h5-iter-order-t)
+  (n (:pointer hsize-t))
+  (op :pointer)
+  (op_data :pointer)
+  (lapd-id hid-t))
+
 (defcfun "H5Aopen" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-Open"
   (obj-id hid-t)
   (attr-name :string)
   (aapl-id hid-t))
+
+(defcfun "H5Aopen_by_idx" hid-t
+    "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-OpenByIdx"
+  (loc-id hid-t)
+  (obj-name :string)
+  (idx-type h5-index-t)
+  (order h5-iter-order-t)
+  (n hsize-t)
+  (aapl-id hid-t)
+  (lapd-id hid-t))
 
 (defcfun "H5Aopen_by_name" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-OpenByName"

@@ -303,18 +303,23 @@
    :h5acreate2
    :h5acreate-by-name
    :h5adelete
+   :h5delete-by-idx
    :h5adelete-by-name
    :h5aexists
    :h5aexists-by-name
    :h5aget-create-plist
    :h5aget-info
+   :h5aget-info-by-idx
    :h5aget-info-by-name
    :h5aget-name
+   :h5aget-name-by-idx
    :h5aget-space
    :h5aget-storage-size
    :h5aget-type
    :h5aiterate2
+   :h5aiterate-by-name
    :h5aopen
+   :h5aopen-by-idx
    :h5aopen-by-name
    :h5aread
    :h5arename
@@ -373,6 +378,8 @@
    :+H5Z-FILTER-CONFIG-ENCODE-ENABLED
    :+H5Z-FILTER-CONFIG-DECODE-ENABLED
 
+   :h5zfilter-avail
+   
    ;; == h5p ==================================================================
 
    :+H5P-ROOT+
