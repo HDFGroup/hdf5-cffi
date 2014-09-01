@@ -178,15 +178,21 @@
    :h5tdecode
    :h5tdetect-class
    :h5tencode
+   :h5tenum-create
+   :h5tenum-insert
+   :h5tenum-nameof
+   :h5tenum-valueof
    :h5tequal
    :h5tget-array-dims2
    :h5tget-array-ndims
    :h5tget-class
    :h5tget-create-plist
    :h5tget-cset
+   :h5tget-member-index
    :h5tget-member-name
    :h5tget-member-offset
    :h5tget-member-type
+   :h5tget-member-value
    :h5tget-native-type
    :h5tget-nmembers
    :h5tget-size

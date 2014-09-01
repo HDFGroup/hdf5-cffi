@@ -310,6 +310,29 @@
   (buf (:pointer :unsigned-char))
   (nalloc (:pointer size-t)))
 
+(defcfun "H5Tenum_create" hid-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-EnumCreate"
+  (dtype-id hid-t))
+
+(defcfun "H5Tenum_insert" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-EnumInsert"
+  (dtype-id hid-t)
+  (name :string)
+  (value :pointer))
+
+(defcfun "H5Tenum_nameof" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-EnumNameOf"
+  (dtype-id hid-t)
+  (value :pointer)
+  (name (:pointer :char))
+  (size size-t))
+
+(defcfun "H5Tenum_valueof" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-EnumValueOf"
+  (dtype-id hid-t)
+  (name (:pointer :char))
+  (value (:pointer)))
+
 (defcfun "H5Tequal" htri-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-Equal"
   (dtype-id1 hid-t)
@@ -336,6 +359,11 @@
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-GetCset"
   (dtype-id hid-t))
 
+(defcfun "H5Tget_member_index" :int
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-GetMemberIndex"
+  (dtype-id hid-t)
+  (field-name :string))
+
 (defcfun "H5Tget_member_name" :string
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-GetMemberName"
   (dtype-id hid-t)
@@ -350,6 +378,12 @@
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-GetMemberType"
   (dtype-id hid-t)
   (field-idx :uint))
+
+(defcfun "H5Tget_member_value" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-GetMemberValue"
+  (dtype-id hid-t)
+  (memb-no :unsigned-int)
+  (value :pointer))
 
 (defcfun "H5Tget_native_type" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-GetNativeType"
