@@ -74,3 +74,7 @@
 
 (defconstant +H5Z-FILTER-CONFIG-ENCODE-ENABLED #x0001)
 (defconstant +H5Z-FILTER-CONFIG-DECODE-ENABLED #x0002)
+
+(defcfun "H5Zfilter_avail" htri-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5Z.html#Compression-FilterAvail"
+  (filer h5z-filter-t))
