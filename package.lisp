@@ -290,6 +290,7 @@
    :h5gcreate-anon
    :h5gcreate-plist
    :h5gget-info
+   :h5gget-info-by-idx
    :h5gget-info-by-name
    :h5gopen1
    :h5gopen2
