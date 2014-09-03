@@ -11,6 +11,7 @@
 (asdf:defsystem #:hdf5-cffi
   :serial t
   :description "hdf5-cffi is a CFFI wrapper for the HDF5 library."
+  :version "0.0.1"
   :author "Gerd Heber <gheber@hdfgroup.org>"
   :license "BSD"
   :components ((:file "package")
