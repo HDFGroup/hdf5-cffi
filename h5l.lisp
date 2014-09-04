@@ -77,6 +77,15 @@
   (link-buff (:pointer (:struct h5l-info-t)))
   (lapl-id hid-t))
 
+(defcfun "H5Literate" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Iterate"
+  (group-id hid-t)
+  (index-type h5-index-t)
+  (order h5-iter-order-t)
+  (idx (:pointer hsize-t))
+  (op :pointer)
+  (op-data :pointer))
+
 (defcfun "H5Lvisit" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Visit"
   (group-id hid-t)

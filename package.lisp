@@ -220,6 +220,7 @@
    :h5lcreate-soft
    :h5ldelete
    :h5lexists
+   :h5literate
    :h5lvisit
    :h5lvisit-by-name
 
