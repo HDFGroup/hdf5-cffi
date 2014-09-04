@@ -100,3 +100,11 @@
   (loc-id hid-t)
   (name :string)
   (lapl-id hid-t))
+
+(defcfun "H5Ovisit" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-Visit"
+  (object-id hid-t)
+  (index-type h5-index-t)
+  (order h5-iter-order-t)
+  (op :pointer)
+  (op-data :pointer))
