@@ -10,6 +10,9 @@
 
 ;;; This example shows how to iterate over group members using H5Literate.
 
+;;; http://www.hdfgroup.org/ftp/HDF5/examples/examples-by-api/hdf5-examples/1_8/C/H5G/h5ex_g_iterate.c
+
+
 (in-package :hdf5-cffi)
 
 ;;; Download the input file from
