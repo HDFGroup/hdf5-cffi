@@ -313,7 +313,7 @@
    :h5acreate2
    :h5acreate-by-name
    :h5adelete
-   :h5delete-by-idx
+   :h5adelete-by-idx
    :h5adelete-by-name
    :h5aexists
    :h5aexists-by-name
