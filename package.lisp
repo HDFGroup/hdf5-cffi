@@ -277,12 +277,18 @@
    :h5dcreate2
    :h5dcreate-anon
    :h5dfill
+   :h5dgather
+   :h5dget-access-plist
    :h5dget-create-plist
+   :h5dget-offset
    :h5dget-space
+   :h5dget-space-status
    :h5dget-storage-size
    :h5dget-type
+   :h5diterate
    :h5dopen2
    :h5dread
+   :h5dscatter
    :h5dset-extent
    :h5dvlen-get-buf-size
    :h5dvlen-reclaim

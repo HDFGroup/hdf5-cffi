@@ -82,13 +82,36 @@
   (buf-type-id hid-t)
   (space-id hid-t))
 
+(defcfun "H5Dgather" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-Gather"
+  (src-space-id hid-t)
+  (src-buf :pointer)
+  (type-id hid-t)
+  (dst-buf-size size-t)
+  (dst-buf :pointer)
+  (op :pointer)
+  (op-data :pointer))
+
+(defcfun "H5Dget_access_plist" hid-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-GetAccessPlist"
+  (dataset-id hid-t))
+
 (defcfun "H5Dget_create_plist" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-GetCreatePlist"
+  (dataset-id hid-t))
+
+(defcfun "H5Dget_offset" haddr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-GetOffset"
   (dataset-id hid-t))
 
 (defcfun "H5Dget_space" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-GetSpace"
   (dataset-id hid-t))
+
+(defcfun "H5Dget_space_status" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-GetSpaceStatus"
+  (dataset-id hid-t)
+  (status (:pointer h5d-space-status-t)))
 
 (defcfun "H5Dget_storage_size" hsize-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-GetStorageSize"
@@ -97,6 +120,14 @@
 (defcfun "H5Dget_type" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-GetType"
   (dataset-id hid-t))
+
+(defcfun "H5Diterate" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-Iterate"
+  (buf :pointer)
+  (type-id hid-t)
+  (space-id hid-t)
+  (operator :pointer)
+  (operator-data :pointer))
 
 (defcfun "H5Dopen2" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-Open2"
@@ -112,6 +143,14 @@
   (file-dataspace-id hid-t)
   (xfer-plist-id hid-t)
   (buffer :pointer))
+
+(defcfun "H5Dscatter" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-Scatter"
+  (op :pointer)
+  (op-data :pointer)
+  (type-id hid-t)
+  (dst-space-id hid-t)
+  (dst-buf :pointer))
 
 (defcfun "H5Dset_extent" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-SetExtent"
