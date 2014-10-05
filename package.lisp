@@ -145,7 +145,6 @@
 
 	   +H5T-OPAQUE-TAG-MAX+
 
-
 	   +H5T-IEEE-F32BE+
 	   +H5T-IEEE-F32LE+
 	   +H5T-IEEE-F64BE+
@@ -249,37 +248,70 @@
 	   h5tset-tag
 	   h5tvlen-create
 
-   ;; == h5l ===============================================================
+	   ;; == h5l ==========================================================
 
-   :+H5L-MAX-LINK-NAME-LEN+
+	   +H5L-MAX-LINK-NAME-LEN+
+	   +H5L-SAME-LOC+
+	   +H5L-LINK-CLASS-T-VERS+
 
-   :h5l-type-t
-   :h5l-info-t
+	   H5L-type-t
 
-   :h5lcreate-external
-   :h5lcreate-hard
-   :h5lcreate-soft
-   :h5ldelete
-   :h5lexists
-   :h5literate
-   :h5lvisit
-   :h5lvisit-by-name
+	   +H5L-TYPE-BUILTIN-MAX+
+	   +H5L-TYPE-UD-MIN+
 
-   ;; == h5o ===============================================================
+	   H5L-info-t
 
-   :h5o-hdr-info-t
-   :h5o-info-t
-   :h5o-msg-crt-idx-t
-   :h5o-type-t
+	   h5lcreate-external
+	   h5lcreate-hard
+	   h5lcreate-soft
+	   h5ldelete
+	   h5lexists
+	   h5literate
+	   h5lvisit
+	   h5lvisit-by-name
+
+	   ;; == h5o ==========================================================
+
+	   +H5O-COPY-SHALLOW-HIERARCHY-FLAG+
+	   +H5O-COPY-EXPAND-SOFT-LINK-FLAG+
+	   +H5O-COPY-EXPAND-EXT-LINK-FLAG+
+	   +H5O-COPY-EXPAND-REFERENCE-FLAG+
+	   +H5O-COPY-WITHOUT-ATTR-FLAG+
+	   +H5O-COPY-PRESERVE-NULL-FLAG+
+	   +H5O-COPY-MERGE-COMMITTED-DTYPE-FLAG+
+	   +H5O-COPY-ALL+
+
+	   +H5O-SHMESG-NONE-FLAG+
+	   +H5O-SHMESG-SDSPACE-FLAG+
+	   +H5O-SHMESG-DTYPE-FLAG+
+	   +H5O-SHMESG-FILL-FLAG+
+	   +H5O-SHMESG-PLINE-FLAG+
+	   +H5O-SHMESG-ATTR-FLAG+
+	   +H5O-SHMESG-ALL-FLAG+
+	   +H5O-SHMESG-MAX-NINDEXES+
+	   +H5O-SHMESG-MAX-LIST-SIZE+
+
+	   +H5O-HDR-CHUNK0-SIZE+
+	   +H5O-HDR-ATTR-CRT-ORDER_TRACKED+
+	   +H5O-HDR-ATTR-CRT-ORDER_INDEXED+
+	   +H5O-HDR-ATTR-STORE-PHASE-CHANGE+
+	   +H5O-HDR-STORE-TIMES+
+	   +H5O-HDR-ALL-FLAGS+
+	   
+	   H5O-type-t
+	   H5O-msg-crt-idx-t
+	   
+	   H5O-hdr-info-t
+	   H5O-info-t
    
-   :h5oclose
-   :h5ocopy
-   :h5oexists-by-name
-   :h5oget-info
-   :h5oget-info-by-name
-   :h5olink
-   :h5oopen
-   :h5ovisit
+	   h5oclose
+	   h5ocopy
+	   h5oexists-by-name
+	   h5oget-info
+	   h5oget-info-by-name
+	   h5olink
+	   h5oopen
+	   h5ovisit
    
    ;; == h5s ===============================================================
 

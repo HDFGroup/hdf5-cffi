@@ -6,33 +6,22 @@
 ;;;; use, modification, and redistribution, is contained in the file COPYING,
 ;;;; which can be found at the root of the source code distribution tree.
 ;;;; If you do not have access to this file, you may request a copy from
-;;;; help @hdfgroup.org.
+;;;; help@hdfgroup.org.
 
-;;; See H5Lpublic.h .
+(in-package #:hdf5)
 
-(in-package #:hdf5-cffi)
-
-(defconstant +H5L-MAX-LINK-NAME-LEN+ (1- (ash 1 32)))
-
-(defcenum h5l-type-t
-  (:H5L-TYPE-ERROR    -1)
-  (:H5L-TYPE-HARD      0)
-  (:H5L-TYPE-SOFT      1)
-  (:H5L-TYPE-EXTERNAL  64)
-  (:H5L-TYPE-MAX       255))
-
-(defcunion h5l-info-union-t
+(cffi:defcunion _u-t
   (address haddr-t)
   (val-size size-t))
 
-(defcstruct h5l-info-t
-  (type h5l-type-t)
+(cffi:defcstruct H5L-info-t
+  (type H5L-type-t)
   (corder-valid hbool-t)
   (corder :int64)
-  (cset h5t-cset-t)
-  (u (:union h5l-info-union-t)))
+  (cset H5T-cset-t)
+  (u (:union _u-t)))
 
-(defcfun "H5Lcreate_external" herr-t
+(cffi:defcfun "H5Lcreate_external" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-CreateExternal"
   (target-file-name :string)
   (target-obj-name :string)
@@ -41,7 +30,7 @@
   (lcpl-id hid-t)
   (lapl-id hid-t))
 
-(defcfun "H5Lcreate_hard" herr-t
+(cffi:defcfun "H5Lcreate_hard" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-CreateHard"
   (obj-loc-id hid-t)
   (obj-name :string)
@@ -50,7 +39,7 @@
   (lcpl-id hid-t)
   (lapl-id hid-t))
 
-(defcfun "H5Lcreate_soft" herr-t
+(cffi:defcfun "H5Lcreate_soft" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-CreateSoft"
   (target-path :string)
   (link-loc-id hid-t)
@@ -58,48 +47,48 @@
   (lcpl-id hid-t)
   (lapl-id hid-t))
 
-(defcfun "H5Ldelete" herr-t
+(cffi:defcfun "H5Ldelete" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Delete"
   (loc-id hid-t)
   (name :string)
   (lapl-id hid-t))
 
-(defcfun "H5Lexists" htri-t
+(cffi:defcfun "H5Lexists" htri-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Exists"
   (loc-id hid-t)
   (name :string)
   (lapl-id hid-t))
 
-(defcfun "H5Lget_info" herr-t
+(cffi:defcfun "H5Lget_info" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-GetInfo"
   (link-loc-id hid-t)
   (link-name :string)
-  (link-buff (:pointer (:struct h5l-info-t)))
+  (link-buff (:pointer (:struct H5L-info-t)))
   (lapl-id hid-t))
 
-(defcfun "H5Literate" herr-t
+(cffi:defcfun "H5Literate" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Iterate"
   (group-id hid-t)
-  (index-type h5-index-t)
-  (order h5-iter-order-t)
+  (index-type H5-index-t)
+  (order H5-iter-order-t)
   (idx (:pointer hsize-t))
   (op :pointer)
   (op-data :pointer))
 
-(defcfun "H5Lvisit" herr-t
+(cffi:defcfun "H5Lvisit" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Visit"
   (group-id hid-t)
-  (index-type h5-index-t)
-  (order h5-iter-order-t)
+  (index-type H5-index-t)
+  (order H5-iter-order-t)
   (op :pointer)
   (op-data :pointer))
 
-(defcfun "H5Lvisit_by_name" herr-t
+(cffi:defcfun "H5Lvisit_by_name" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-VisitByName"
   (loc-id hid-t)
   (group-name :string)
-  (index-type h5-index-t)
-  (order h5-iter-order-t)
+  (index-type H5-index-t)
+  (order H5-iter-order-t)
   (op :pointer)
   (op-data :pointer)
   (lapl-id hid-t))

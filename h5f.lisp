@@ -10,13 +10,13 @@
 
 (in-package #:hdf5)
 
-(cffi:defcstruct sohm-t
+(cffi:defcstruct _sohm-t
   (hdr-size hsize-t)
   (msgs-info (:struct H5-ih-info-t)))
 
 (cffi:defcstruct H5F-info-t
   (super-ext-size hsize-t)
-  (sohm (:struct sohm-t)))
+  (sohm (:struct _sohm-t)))
 
 (cffi:defcfun "H5Fclose" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-Close"
