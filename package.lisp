@@ -313,29 +313,29 @@
 	   h5oopen
 	   h5ovisit
    
-   ;; == h5s ===============================================================
+	   ;; == h5s ==========================================================
 
-   :+H5S-ALL+
-   :+H5S-MAX-RANK+
-   :+H5S-UNLIMITED+
+	   +H5S-ALL+
+	   +H5S-MAX-RANK+
+	   +H5S-UNLIMITED+
 
-   :h5s-class-t
-   :h5s-sel-type
-   :h5s-seloper-t
+	   H5S-class-t
+	   H5S-sel-type
+	   H5S-seloper-t
 
-   :h5s.close
-   :h5scopy
-   :h5screate
-   :h5screate-simple
-   :h5sget-select-bounds
-   :h5sget-select-type
-   :h5sget-simple-extent-dims
-   :h5sget-simple-extent-ndims
-   :h5sget-simple-extent-npoints
-   :h5sget-simple-extent-type
-   :h5sis-simple
-   :h5sselect-hyperslab
-   :h5sselect-valid
+	   h5sclose
+	   h5scopy
+	   h5screate
+	   h5screate-simple
+	   h5sget-select-bounds
+	   h5sget-select-type
+	   h5sget-simple-extent-dims
+	   h5sget-simple-extent-ndims
+	   h5sget-simple-extent-npoints
+	   h5sget-simple-extent-type
+	   h5sis-simple
+	   h5sselect-hyperslab
+	   h5sselect-valid
 
    ;; == h5d ===============================================================
    
