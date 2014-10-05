@@ -6,207 +6,248 @@
 ;;;; use, modification, and redistribution, is contained in the file COPYING,
 ;;;; which can be found at the root of the source code distribution tree.
 ;;;; If you do not have access to this file, you may request a copy from
-;;;; help @hdfgroup.org.
+;;;; help@hdfgroup.org.
 
-(defpackage #:hdf5-cffi
-  (:use #:cl #:cffi)
-  (:export
-
-   :time-t
-   :off-t
+(defpackage #:hdf5
+  (:documentation "hdf5-cffi library: Common LISP binding for the HDF5 library")
+  (:use #:cl)
+  (:export load-hdf5-foreign-libraries
+	   size-t
+	   time-t
+	   off-t
    
-   ;; == h5 ===================================================================
+	   ;; == h5 ===========================================================
+
+	   +H5-VERS-MAJOR+
+	   +H5-VERS-MINOR+
+	   +H5-VERS-RELEASE+
    
-   :haddr-t
-   :hbool-t
-   :herr-t
-   :hsize-t
-   :hssize-t
-   :htri-t
-   :size-t
-   :ssize-t
+	   herr-t	   
+	   hbool-t
+	   htri-t
+	   ssize-t
+	   hsize-t
+	   hssize-t
+	   haddr-t
 
-   :h5-ih-info-t
-   :h5-index-t
-   :h5-iter-order-t
-   
-   :+H5-ITER-ERROR+
-   :+H5-ITER-CONT+
-   :+H5-ITER-STOP+
-   :+H5-VERS-MAJOR+
-   :+H5-VERS-MINOR+
-   :+H5-VERS-RELEASE+
-   :+HADDR-UNDEF+
-   :+HADDR-MAX+
-   :+H5P-DEFAULT+
-   :+SIZE-OF-HADDR-T+
-   :+SIZE-OF-HSIZE-T+
-   :+SIZE-OF-HSSIZE-T+
+	   +HADDR-UNDEF+
+	   +HADDR-MAX+
+	   
+	   +H5P-DEFAULT+
 
-   :h5check-version
-   :h5close
-   :h5dont-atexit
-   :h5free-memory
-   :h5garbage-collect
-   :h5get-libversion
-   :h5open
-   :h5set-free-list-limits
+	   H5-iter-order-t
 
-   ;; == h5i ==================================================================
+	   +H5-ITER-ERROR+
+	   +H5-ITER-CONT+
+	   +H5-ITER-STOP+
+	   
+	   H5-index-t
+	   
+	   H5-ih-info-t
 
-   :hid-t
-   :h5i-type-t
+	   h5check-version
+	   h5close
+	   h5dont-atexit
+	   h5free-memory
+	   h5garbage-collect
+	   h5get-libversion
+	   h5open
+	   h5set-free-list-limits
 
-   :+H5I-INVALID-HID+
+	   ;; == h5i ==========================================================
 
-   :h5iget-file-id
-   :h5iget-name
-   :h5iget-type
-   :h5iis-valid
-   :h5inmembers
-   :h5itype-exists
+	   H5I-type-t
+	   
+	   hid-t
 
-   ;; == h5f ==================================================================
+	   +H5-SIZEOF-HID-T+
+	   +H5I-INVALID-HID+
 
-   :h5f-info-t
-   :h5f-intent-flags
-   :h5f-libver-t
-   :h5f-scope-t
+	   h5iget-file-id
+	   h5iget-name
+	   h5iget-type
+	   h5iis-valid
+	   h5inmembers
+	   h5itype-exists
 
-   :h5fclose
-   :h5fcreate
-   :h5fflush
-   :h5fget-access-plist
-   :h5fget-create-plist
-   :h5fget-file-image
-   :h5fget-filesize
-   :h5fget-freespace
-   :h5fget-obj-count
-   :h5fget-obj-ids
-   :h5fget-info
-   :h5fget-intent
-   :h5fget-name
-   :h5fis-hdf5
-   :h5fmount
-   :h5fopen
-   :h5freopen
-   :h5funmount
+	   ;; == h5f ==========================================================
 
-   ;; == h5t ==================================================================
+	   +H5F-ACC-RDONLY+
+	   +H5F-ACC-RDWR+
+	   +H5F-ACC-TRUNC+
+	   +H5F-ACC-EXCL+
+	   +H5F-ACC-DEBUG+
+	   +H5F-ACC-CREAT+
+	   +H5F-ACC-DEFAULT+
 
-   :h5t-class-t
-   :h5t-cset-t
-   :h5t-direction-t
-   :h5t-norm-t
-   :h5t-order-t
-   :h5t-pad-t
-   :h5t-sign-t
-   :h5t-str-t
-   :hvl-t
+	   +H5F-OBJ-FILE+
+	   +H5F-OBJ-DATASET+
+	   +H5F-OBJ-GROUP+
+	   +H5F-OBJ-DATATYPE+
+	   +H5F-OBJ-ATTR+
+	   +H5F-OBJ-ALL+
+	   +H5F-OBJ-LOCAL+
 
-   :+H5T-NCSET+
-   :+H5T-NSTR+
-   :+H5T-OPAQUE-TAG-MAX+
-   :+H5T-VARIABLE+
+	   H5F-scope-t
+	   
+	   +H5F-UNLIMITED+
 
-   :+H5T-IEEE-F32BE+
-   :+H5T-IEEE-F32LE+
-   :+H5T-IEEE-F64BE+
-   :+H5T-IEEE-F64LE+
-   :+H5T-STD-I8BE+
-   :+H5T-STD-I8LE+
-   :+H5T-STD-I16BE+
-   :+H5T-STD-I16LE+
-   :+H5T-STD-I32BE+
-   :+H5T-STD-I32LE+
-   :+H5T-STD-I64BE+
-   :+H5T-STD-I64LE+
-   :+H5T-STD-U8BE+
-   :+H5T-STD-U8LE+
-   :+H5T-STD-U16BE+
-   :+H5T-STD-U16LE+
-   :+H5T-STD-U32BE+
-   :+H5T-STD-U32LE+
-   :+H5T-STD-U64BE+
-   :+H5T-STD-U64LE+
-   :+H5T-STD-B8BE+
-   :+H5T-STD-B8LE+
-   :+H5T-STD-B16BE+
-   :+H5T-STD-B16LE+
-   :+H5T-STD-B32BE+
-   :+H5T-STD-B32LE+
-   :+H5T-STD-B64BE+
-   :+H5T-STD-B64LE+
-   :+H5T-STD-REF-OBJ+
-   :+H5T-STD-REF-DSETREG+
-   :+H5T-UNIX-D32BE+
-   :+H5T-UNIX-D32LE+
-   :+H5T-UNIX-D64BE+
-   :+H5T-UNIX-D64LE+
-   :+H5T-C-S1+
-   :+H5T-FORTRAN-S1+
-   :+H5T-NATIVE-CHAR+
-   :+H5T-NATIVE-UCHAR+
-   :+H5T-NATIVE-SHORT+
-   :+H5T-NATIVE-USHORT+
-   :+H5T-NATIVE-INT+
-   :+H5T-NATIVE-UINT+
-   :+H5T-NATIVE-LONG+
-   :+H5T-NATIVE-ULONG+
-   :+H5T-NATIVE-LLONG+
-   :+H5T-NATIVE-ULLONG+
-   :+H5T-NATIVE-FLOAT+
-   :+H5T-NATIVE-DOUBLE+
-   :+H5T-NATIVE-B8+
-   :+H5T-NATIVE-B16+
-   :+H5T-NATIVE-B32+
-   :+H5T-NATIVE-B64+
-   :+H5T-NATIVE-OPAQUE+
-   :+H5T-NATIVE-HADDR+
-   :+H5T-NATIVE-HSIZE+
-   :+H5T-NATIVE-HSSIZE+
-   :+H5T-NATIVE-HERR+
-   :+H5T-NATIVE-HBOOL+
+	   H5F-close-degree-t
+	   
+	   H5F-info-t
 
-   :h5tarray-create2
-   :h5tclose
-   :h5tcommit2
-   :h5tcommit-anon
-   :h5tcommitted
-   :h5tcopy
-   :h5tcreate
-   :h5tdecode
-   :h5tdetect-class
-   :h5tencode
-   :h5tenum-create
-   :h5tenum-insert
-   :h5tenum-nameof
-   :h5tenum-valueof
-   :h5tequal
-   :h5tget-array-dims2
-   :h5tget-array-ndims
-   :h5tget-class
-   :h5tget-create-plist
-   :h5tget-cset
-   :h5tget-member-index
-   :h5tget-member-name
-   :h5tget-member-offset
-   :h5tget-member-type
-   :h5tget-member-value
-   :h5tget-native-type
-   :h5tget-nmembers
-   :h5tget-size
-   :h5tget-strpad
-   :h5tget-super
-   :h5tget-tag
-   :h5tinsert
-   :h5tis-variable-string
-   :h5topen2
-   :h5tset-cset
-   :h5tset-size
-   :h5tset-strpad
-   :h5tset-tag
-   :h5tvlen-create
+	   H5F-libver-t
+	   
+	   h5fclose
+	   h5fcreate
+	   h5fflush
+	   h5fget-access-plist
+	   h5fget-create-plist
+	   h5fget-file-image
+	   h5fget-filesize
+	   h5fget-freespace
+	   h5fget-obj-count
+	   h5fget-obj-ids
+	   h5fget-info
+	   h5fget-intent
+	   h5fget-name
+	   h5fis-hdf5
+	   h5fmount
+	   h5fopen
+	   h5freopen
+	   h5funmount
+
+	   ;; == h5t ==========================================================
+
+	   H5T-class-t
+	   H5T-order-t
+	   H5T-sign-t
+	   H5T-norm-t
+	   H5T-cset-t
+
+	   +H5T-NCSET+
+
+	   H5T-str-t
+
+	   +H5T-NSTR+
+
+	   H5T-pad-t
+	   H5T-cmd-t
+	   H5T-bkg-t
+	   H5T-cdata-t
+	   H5T-pers-t
+	   H5T-dir-t
+	   H5T-conv-except-t
+	   H5T-conv-ret-t
+	   hvl-t
+	   
+	   +H5T-VARIABLE+
+
+	   +H5T-OPAQUE-TAG-MAX+
+
+
+	   +H5T-IEEE-F32BE+
+	   +H5T-IEEE-F32LE+
+	   +H5T-IEEE-F64BE+
+	   +H5T-IEEE-F64LE+
+	   +H5T-STD-I8BE+
+	   +H5T-STD-I8LE+
+	   +H5T-STD-I16BE+
+	   +H5T-STD-I16LE+
+	   +H5T-STD-I32BE+
+	   +H5T-STD-I32LE+
+	   +H5T-STD-I64BE+
+	   +H5T-STD-I64LE+
+	   +H5T-STD-U8BE+
+	   +H5T-STD-U8LE+
+	   +H5T-STD-U16BE+
+	   +H5T-STD-U16LE+
+	   +H5T-STD-U32BE+
+	   +H5T-STD-U32LE+
+	   +H5T-STD-U64BE+
+	   +H5T-STD-U64LE+
+	   +H5T-STD-B8BE+
+	   +H5T-STD-B8LE+
+	   +H5T-STD-B16BE+
+	   +H5T-STD-B16LE+
+	   +H5T-STD-B32BE+
+	   +H5T-STD-B32LE+
+	   +H5T-STD-B64BE+
+	   +H5T-STD-B64LE+
+	   +H5T-STD-REF-OBJ+
+	   +H5T-STD-REF-DSETREG+
+	   
+	   +H5T-UNIX-D32BE+
+	   +H5T-UNIX-D32LE+
+	   +H5T-UNIX-D64BE+
+	   +H5T-UNIX-D64LE+
+	   
+	   +H5T-C-S1+
+	   +H5T-FORTRAN-S1+
+	   
+	   +H5T-NATIVE-CHAR+
+	   +H5T-NATIVE-SCHAR+
+	   +H5T-NATIVE-UCHAR+
+	   +H5T-NATIVE-SHORT+
+	   +H5T-NATIVE-USHORT+
+	   +H5T-NATIVE-INT+
+	   +H5T-NATIVE-UINT+
+	   +H5T-NATIVE-LONG+
+	   +H5T-NATIVE-ULONG+
+	   +H5T-NATIVE-LLONG+
+	   +H5T-NATIVE-ULLONG+
+	   +H5T-NATIVE-FLOAT+
+	   +H5T-NATIVE-DOUBLE+
+	   +H5T-NATIVE-B8+
+	   +H5T-NATIVE-B16+
+	   +H5T-NATIVE-B32+
+	   +H5T-NATIVE-B64+
+	   +H5T-NATIVE-OPAQUE+
+	   +H5T-NATIVE-HADDR+
+	   +H5T-NATIVE-HSIZE+
+	   +H5T-NATIVE-HSSIZE+
+	   +H5T-NATIVE-HERR+
+	   +H5T-NATIVE-HBOOL+
+
+	   h5tarray-create2
+	   h5tclose
+	   h5tcommit2
+	   h5tcommit-anon
+	   h5tcommitted
+	   h5tcopy
+	   h5tcreate
+	   h5tdecode
+	   h5tdetect-class
+	   h5tencode
+	   h5tenum-create
+	   h5tenum-insert
+	   h5tenum-nameof
+	   h5tenum-valueof
+	   h5tequal
+	   h5tget-array-dims2
+	   h5tget-array-ndims
+	   h5tget-class
+	   h5tget-create-plist
+	   h5tget-cset
+	   h5tget-member-index
+	   h5tget-member-name
+	   h5tget-member-offset
+	   h5tget-member-type
+	   h5tget-member-value
+	   h5tget-native-type
+	   h5tget-nmembers
+	   h5tget-size
+	   h5tget-strpad
+	   h5tget-super
+	   h5tget-tag
+	   h5tinsert
+	   h5tis-variable-string
+	   h5topen2
+	   h5tset-cset
+	   h5tset-size
+	   h5tset-strpad
+	   h5tset-tag
+	   h5tvlen-create
 
    ;; == h5l ===============================================================
 

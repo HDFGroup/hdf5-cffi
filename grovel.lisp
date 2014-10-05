@@ -10,8 +10,8 @@
 
 (in-package :hdf5)
 
-(progn
-  (pushnew :hdf5 *features*)
-  (defvar *hdf5-header-file* "/usr/local/include/mpi/hdf5.h")
-  (defun load-hdf5-foreign-libraries ()
-    (cffi:use-foreign-library "/usr/local/lib/libhdf5.so")))
+(ctype hdf5::size-t  "size_t")
+
+(ctype hdf5::time-t  "time_t")
+
+(ctype hdf5::off-t  "off_t")
