@@ -337,51 +337,51 @@
 	   h5sselect-hyperslab
 	   h5sselect-valid
 
-   ;; == h5d ===============================================================
+	   ;; == h5d ==========================================================
    
-   :h5d-alloc-time-t
-   :h5d-fill-time-t
-   :h5d-fill-value-t
-   :h5d-layout-t
-   :h5d-space-status-t
+	   H5D-alloc-time-t
+	   H5D-fill-time-t
+	   H5D-fill-value-t
+	   H5D-layout-t
+	   H5D-space-status-t
    
-   :h5dclose
-   :h5dcreate1
-   :h5dcreate2
-   :h5dcreate-anon
-   :h5dfill
-   :h5dgather
-   :h5dget-access-plist
-   :h5dget-create-plist
-   :h5dget-offset
-   :h5dget-space
-   :h5dget-space-status
-   :h5dget-storage-size
-   :h5dget-type
-   :h5diterate
-   :h5dopen2
-   :h5dread
-   :h5dscatter
-   :h5dset-extent
-   :h5dvlen-get-buf-size
-   :h5dvlen-reclaim
-   :h5dwrite
+	   h5dclose
+	   h5dcreate1
+	   h5dcreate2
+	   h5dcreate-anon
+	   h5dfill
+	   h5dgather
+	   h5dget-access-plist
+	   h5dget-create-plist
+	   h5dget-offset
+	   h5dget-space
+	   h5dget-space-status
+	   h5dget-storage-size
+	   h5dget-type
+	   h5diterate
+	   h5dopen2
+	   h5dread
+	   h5dscatter
+	   h5dset-extent
+	   h5dvlen-get-buf-size
+	   h5dvlen-reclaim
+	   h5dwrite
 
-   ;; == h5g ===============================================================
+	   ;; == h5g ==========================================================
 
-   :h5g-storage-type-t
-   :h5g-info-type-t
+	   H5G-storage-type-t
+	   H5G-info-type-t
 
-   :h5gclose
-   :h5gcreate1
-   :h5gcreate2
-   :h5gcreate-anon
-   :h5gcreate-plist
-   :h5gget-info
-   :h5gget-info-by-idx
-   :h5gget-info-by-name
-   :h5gopen1
-   :h5gopen2
+	   h5gclose
+	   h5gcreate1
+	   h5gcreate2
+	   h5gcreate-anon
+	   h5gcreate-plist
+	   h5gget-info
+	   h5gget-info-by-idx
+	   h5gget-info-by-name
+	   h5gopen1
+	   h5gopen2
 
    ;; == h5a ===============================================================
 

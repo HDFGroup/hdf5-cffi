@@ -6,49 +6,17 @@
 ;;;; use, modification, and redistribution, is contained in the file COPYING,
 ;;;; which can be found at the root of the source code distribution tree.
 ;;;; If you do not have access to this file, you may request a copy from
-;;;; help @hdfgroup.org.
+;;;; help@hdfgroup.org.
 
 ;;; See H5Dpublih.h .
 
-(in-package #:hdf5-cffi)
+(in-package #:hdf5)
 
-(defcenum h5d-layout-t
-  (:H5D-LAYOUT-ERROR -1)
-  :H5D-COMPACT
-  :H5D-CONTIGUOUS
-  :H5D-CHUNKED
-  :H5D-NLAYOUTS)
-
-(defcenum h5d-alloc-time-t
-  (:H5D-ALLOC-TIME-ERROR -1)
-  :H5D-ALLOC-TIME-DEFAULT
-  :H5D-ALLOC-TIME-EARLY
-  :H5D-ALLOC-TIME-LATE
-  :H5D-ALLOC-TIME-INCR)
-
-(defcenum h5d-space-status-t
-  (:H5D-SPACE-STATUS-ERROR -1)
-  :H5D-SPACE-STATUS-NOT-ALLOCATED
-  :H5D-SPACE-STATUS-PART-ALLOCATED
-  :H5D-SPACE-STATUS-ALLOCATED)
-
-(defcenum h5d-fill-time-t
-  (:H5D-FILL-TIME-ERROR -1)
-  :H5D-FILL-TIME-ALLOC
-  :H5D-FILL-TIME-NEVER
-  :H5D-FILL-TIME-IFSET)
-
-(defcenum h5d-fill-value-t
-  (:H5D-FILL-VALUE-ERROR -1)
-  :H5D-FILL-VALUE-UNDEFINED
-  :H5D-FILL-VALUE-DEFAULT
-  :H5D-FILL-VALUE-USER-DEFINED)
-
-(defcfun "H5Dclose" herr-t
+(cffi:defcfun "H5Dclose" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-Close"
   (dataset-id hid-t))
 
-(defcfun "H5Dcreate1" hid-t
+(cffi:defcfun "H5Dcreate1" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-Create1"
   (loc-id hid-t)
   (name :string)
@@ -56,7 +24,7 @@
   (space-id hid-t)
   (dcpl-id hid-t))
 
-(defcfun "H5Dcreate2" hid-t
+(cffi:defcfun "H5Dcreate2" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-Create2"
   (loc-id hid-t)
   (name :string)
@@ -66,7 +34,7 @@
   (dcpl-id hid-t)
   (dapl hid-t))
 
-(defcfun "H5Dcreate_anon" hid-t
+(cffi:defcfun "H5Dcreate_anon" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-CreateAnon"
   (loc-id hid-t)
   (type-id hid-t)
@@ -74,7 +42,7 @@
   (dcpl-id hid-t)
   (dapl hid-t))
 
-(defcfun "H5Dfill" herr-t
+(cffi:defcfun "H5Dfill" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-Fill"
   (fill :pointer)
   (fill-type-id hid-t)
@@ -82,7 +50,7 @@
   (buf-type-id hid-t)
   (space-id hid-t))
 
-(defcfun "H5Dgather" herr-t
+(cffi:defcfun "H5Dgather" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-Gather"
   (src-space-id hid-t)
   (src-buf :pointer)
@@ -92,36 +60,36 @@
   (op :pointer)
   (op-data :pointer))
 
-(defcfun "H5Dget_access_plist" hid-t
+(cffi:defcfun "H5Dget_access_plist" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-GetAccessPlist"
   (dataset-id hid-t))
 
-(defcfun "H5Dget_create_plist" hid-t
+(cffi:defcfun "H5Dget_create_plist" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-GetCreatePlist"
   (dataset-id hid-t))
 
-(defcfun "H5Dget_offset" haddr-t
+(cffi:defcfun "H5Dget_offset" haddr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-GetOffset"
   (dataset-id hid-t))
 
-(defcfun "H5Dget_space" hid-t
+(cffi:defcfun "H5Dget_space" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-GetSpace"
   (dataset-id hid-t))
 
-(defcfun "H5Dget_space_status" herr-t
+(cffi:defcfun "H5Dget_space_status" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-GetSpaceStatus"
   (dataset-id hid-t)
-  (status (:pointer h5d-space-status-t)))
+  (status (:pointer H5D-space-status-t)))
 
-(defcfun "H5Dget_storage_size" hsize-t
+(cffi:defcfun "H5Dget_storage_size" hsize-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-GetStorageSize"
   (dataset-id hid-t))
 
-(defcfun "H5Dget_type" hid-t
+(cffi:defcfun "H5Dget_type" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-GetType"
   (dataset-id hid-t))
 
-(defcfun "H5Diterate" herr-t
+(cffi:defcfun "H5Diterate" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-Iterate"
   (buf :pointer)
   (type-id hid-t)
@@ -129,13 +97,13 @@
   (operator :pointer)
   (operator-data :pointer))
 
-(defcfun "H5Dopen2" hid-t
+(cffi:defcfun "H5Dopen2" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-Open2"
   (loc-id hid-t)
   (name :string)
   (dapl-id hid-t))
 
-(defcfun "H5Dread" herr-t
+(cffi:defcfun "H5Dread" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-Read"
   (dataset-id hid-t)
   (mem-type-id hid-t)
@@ -144,7 +112,7 @@
   (xfer-plist-id hid-t)
   (buffer :pointer))
 
-(defcfun "H5Dscatter" herr-t
+(cffi:defcfun "H5Dscatter" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-Scatter"
   (op :pointer)
   (op-data :pointer)
@@ -152,26 +120,26 @@
   (dst-space-id hid-t)
   (dst-buf :pointer))
 
-(defcfun "H5Dset_extent" herr-t
+(cffi:defcfun "H5Dset_extent" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-SetExtent"
   (dset-id hid-t)
   (size (:pointer hsize-t)))
 
-(defcfun "H5Dvlen_get_buf_size" herr-t
+(cffi:defcfun "H5Dvlen_get_buf_size" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-VLGetBuf"
   (dataset-id hid-t)
   (type-id hid-t)
   (space-id hid-t)
   (size (:pointer hsize-t)))
 
-(defcfun "H5Dvlen_reclaim" herr-t
+(cffi:defcfun "H5Dvlen_reclaim" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-VLReclaim"
   (type-id hid-t)
   (space_id hid-t)
   (plist-id hid-t)
   (buf :pointer))
 
-(defcfun "H5Dwrite" herr-t
+(cffi:defcfun "H5Dwrite" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5D.html#Dataset-Write"
   (datset-id hid-t)
   (mem-type-id hid-t)
