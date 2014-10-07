@@ -1,0 +1,6 @@
+#+sbcl(require 'asdf)
+(asdf:operate 'asdf:load-op 'hdf5-cffi)
+(load "hdf5-test")
+(hdf5::testhdf5)
+#+cmu(ext:quit)
+#+sbcl(sb-ext:quit)
