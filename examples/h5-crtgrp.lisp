@@ -6,7 +6,7 @@
 ;;;; use, modification, and redistribution, is contained in the file COPYING,
 ;;;; which can be found at the root of the source code distribution tree.
 ;;;; If you do not have access to this file, you may request a copy from
-;;;; help @hdfgroup.org.
+;;;; help@hdfgroup.org.
 
 ;;; This example illustrates how to create and close a group.
 ;;; http://www.hdfgroup.org/ftp/HDF5/current/src/unpacked/examples/h5_crtgrp.c
@@ -22,15 +22,15 @@
     ((fapl (h5pcreate +H5P-FILE-ACCESS+))
      (file (prog2
 	       (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-	       ;; create the file
 	       (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
+  
   (unwind-protect
-       (let*
-	   ((g (h5gcreate2 file "/MyGroup" +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+
+       (let ((g (h5gcreate2 file "/MyGroup"
+			    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	 (h5gclose g))
-    ;; cleanup forms
+
     (h5fclose file)
     (h5pclose fapl)))
 
-#+cmu(ext:quit)
 #+sbcl(sb-ext:quit)
