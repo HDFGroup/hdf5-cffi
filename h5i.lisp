@@ -8,19 +8,6 @@
 ;;;; If you do not have access to this file, you may request a copy from
 ;;;; help@hdfgroup.org.
 
-#+sbcl(require 'asdf)
-
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  #+cmu(progn
-         (setf debug:*debug-print-level* 11
-               debug:*debug-print-length* 25)
-         (setf ext:*gc-verbose* nil)))
-
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (setf *features* (remove ':newitem *features*))
-  (pushnew :newitem *features*)
-  (hdf5::load-hdf5-foreign-libraries)
-  (in-package #:hdf5))
 (in-package #:hdf5)
 
 (cffi:defcfun "H5Iget_file_id" hid-t

@@ -21,7 +21,6 @@
   (pushnew :newitem *features*)
   (hdf5::load-hdf5-foreign-libraries)
   (in-package #:hdf5))
-(in-package #:hdf5)
 
 (cffi:defcfun "H5check_version" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-VersCheck"
