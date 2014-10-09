@@ -254,12 +254,12 @@
 	   +H5L-SAME-LOC+
 	   +H5L-LINK-CLASS-T-VERS+
 
-	   H5L-type-t
+	   h5l-type-t
 
 	   +H5L-TYPE-BUILTIN-MAX+
 	   +H5L-TYPE-UD-MIN+
 
-	   H5L-info-t
+	   h5l-info-t
 
 	   h5lcreate-external
 	   h5lcreate-hard

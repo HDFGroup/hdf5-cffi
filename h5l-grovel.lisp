@@ -18,7 +18,7 @@
 
 (constant (+H5L-LINK-CLASS-T-VERS+ "H5L_LINK_CLASS_T_VERS"))
 
-(cenum H5L-type-t
+(cenum h5l-type-t
        ((:H5L-TYPE-ERROR    "H5L_TYPE_ERROR"))
        ((:H5L-TYPE-HARD     "H5L_TYPE_HARD"))
        ((:H5L-TYPE-SOFT     "H5L_TYPE_SOFT"))
