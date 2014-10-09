@@ -16,64 +16,64 @@
 
 (cffi:defcfun "H5Acreate1" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-Create1"
-  (loc-id hid-t)
+  (loc-id    hid-t)
   (attr-name :string)
-  (type-id hid-t)
-  (space-id hid-t)
-  (acpl-id hid-t))
+  (type-id   hid-t)
+  (space-id  hid-t)
+  (acpl-id   hid-t))
 
 (cffi:defcfun "H5Acreate2" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-Create2"
-  (loc-id hid-t)
+  (loc-id    hid-t)
   (attr-name :string)
-  (type-id hid-t)
-  (space-id hid-t)
-  (acpl-id hid-t)
-  (aapl-id hid-t))
+  (type-id   hid-t)
+  (space-id  hid-t)
+  (acpl-id   hid-t)
+  (aapl-id   hid-t))
 
 (cffi:defcfun "H5Acreate_by_name" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-CreateByName"
-  (loc-id hid-t)
-  (obj-name :string)
+  (loc-id    hid-t)
+  (obj-name  :string)
   (attr-name :string)
-  (type-id hid-t)
-  (space-id hid-t)
-  (acpl-id hid-t)
-  (aapl-id hid-t)
-  (lapl-id hid-t))
+  (type-id   hid-t)
+  (space-id  hid-t)
+  (acpl-id   hid-t)
+  (aapl-id   hid-t)
+  (lapl-id   hid-t))
 
 (cffi:defcfun "H5Adelete" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-Delete"
-  (loc-id hid-t)
+  (loc-id    hid-t)
   (attr-name :string))
 
 (cffi:defcfun "H5Adelete_by_idx" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-DeleteByIdx"
-  (loc-id hid-t)
+  (loc-id   hid-t)
   (obj-name :string)
   (idx-type h5-index-t)
-  (order h5-iter-order-t)
-  (n hsize-t)
-  (lapl-id hid-t))
+  (order    h5-iter-order-t)
+  (n        hsize-t)
+  (lapl-id  hid-t))
 
 (cffi:defcfun "H5Adelete_by_name" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-DeleteByName"
-  (loc-id hid-t)
-  (obj-name :string)
+  (loc-id    hid-t)
+  (obj-name  :string)
   (attr-name :string)
-  (lapl-id hid-t))
+  (lapl-id   hid-t))
 
 (cffi:defcfun "H5Aexists" htri-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-Exists"
-  (obj-id hid-t)
+  (obj-id    hid-t)
   (attr-name :string))
 
 (cffi:defcfun "H5Aexists_by_name" htri-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-ExistsByName"
-  (obj-id hid-t)
-  (obj-name :string)
+  (obj-id    hid-t)
+  (obj-name  :string)
   (attr-name :string)
-  (lapl-id hid-t))
+  (lapl-id   hid-t))
 
 (cffi:defcfun "H5Aget_create_plist" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-GetCreatePlist"
@@ -82,42 +82,42 @@
 (cffi:defcfun "H5Aget_info" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-GetInfo"
   (attr-id hid-t)
-  (info (:pointer (:struct H5A-info-t))))
+  (info    (:pointer (:struct h5a-info-t))))
 
 (cffi:defcfun "H5Aget_info_by_idx" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-GetInfoByIdx"
-  (loc-id hid-t)
+  (loc-id   hid-t)
   (obj-name :string)
   (idx-type h5-index-t)
-  (order h5-iter-order-t)
-  (n hsize-t)
-  (info (:pointer (:struct H5A-info-t)))
-  (lapl-id hid-t))
+  (order    h5-iter-order-t)
+  (n        hsize-t)
+  (info     (:pointer (:struct H5A-info-t)))
+  (lapl-id  hid-t))
 
 (cffi:defcfun "H5Aget_info_by_name" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-GetInfoByName"
-  (loc-id hid-t)
-  (obj-name :string)
+  (loc-id    hid-t)
+  (obj-name  :string)
   (attr-name :string)
-  (info (:pointer (:struct H5A-info-t)))
-  (lapl-id hid-t))
+  (info      (:pointer (:struct h5a-info-t)))
+  (lapl-id   hid-t))
 
 (cffi:defcfun "H5Aget_name" ssize-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-GetName"
-  (attr-id hid-t)
+  (attr-id  hid-t)
   (buf-size size-t)
-  (buf (:pointer :char)))
+  (buf      (:pointer :char)))
 
 (cffi:defcfun "H5Aget_name_by_idx" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-GetNameByIdx"
-  (loc-id hid-t)
+  (loc-id   hid-t)
   (obj-name :string)
-  (idx-type H5-index-t)
-  (order H5-iter-order-t)
-  (n hsize-t)
-  (name (:pointer :char))
-  (size size-t)
-  (lapl-id hid-t))
+  (idx-type h5-index-t)
+  (order    h5-iter-order-t)
+  (n        hsize-t)
+  (name     (:pointer :char))
+  (size     size-t)
+  (lapl-id  hid-t))
 
 (cffi:defcfun "H5Aget_space" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-GetSpace"
@@ -133,70 +133,70 @@
 
 (cffi:defcfun "H5Aiterate2" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-Iterate2"
-  (obj-id hid-t)
-  (idx-type H5-index-t)
-  (order H5-iter-order-t)
-  (n (:pointer hsize-t))
-  (op :pointer)
-  (op-data :pointer))
+  (obj-id   hid-t)
+  (idx-type h5-index-t)
+  (order    h5-iter-order-t)
+  (n        (:pointer hsize-t))
+  (op       :pointer)
+  (op-data  :pointer))
 
 (cffi:defcfun "H5Aiterate_by_name" herr-t
     "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-IterateByName"
-  (loc-id hid-t)
+  (loc-id   hid-t)
   (obj-name :string)
-  (idx-type H5-index-t)
-  (order H5-iter-order-t)
-  (n (:pointer hsize-t))
-  (op :pointer)
-  (op_data :pointer)
-  (lapd-id hid-t))
+  (idx-type h5-index-t)
+  (order    h5-iter-order-t)
+  (n        (:pointer hsize-t))
+  (op       :pointer)
+  (op_data  :pointer)
+  (lapd-id  hid-t))
 
 (cffi:defcfun "H5Aopen" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-Open"
-  (obj-id hid-t)
+  (obj-id    hid-t)
   (attr-name :string)
-  (aapl-id hid-t))
+  (aapl-id   hid-t))
 
 (cffi:defcfun "H5Aopen_by_idx" hid-t
     "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-OpenByIdx"
-  (loc-id hid-t)
+  (loc-id   hid-t)
   (obj-name :string)
-  (idx-type H5-index-t)
-  (order H5-iter-order-t)
-  (n hsize-t)
-  (aapl-id hid-t)
-  (lapd-id hid-t))
+  (idx-type h5-index-t)
+  (order    h5-iter-order-t)
+  (n        hsize-t)
+  (aapl-id  hid-t)
+  (lapd-id  hid-t))
 
 (cffi:defcfun "H5Aopen_by_name" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-OpenByName"
-  (loc-id hid-t)
-  (obj-name :string)
+  (loc-id    hid-t)
+  (obj-name  :string)
   (attr-name :string)
-  (aapl-id hid-t)
-  (lapl-id hid-t))
+  (aapl-id   hid-t)
+  (lapl-id   hid-t))
 
 (cffi:defcfun "H5Aread" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-Read"
-  (attr-id hid-t)
+  (attr-id     hid-t)
   (mem-type-id hid-t)
-  (buf :pointer))
+  (buf         :pointer))
 
 (cffi:defcfun "H5Arename" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-Rename"
-  (loc-id hid-t)
+  (loc-id        hid-t)
   (old-attr-name :string)
   (new-attr-name :string))
 
 (cffi:defcfun "H5Arename_by_name" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-RenameByName"
-  (loc-id hid-t)
-  (obj-name :string)
+  (loc-id        hid-t)
+  (obj-name      :string)
   (old-attr-name :string)
   (new-attr-name :string)
-  (lapl-id hid-t))
+  (lapl-id       hid-t))
 
 (cffi:defcfun "H5Awrite" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-Write"
-  (attr-id hid-t)
+  (attr-id     hid-t)
   (mem-type-id hid-t)
-  (buf :pointer))
+  (buf         :pointer))

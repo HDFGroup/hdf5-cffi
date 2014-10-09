@@ -14,7 +14,7 @@
 
 (cc-flags "-lhdf5")
 
-(cenum H5T-class-t
+(cenum h5t-class-t
        ((:H5T-NO-CLASS  "H5T_NO_CLASS"))
        ((:H5T-INTEGER   "H5T_INTEGER"))
        ((:H5T-FLOAT     "H5T_FLOAT"))
@@ -29,7 +29,7 @@
        ((:H5T-ARRAY     "H5T_ARRAY"))
        ((:H5T-NCLASSES  "H5T_NCLASSES")))
 
-(cenum H5T-order-t
+(cenum h5t-order-t
        ((:H5T-ORDER-ERROR "H5T_ORDER_ERROR"))
        ((:H5T-ORDER-LE    "H5T_ORDER_LE"))
        ((:H5T-ORDER-BE    "H5T_ORDER_BE"))
@@ -37,19 +37,19 @@
        ((:H5T-ORDER-MIXED "H5T_ORDER_MIXED"))
        ((:H5T-ORDER-NONE  "H5T_ORDER_NONE")))
 
-(cenum H5T-sign-t
+(cenum h5t-sign-t
        ((:H5T-SGN-ERROR "H5T_SGN_ERROR"))
        ((:H5T-SGN-NONE  "H5T_SGN_NONE"))
        ((:H5T-SGN-2     "H5T_SGN_2"))
        ((:H5T-NSGN      "H5T_NSGN")))
 
-(cenum H5T-norm-t
+(cenum h5t-norm-t
        ((:H5T-NORM-ERROR   "H5T_NORM_ERROR"))
        ((:H5T-NORM-IMPLIED "H5T_NORM_IMPLIED"))
        ((:H5T-NORM-MSBSET  "H5T_NORM_MSBSET"))
        ((:H5T-NORM-NONE    "H5T_NORM_NONE")))
 
-(cenum H5T-cset-t
+(cenum h5t-cset-t
        ((:H5T-CSET-ERROR       "H5T_CSET_ERROR"))
        ((:H5T-CSET-ASCII       "H5T_CSET_ASCII"))
        ((:H5T-CSET-UTF8        "H5T_CSET_UTF8"))
@@ -70,7 +70,7 @@
 
 (constant (+H5T-NCSET+ "H5T_NCSET"))
 
-(cenum H5T-str-t
+(cenum h5t-str-t
        ((:H5T-STR-ERROR       "H5T_STR_ERROR"))
        ((:H5T-STR-NULLTERM    "H5T_STR_NULLTERM"))
        ((:H5T-STR-NULLPAD     "H5T_STR_NULLPAD"))
@@ -91,40 +91,40 @@
 
 (constant (+H5T-NSTR+ "H5T_NSTR"))
 
-(cenum H5T-pad-t
+(cenum h5t-pad-t
        ((:H5T-PAD-ERROR      "H5T_PAD_ERROR"))
        ((:H5T-PAD-ZERO       "H5T_PAD_ZERO"))
        ((:H5T-PAD-ONE        "H5T_PAD_ONE"))
        ((:H5T-PAD-BACKGROUND "H5T_PAD_BACKGROUND"))
        ((:H5T-NPAD           "H5T_NPAD")))
 
-(cenum H5T-cmd-t
+(cenum h5t-cmd-t
        ((:H5T-CONV-INIT "H5T_CONV_INIT"))
        ((:H5T-CONV-CONV "H5T_CONV_CONV"))
        ((:H5T-CONV-FREE "H5T_CONV_FREE")))
 
-(cenum H5T-bkg-t
+(cenum h5t-bkg-t
        ((:H5T-BKG-NO   "H5T_BKG_NO"))
        ((:H5T-BKG-TEMP "H5T_BKG_TEMP"))
        ((:H5T-BKG-YES  "H5T_BKG_YES")))
 
-(cstruct H5-cdata-t "H5T_cdata_t"
+(cstruct h5t-cdata-t "H5T_cdata_t"
          (command  "command"  :type hdf5::H5T-cmd-t)
          (need-bkg "need_bkg" :type hdf5::H5T-bkg-t)
 	 (recalc   "recalc"   :type hdf5::hbool-t)
 	 (priv     "priv"     :type :pointer))
 
-(cenum H5T-pers-t
+(cenum h5t-pers-t
        ((:H5T-PERS-DONTCARE "H5T_PERS_DONTCARE"))
        ((:H5T-PERS-HARD     "H5T_PERS_HARD"))
        ((:H5T-PERS-SOFT     "H5T_PERS_SOFT")))
 
-(cenum H5T-dir-t
+(cenum h5t-dir-t
        ((:H5T-DIR-DEFAULT "H5T_DIR_DEFAULT"))
        ((:H5T-DIR-ASCEND  "H5T_DIR_ASCEND"))
        ((:H5T-DIR-DESCEND "H5T_DIR_DESCEND")))
 
-(cenum H5T-conv-except-t
+(cenum h5t-conv-except-t
        ((:H5T-CONV-EXCEPT-RANGE-HI  "H5T_CONV_EXCEPT_RANGE_HI"))
        ((:H5T-CONV-EXCEPT-RANGE-LOW "H5T_CONV_EXCEPT_RANGE_LOW"))
        ((:H5T-CONV-EXCEPT-PRECISION "H5T_CONV_EXCEPT_PRECISION"))
@@ -133,7 +133,7 @@
        ((:H5T-CONV-EXCEPT-NINF      "H5T_CONV_EXCEPT_NINF"))
        ((:H5T-CONV-EXCEPT-NAN       "H5T_CONV_EXCEPT_NAN")))
 
-(cenum H5T-conv-ret-t
+(cenum h5t-conv-ret-t
        ((:H5T-CONV-ABORT     "H5T_CONV_ABORT"))
        ((:H5T-CONV-UNHANDLED "H5T_CONV_UNHANDLED"))
        ((:H5T-CONV-HANDLED   "H5T_CONV_HANDLED")))

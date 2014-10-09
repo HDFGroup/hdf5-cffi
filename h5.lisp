@@ -11,12 +11,6 @@
 #+sbcl(require 'asdf)
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  #+cmu(progn
-         (setf debug:*debug-print-level* 11
-               debug:*debug-print-length* 25)
-         (setf ext:*gc-verbose* nil)))
-
-(eval-when (:compile-toplevel :load-toplevel :execute)
   (setf *features* (remove ':newitem *features*))
   (pushnew :newitem *features*)
   (hdf5::load-hdf5-foreign-libraries)

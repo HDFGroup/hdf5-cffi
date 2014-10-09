@@ -20,33 +20,33 @@
 
 (cffi:defcfun "H5Screate" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html#Dataspace-Create"
-  (types H5S-class-t))
+  (types h5s-class-t))
 
 (cffi:defcfun "H5Screate_simple" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html#Dataspace-CreateSimple"
-  (rank :int)
+  (rank         :int)
   (current-dims (:pointer hsize-t))
   (maximum-dims (:pointer hsize-t)))
 
 (cffi:defcfun "H5Sget_select_bounds" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html#Dataspace-SelectBounds"
   (space-id hid-t)
-  (start (:pointer hsize-t))
-  (end (:pointer hsize-t)))
+  (start    (:pointer hsize-t))
+  (end      (:pointer hsize-t)))
 
 (cffi:defcfun "H5Sget_select_npoints" hssize-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html#Dataspace-SelectNpoints"
   (space-id hid-t))
 
-(cffi:defcfun "H5Sget_select_type" H5S-sel-type
+(cffi:defcfun "H5Sget_select_type" h5s-sel-type
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html#Dataspace-GetSelectType"
   (space-id hid-t))
 
 (cffi:defcfun "H5Sget_simple_extent_dims" :int
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html#Dataspace-ExtentDims"
   (space-id hid-t)
-  (dims (:pointer hsize-t))
-  (maxdims (:pointer hsize-t)))
+  (dims     (:pointer hsize-t))
+  (maxdims  (:pointer hsize-t)))
 
 (cffi:defcfun "H5Sget_simple_extent_ndims" :int
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html#Dataspace-ExtentNdims"
@@ -66,12 +66,12 @@
 
 (cffi:defcfun "H5Sselect_hyperslab" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html#Dataspace-SelectHyperslab"
-  (space-id hid-t)
-  (select-operation H5S-seloper-t)
-  (start (:pointer hsize-t))
-  (stride (:pointer hsize-t))
-  (count (:pointer hsize-t))
-  (block (:pointer hsize-t)))
+  (space-id         hid-t)
+  (select-operation h5s-seloper-t)
+  (start            (:pointer hsize-t))
+  (stride           (:pointer hsize-t))
+  (count            (:pointer hsize-t))
+  (block            (:pointer hsize-t)))
 
 (cffi:defcfun "H5Sselect_valid" htri-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html#Dataspace-SelectValid"

@@ -38,11 +38,11 @@
 (constant (+H5O-HDR-STORE-TIMES+             "H5O_HDR_STORE_TIMES"))
 (constant (+H5O-HDR-ALL-FLAGS+               "H5O_HDR_ALL_FLAGS"))
 
-(cenum H5O-type-t
+(cenum h5o-type-t
        ((:H5O-TYPE-UNKNOWN        "H5O_TYPE_UNKNOWN"))
        ((:H5O-TYPE-GROUP          "H5O_TYPE_GROUP"))
        ((:H5O-TYPE-DATASET        "H5O_TYPE_DATASET"))
        ((:H5O-TYPE-NAMED-DATATYPE "H5O_TYPE_NAMED_DATATYPE"))
        ((:H5O-TYPE-NTYPES         "H5O_TYPE_NTYPES")))
 
-(ctype hdf5::H5O-msg-crt-idx-t "H5O_msg_crt_idx_t")
+(ctype hdf5::h5o-msg-crt-idx-t "H5O_msg_crt_idx_t")

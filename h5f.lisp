@@ -11,12 +11,12 @@
 (in-package #:hdf5)
 
 (cffi:defcstruct _sohm-t
-  (hdr-size hsize-t)
+  (hdr-size  hsize-t)
   (msgs-info (:struct H5-ih-info-t)))
 
-(cffi:defcstruct H5F-info-t
+(cffi:defcstruct h5f-info-t
   (super-ext-size hsize-t)
-  (sohm (:struct _sohm-t)))
+  (sohm           (:struct _sohm-t)))
 
 (cffi:defcfun "H5Fclose" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-Close"
@@ -25,14 +25,14 @@
 (cffi:defcfun "H5Fcreate" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-Create"
   (filename :string)
-  (flags :unsigned-int)
-  (fcpl-id hid-t)
-  (fapl-id hid-t))
+  (flags    :unsigned-int)
+  (fcpl-id  hid-t)
+  (fapl-id  hid-t))
 
 (cffi:defcfun "H5Fflush" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-Flush"
   (object-id hid-t)
-  (scope H5F-scope-t))
+  (scope     h5f-scope-t))
 
 (cffi:defcfun "H5Fget_access_plist" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetAccessPlist"
@@ -59,30 +59,30 @@
 
 (cffi:defcfun "H5Fget_info" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetInfo"
-  (obj-id hid-t)
-  (file-info (:pointer (:struct H5F-info-t))))
+  (obj-id    hid-t)
+  (file-info (:pointer (:struct h5f-info-t))))
 
 (cffi:defcfun "H5Fget_intent" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetIntent"
   (file-id hid-t)
-  (intent (:pointer :unsigned-int)))
+  (intent  (:pointer :unsigned-int)))
 
 (cffi:defcfun "H5Fget_name" ssize-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetName"
   (obj-id hid-t)
-  (name (:pointer :char))
-  (size size-t))
+  (name   (:pointer :char))
+  (size   size-t))
 
 (cffi:defcfun "H5Fget_obj_count" ssize-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetObjCount"
   (file-id hid-t)
-  (types :unsigned-int))
+  (types   :unsigned-int))
 
 (cffi:defcfun "H5Fget_obj_ids" ssize-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetObjIDs"
-  (file-id hid-t)
-  (types :unsigned-int)
-  (max-objs size-t)
+  (file-id     hid-t)
+  (types       :unsigned-int)
+  (max-objs    size-t)
   (obj-id-list (:pointer hid-t)))
 
 (cffi:defcfun "H5Fis_hdf5" htri-t
@@ -91,15 +91,15 @@
 
 (cffi:defcfun "H5Fmount" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-Mount"
-  (loc-id hid-t)
-  (name :string)
+  (loc-id   hid-t)
+  (name     :string)
   (child-id hid-t)
-  (fmpl-id hid-t))
+  (fmpl-id  hid-t))
 
 (cffi:defcfun "H5Fopen" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-Open"
-  (name :string)
-  (flags :unsigned-int)
+  (name   :string)
+  (flags  :unsigned-int)
   (fapl-id hid-t))
 
 (cffi:defcfun "H5Freopen" hid-t
@@ -109,4 +109,4 @@
 (cffi:defcfun "H5Funmount" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-Unmount"
   (loc-id hid-t)
-  (name :string))
+  (name   :string))

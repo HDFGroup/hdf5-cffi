@@ -17,14 +17,14 @@
 (cffi:defcfun "H5Iget_name" ssize-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5I.html#Identify-GetType"
   (obj-id hid-t)
-  (name (:pointer :char))
-  (size size-t))
+  (name   (:pointer :char))
+  (size   size-t))
 
-(cffi:defcfun "H5Iget_type" H5I-type-t
+(cffi:defcfun "H5Iget_type" h5i-type-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5I.html#Identify-GetName"
   (obj-id hid-t)
-  (name (:pointer :char))
-  (size size-t))
+  (name   (:pointer :char))
+  (size   size-t))
 
 (cffi:defcfun "H5Iis_valid" htri-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5I.html#Identify-IsValid"
@@ -32,9 +32,9 @@
 
 (cffi:defcfun "H5Inmembers" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5I.html#Identify-NMembers"
-  (type H5I-type-t)
+  (type        h5i-type-t)
   (num-members (:pointer hsize-t)))
 
 (cffi:defcfun "H5Itype_exists" htri-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5I.html#Identify-TypeExists"
-  (type H5I-type-t))
+  (type h5i-type-t))

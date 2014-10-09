@@ -12,7 +12,7 @@
 
 (in-package :hdf5)
 
-(cenum H5I-type-t
+(cenum h5i-type-t
        ((:H5I-UNINIT      "H5I_UNINIT"))
        ((:H5I-BADID       "H5I_BADID"))
        ((:H5I-FILE        "H5I_FILE"))

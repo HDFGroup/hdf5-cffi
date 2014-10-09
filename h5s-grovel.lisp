@@ -17,13 +17,13 @@
 
 (constant (+H5S-MAX-RANK+ "H5S_MAX_RANK"))
 
-(cenum H5S-class-t
+(cenum h5s-class-t
        ((:H5S-NO-CLASS "H5S_NO_CLASS"))
        ((:H5S-SCALAR   "H5S_SCALAR"))
        ((:H5S-SIMPLE   "H5S_SIMPLE"))
        ((:H5S-NULL     "H5S_NULL")))
 
-(cenum H5S-seloper-t
+(cenum h5s-seloper-t
        ((:H5S-SELECT-NOOP    "H5S_SELECT_NOOP"))
        ((:H5S-SELECT-SET     "H5S_SELECT_SET"))
        ((:H5S-SELECT-OR      "H5S_SELECT_OR"))
@@ -35,7 +35,7 @@
        ((:H5S-SELECT-PREPEND "H5S_SELECT_PREPEND"))
        ((:H5S-SELECT-INVALID "H5S_SELECT_INVALID")))
 
-(cenum H5S-sel-type
+(cenum h5s-sel-type
        ((:H5S-SEL-ERROR      "H5S_SEL_ERROR"))
        ((:H5S-SEL-NONE       "H5S_SEL_NONE"))
        ((:H5S-SEL-POINTS     "H5S_SEL_POINTS"))

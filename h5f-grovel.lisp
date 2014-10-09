@@ -30,19 +30,19 @@
 (constant (+H5F-OBJ-ALL+      "H5F_OBJ_ALL"))
 (constant (+H5F-OBJ-LOCAL+    "H5F_OBJ_LOCAL"))
 
-(cenum H5F-scope-t
+(cenum h5f-scope-t
        ((:H5F-SCOPE-LOCAL  "H5F_SCOPE_LOCAL"))
        ((:H5F-SCOPE-GLOBAL "H5F_SCOPE_GLOBAL")))
 
 (constant (+H5F-UNLIMITED+ "H5F_UNLIMITED"))
 
-(cenum H5F-close-degree-t
+(cenum h5f-close-degree-t
        ((:H5F-CLOSE-DEFAULT "H5F_CLOSE_DEFAULT"))
        ((:H5F-CLOSE-WEAK    "H5F_CLOSE_WEAK"))
        ((:H5F-CLOSE-SEMI    "H5F_CLOSE_SEMI"))
        ((:H5F-CLOSE-STRONG  "H5F_CLOSE_STRONG")))
 
-(cenum H5F-mem-t
+(cenum h5f-mem-t
        ((:H5FD-MEM-NOLIST  "H5FD_MEM_NOLIST"))
        ((:H5FD-MEM-DEFAULT "H5FD_MEM_DEFAULT"))
        ((:H5FD-MEM-SUPER   "H5FD_MEM_SUPER"))
@@ -53,7 +53,7 @@
        ((:H5FD-MEM-OHDR    "H5FD_MEM_OHDR"))
        ((:H5FD-MEM-NTYPES  "H5FD_MEM_NTYPES")))
 
-(cenum H5F-libver-t
+(cenum h5f-libver-t
        ((:H5F-LIBVER-EARLIEST "H5F_LIBVER_EARLIEST"))
        ((:H5F-LIBVER-LATEST   "H5F_LIBVER_LATEST")))
 

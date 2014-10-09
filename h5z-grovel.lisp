@@ -13,7 +13,7 @@
 
 (in-package :hdf5)
 
-(ctype H5Z-filter-t "H5Z_filter_t")
+(ctype h5z-filter-t "H5Z_filter_t")
 
 (constant (+H5Z-FILTER-ERROR+       "H5Z_FILTER_ERROR"))
 (constant (+H5Z-FILTER-NONE+        "H5Z_FILTER_NONE"))
@@ -60,14 +60,14 @@
 
 (constant (+H5Z-SO-INT-MINBITS-DEFAULT+ "H5Z_SO_INT_MINBITS_DEFAULT"))
 
-(cenum H5Z-SO-scale-type-t
+(cenum h5z-so-scale-type-t
     ((:H5Z-SO-FLOAT-DSCALE "H5Z_SO_FLOAT_DSCALE"))
     ((:H5Z-SO-FLOAT-ESCALE "H5Z_SO_FLOAT_ESCALE"))
     ((:H5Z-SO-INT          "H5Z_SO_INT")))
 
 (constant (+H5Z-CLASS-T-VERS+ "H5Z_CLASS_T_VERS"))
 
-(cenum H5Z-EDC-t
+(cenum h5z-edc-t
   ((:H5Z-ERROR-EDC   "H5Z_ERROR_EDC"))
   ((:H5Z-DISABLE-EDC "H5Z_DISABLE_EDC"))
   ((:H5Z-ENABLE-EDC  "H5Z_ENABLE_EDC"))

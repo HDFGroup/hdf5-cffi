@@ -12,4 +12,4 @@
 
 (cffi:defcfun "H5Zfilter_avail" htri-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5Z.html#Compression-FilterAvail"
-  (filter H5Z-filter-t))
+  (filter h5z-filter-t))

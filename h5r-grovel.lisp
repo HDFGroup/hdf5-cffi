@@ -12,7 +12,7 @@
 
 (in-package :hdf5)
 
-(cenum H5R-type-t
+(cenum h5r-type-t
        ((:H5R-BADTYPE        "H5R_BADTYPE"))
        ((:H5R-OBJECT         "H5R_OBJECT"))
        ((:H5R-DATASET-REGION "H5R_DATASET_REGION"))

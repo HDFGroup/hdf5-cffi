@@ -12,33 +12,33 @@
 
 (in-package :hdf5)
 
-(cenum H5D-layout-t
+(cenum h5d-layout-t
        ((:H5D-LAYOUT-ERROR "H5D_LAYOUT_ERROR"))
        ((:H5D-COMPACT      "H5D_COMPACT"))
        ((:H5D-CONTIGUOUS   "H5D_CONTIGUOUS"))
        ((:H5D-CHUNKED      "H5D_CHUNKED"))
        ((:H5D-NLAYOUTS     "H5D_NLAYOUTS")))
 
-(cenum H5D-alloc-time-t
+(cenum h5d-alloc-time-t
        ((:H5D-ALLOC-TIME-ERROR   "H5D_ALLOC_TIME_ERROR"))
        ((:H5D-ALLOC-TIME-DEFAULT "H5D_ALLOC_TIME_DEFAULT"))
        ((:H5D-ALLOC-TIME-EARLY   "H5D_ALLOC_TIME_EARLY"))
        ((:H5D-ALLOC-TIME-LATE    "H5D_ALLOC_TIME_LATE"))
        ((:H5D-ALLOC-TIME-INCR    "H5D_ALLOC_TIME_INCR")))
 
-(cenum H5D-space-status-t
+(cenum h5d-space-status-t
        ((:H5D-SPACE-STATUS-ERROR          "H5D_SPACE_STATUS_ERROR"))
        ((:H5D-SPACE-STATUS-NOT-ALLOCATED  "H5D_SPACE_STATUS_NOT_ALLOCATED"))
        ((:H5D-SPACE-STATUS-PART-ALLOCATED "H5D_SPACE_STATUS_PART_ALLOCATED"))
        ((:H5D-SPACE-STATUS-ALLOCATED      "H5D_SPACE_STATUS_ALLOCATED")))
 
-(cenum H5D-fill-time-t
+(cenum h5d-fill-time-t
        ((:H5D-FILL-TIME-ERROR "H5D_FILL_TIME_ERROR"))
        ((:H5D-FILL-TIME-ALLOC "H5D_FILL_TIME_ALLOC"))
        ((:H5D-FILL-TIME-NEVER "H5D_FILL_TIME_NEVER"))
        ((:H5D-FILL-TIME-IFSET "H5D_FILL_TIME_IFSET")))
 
-(cenum H5D-fill-value-t
+(cenum h5d-fill-value-t
        ((:H5D-FILL-VALUE-ERROR        "H5D_FILL_VALUE_ERROR"))
        ((:H5D-FILL-VALUE-UNDEFINED    "H5D_FILL_VALUE_UNDEFINED"))
        ((:H5D-FILL-VALUE-DEFAULT      "H5D_FILL_VALUE_DEFAULT"))

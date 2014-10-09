@@ -35,15 +35,14 @@
 	   
 	   +H5P-DEFAULT+
 
-	   H5-iter-order-t
+	   h5-iter-order-t
 
 	   +H5-ITER-ERROR+
 	   +H5-ITER-CONT+
 	   +H5-ITER-STOP+
 	   
-	   H5-index-t
-	   
-	   H5-ih-info-t
+	   h5-index-t
+	   h5-ih-info-t
 
 	   h5check-version
 	   h5close
@@ -56,7 +55,7 @@
 
 	   ;; == h5i ==========================================================
 
-	   H5I-type-t
+	   h5i-type-t
 	   
 	   hid-t
 
@@ -88,15 +87,13 @@
 	   +H5F-OBJ-ALL+
 	   +H5F-OBJ-LOCAL+
 
-	   H5F-scope-t
+	   h5f-scope-t
 	   
 	   +H5F-UNLIMITED+
 
-	   H5F-close-degree-t
-	   
-	   H5F-info-t
-
-	   H5F-libver-t
+	   h5f-close-degree-t
+	   h5f-info-t
+	   h5f-libver-t
 	   
 	   h5fclose
 	   h5fcreate
@@ -119,30 +116,30 @@
 
 	   ;; == h5t ==========================================================
 
-	   H5T-class-t
-	   H5T-order-t
-	   H5T-sign-t
-	   H5T-norm-t
-	   H5T-cset-t
+	   h5t-class-t
+	   h5t-order-t
+	   h5t-sign-t
+	   h5t-norm-t
+	   h5t-cset-t
 
 	   +H5T-NCSET+
 
-	   H5T-str-t
+	   h5t-str-t
 
 	   +H5T-NSTR+
 
-	   H5T-pad-t
-	   H5T-cmd-t
-	   H5T-bkg-t
-	   H5T-cdata-t
-	   H5T-pers-t
-	   H5T-dir-t
-	   H5T-conv-except-t
-	   H5T-conv-ret-t
+	   h5t-pad-t
+	   h5t-cmd-t
+	   h5t-bkg-t
+	   h5t-cdata-t
+	   h5t-pers-t
+	   h5t-dir-t
+	   h5t-conv-except-t
+	   h5t-conv-ret-t
 	   hvl-t
 	   
 	   +H5T-VARIABLE+
-
+	   
 	   +H5T-OPAQUE-TAG-MAX+
 
 	   +H5T-IEEE-F32BE+
@@ -298,11 +295,10 @@
 	   +H5O-HDR-STORE-TIMES+
 	   +H5O-HDR-ALL-FLAGS+
 	   
-	   H5O-type-t
-	   H5O-msg-crt-idx-t
-	   
-	   H5O-hdr-info-t
-	   H5O-info-t
+	   h5o-type-t
+	   h5o-msg-crt-idx-t
+	   h5o-hdr-info-t
+	   h5o-info-t
    
 	   h5oclose
 	   h5ocopy
@@ -319,9 +315,9 @@
 	   +H5S-MAX-RANK+
 	   +H5S-UNLIMITED+
 
-	   H5S-class-t
-	   H5S-sel-type
-	   H5S-seloper-t
+	   h5s-class-t
+	   h5s-sel-type
+	   h5s-seloper-t
 
 	   h5sclose
 	   h5scopy
@@ -339,11 +335,11 @@
 
 	   ;; == h5d ==========================================================
    
-	   H5D-alloc-time-t
-	   H5D-fill-time-t
-	   H5D-fill-value-t
-	   H5D-layout-t
-	   H5D-space-status-t
+	   h5d-alloc-time-t
+	   h5d-fill-time-t
+	   h5d-fill-value-t
+	   h5d-layout-t
+	   h5d-space-status-t
    
 	   h5dclose
 	   h5dcreate1
@@ -369,8 +365,8 @@
 
 	   ;; == h5g ==========================================================
 
-	   H5G-storage-type-t
-	   H5G-info-type-t
+	   h5g-storage-type-t
+	   h5g-info-type-t
 
 	   h5gclose
 	   h5gcreate1
@@ -385,7 +381,7 @@
 
 	   ;; == h5a ==========================================================
 
-	   H5A-info-t
+	   h5a-info-t
    
 	   h5aclose
 	   h5acreate1
@@ -417,7 +413,7 @@
 
 	   ;; == h5r ==========================================================
 
-	   H5R-type-t
+	   h5r-type-t
 
 	   +H5R-OBJ-REF-BUF-SIZE+
 	   +H5R-DSET-REG-REF-BUF-SIZE+
@@ -430,9 +426,9 @@
 
 	   ;; == h5z ==========================================================
 
-	   H5Z-edc-t
-	   H5Z-filter-t
-	   H5Z-so-scale-type-t
+	   h5z-edc-t
+	   h5z-filter-t
+	   h5z-so-scale-type-t
 
 	   +H5Z-FILTER-ERROR+
 	   +H5Z-FILTER-NONE+ 
