@@ -15,7 +15,10 @@
 
 ;;; http://www.hdfgroup.org/ftp/HDF5/examples/examples-by-api/hdf5-examples/1_8/C/H5G/h5ex_g_visit.c
 
-(in-package :hdf5-cffi)
+#+sbcl(require 'asdf)
+(asdf:operate 'asdf:load-op 'hdf5-cffi)
+
+(in-package :hdf5)
 
 ;;; Download the input file from
 ;;; http://www.hdfgroup.org/ftp/HDF5/examples/files/exbyapi/h5ex_g_visit.h5
@@ -27,7 +30,7 @@
 ;;; This is a workaround...
 
 (defun print-info-et-name (info name)
-    (let ((type (foreign-slot-value info '(:struct h5o-info-t) 'type)))
+    (let ((type (cffi:foreign-slot-value info '(:struct h5o-info-t) 'type)))
       (if (equal name ".")
 	  (format t "  (Group)~%")
 	  (cond ((eql type :H5O-TYPE-GROUP)
@@ -40,7 +43,7 @@
   
 ;;; the callback function for H5Ovisit
 
-(defcallback op-func herr-t
+(cffi:defcallback op-func herr-t
     ((loc-id hid-t)
      (name :string)
      (info (:pointer (:struct h5o-info-t)))
@@ -51,14 +54,14 @@
 
 ;;; the callback function for H5Lvisit
 
-(defcallback op-func-l herr-t
+(cffi:defcallback op-func-l herr-t
     ((loc-id hid-t)
      (name :string)
      (info (:pointer (:struct h5l-info-t)))
      (operator-data :pointer))
   (progn
-    (with-foreign-object (infobuf '(:struct h5o-info-t) 1)
-      (let ((infobuf-ptr (mem-aptr infobuf '(:struct h5o-info-t) 0)))
+    (cffi:with-foreign-object (infobuf '(:struct h5o-info-t) 1)
+      (let ((infobuf-ptr (cffi:mem-aptr infobuf '(:struct h5o-info-t) 0)))
 	(h5oget-info-by-name loc-id name infobuf-ptr +H5P-DEFAULT+)
 	(print-info-et-name infobuf-ptr name)
 	0))))
@@ -69,18 +72,19 @@
     ((fapl (h5pcreate +H5P-FILE-ACCESS+))
      (file (prog2
 	       (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-	       (h5fopen *FILE* '(:rdonly) fapl))))
+	       (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
+
   (unwind-protect
+
        (progn
 	 (format t "Objects in the file:~%")
 	 (h5ovisit file :H5-INDEX-NAME :H5-ITER-NATIVE
-		   (callback op-func) (null-pointer))
+		   (cffi:callback op-func) (cffi:null-pointer))
 	 (format t "Links in the file:~%")
 	 (h5lvisit file :H5-INDEX-NAME :H5-ITER-NATIVE
-		   (callback op-func-l) (null-pointer))))
+		   (cffi:callback op-func-l) (cffi:null-pointer))))
     
-    ;; cleanup forms
     (h5fclose file)
     (h5pclose fapl))
 
-(in-package :cl-user)
+#+sbcl(sb-ext:quit)

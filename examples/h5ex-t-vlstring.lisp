@@ -16,28 +16,32 @@
 
 ;;; See h5ex_t_vlstring.c at http://www.hdfgroup.org/HDF5/examples/api18-c.html
 
-(in-package :hdf5-cffi)
+#+sbcl(require 'asdf)
+(asdf:operate 'asdf:load-op 'hdf5-cffi)
+
+(in-package :hdf5)
 
 (defparameter *FILE* "h5ex_t_vlstring.h5")
 (defparameter *DATASET* "DS1")
 (defparameter *DIM0* 4)
 
-(with-foreign-objects ((dims 'hsize-t 1))
+(cffi:with-foreign-objects ((dims 'hsize-t 1))
   (let*
       ((fapl (h5pcreate +H5P-FILE-ACCESS+))
        (file (prog2
 		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		 ;; create the file
-		 (h5fcreate *FILE* '(:trunc) +H5P-DEFAULT+ fapl))))
+		 (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
+    
     (unwind-protect
+
 	 (let*
-	     ((wdata (foreign-alloc :string :initial-contents
+	     ((wdata (cffi:foreign-alloc :string :initial-contents
 				    '("Parting" "is such" "sweet" "sorrow")))
 	      (ftype (h5tcopy +H5T-FORTRAN-S1+))
 	      (mtype (h5tcopy +H5T-C-S1+))
 	      (shape (prog2
-			 (setf (mem-aref dims 'hsize-t 0) *DIM0*)
-			 (h5screate-simple 1 dims (null-pointer))))
+			 (setf (cffi:mem-aref dims 'hsize-t 0) *DIM0*)
+			 (h5screate-simple 1 dims (cffi:null-pointer))))
 	      (dset (progn
 		      (h5tset-size ftype +H5T-VARIABLE+)
 		      (h5tset-size mtype +H5T-VARIABLE+)
@@ -50,9 +54,8 @@
 	   (h5sclose shape)
 	   (h5tclose mtype)
 	   (h5tclose ftype)
-	   (foreign-free wdata))
+	   (cffi:foreign-free wdata))
 
-      ;; cleanup forms
       (h5fclose file)
       (h5pclose fapl)))
 
@@ -60,39 +63,41 @@
       ((fapl (h5pcreate +H5P-FILE-ACCESS+))
        (file (prog2
 		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		 (h5fopen *FILE* '(:rdonly) fapl))))
+		 (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
+    
     (unwind-protect
+
 	 (let*
 	     ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
 	      (shape (h5dget-space dset)) 
 	      (mtype (h5tcopy +H5T-C-S1+))
 	      (rdata (prog2
 			 (h5tset-size mtype +H5T-VARIABLE+)
-			 (foreign-alloc '(:pointer :char)
-					:initial-element (null-pointer)
-					:count *DIM0*))))
+			 (cffi:foreign-alloc '(:pointer :char)
+					     :initial-element
+					     (cffi:null-pointer)
+					     :count *DIM0*))))
 
 	   (h5dread dset mtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ rdata)
 
 	   (dotimes (i *DIM0*)
-	     (print (foreign-string-to-lisp
+	     (print (cffi:foreign-string-to-lisp
 		     ;; rdata is an array of pointers
 		     ;; mem-aref gives us a pointer to the i-th element
 		     ;; mem-ref de-references this element and
 		     ;; gives us the pointer which repesents the string
-		     (mem-ref (mem-aptr rdata '(:pointer :char) i)
-			      '(:pointer :char)))))
+		     (cffi:mem-ref (cffi:mem-aptr rdata '(:pointer :char) i)
+				   '(:pointer :char)))))
 
 	   ;;; reclaim the space allocated for individual strings
 	   (h5dvlen-reclaim mtype shape +H5P-DEFAULT+ rdata)
 	   ;;; still need to free the pointer array
-	   (foreign-free rdata)
+	   (cffi:foreign-free rdata)
 	   (h5tclose mtype)
 	   (h5sclose shape)
 	   (h5dclose dset))
 
-      ;; cleanup forms
       (h5fclose file)
       (h5pclose fapl))))
 
-(in-package :cl-user)
+#+sbcl(sb-ext:quit)

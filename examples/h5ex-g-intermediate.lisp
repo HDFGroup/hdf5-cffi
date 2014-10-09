@@ -13,19 +13,22 @@
 
 ;;; http://www.hdfgroup.org/ftp/HDF5/examples/examples-by-api/hdf5-examples/1_8/C/H5G/h5ex_g_intermediate.c
 
-(in-package :hdf5-cffi)
+#+sbcl(require 'asdf)
+(asdf:operate 'asdf:load-op 'hdf5-cffi)
+
+(in-package :hdf5)
 
 (defparameter *FILE* "h5ex_g_intermediate.h5")
 
 ;;; the callback function for H5Ovisit
 
-(defcallback op-func herr-t
+(cffi:defcallback op-func herr-t
     ((loc-id hid-t)
      (name :string)
      (info (:pointer (:struct h5o-info-t)))
      (operator-data :pointer))
   (prog2
-      (let ((type (foreign-slot-value info '(:struct h5o-info-t) 'type)))
+      (let ((type (cffi:foreign-slot-value info '(:struct h5o-info-t) 'type)))
 	(format t "/")
 	(if (equal name ".")
 	    (format t "  (Group)~%")
@@ -44,8 +47,10 @@
     ((fapl (h5pcreate +H5P-FILE-ACCESS+))
      (file (prog2
 	       (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-	       (h5fcreate *FILE* '(:trunc) +H5P-DEFAULT+ fapl))))
+	       (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
+  
   (unwind-protect
+       
        (let* ((gcpl (h5pcreate +H5P-LINK-CREATE+))
 	      (group (prog2
 			 (h5pset-create-intermediate-group gcpl 1)
@@ -58,13 +63,12 @@
 	 (progn
 	   (format t "Objects in the file:~%")
 	   (h5ovisit file :H5-INDEX-NAME :H5-ITER-NATIVE
-		     (callback op-func) (null-pointer))
+		     (cffi:callback op-func) (cffi:null-pointer))
 	   
 	   (h5gclose group)
-	   (h5pclose gcpl)))
-    
-    ;; cleanup forms
+	   (h5pclose gcpl)))    
+
     (h5fclose file)
     (h5pclose fapl)))
 
-(in-package :cl-user)
+#+sbcl(sb-ext:quit)
