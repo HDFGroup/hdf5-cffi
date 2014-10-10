@@ -35,7 +35,7 @@
 
 (constant (+H5P-DEFAULT+ "H5P_DEFAULT"))
 
-(cenum H5-iter-order-t
+(cenum h5-iter-order-t
        ((:H5-ITER-UNKNOWN "H5_ITER_UNKNOWN"))
        ((:H5-ITER-INC     "H5_ITER_INC"))
        ((:H5-ITER-DEC     "H5_ITER_DEC"))
@@ -46,12 +46,12 @@
 (constant (+H5-ITER-CONT+  "H5_ITER_CONT"))
 (constant (+H5-ITER-STOP+  "H5_ITER_STOP"))
 
-(cenum H5-index-t
+(cenum h5-index-t
        ((:H5-INDEX-UNKNOWN   "H5_INDEX_UNKNOWN"))
        ((:H5-INDEX-NAME      "H5_INDEX_NAME"))
        ((:H5-INDEX-CRT-ORDER "H5_INDEX_CRT_ORDER"))
        ((:H5-INDEX-N         "H5_INDEX_N")))
 
-(cstruct H5-ih-info-t "H5_ih_info_t"
+(cstruct h5-ih-info-t "h5_ih_info_t"
          (index-size "index_size" :type hdf5::hsize-t)
          (heap-size  "heap_size"  :type hdf5::hsize-t))
