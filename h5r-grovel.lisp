@@ -20,4 +20,8 @@
 
 (constant (+H5R-OBJ-REF-BUF-SIZE+  "H5R_OBJ_REF_BUF_SIZE"))
 
+(ctype hobj-ref-t "hobj_ref_t")
+
 (constant (+H5R-DSET-REG-REF-BUF-SIZE+  "H5R_DSET_REG_REF_BUF_SIZE"))
+
+(cstruct hdset-reg-ref-t "hdset_reg_ref_t")

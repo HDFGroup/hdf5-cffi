@@ -416,8 +416,13 @@
 	   h5r-type-t
 
 	   +H5R-OBJ-REF-BUF-SIZE+
+
+	   hobj-ref-t
+
 	   +H5R-DSET-REG-REF-BUF-SIZE+
 
+	   hdset-reg-ref-t
+	   
 	   h5rcreate
 	   h5rdereference
 	   h5rget-name
