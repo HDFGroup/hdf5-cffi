@@ -52,6 +52,6 @@
        ((:H5-INDEX-CRT-ORDER "H5_INDEX_CRT_ORDER"))
        ((:H5-INDEX-N         "H5_INDEX_N")))
 
-(cstruct h5-ih-info-t "h5_ih_info_t"
+(cstruct h5-ih-info-t "H5_ih_info_t"
          (index-size "index_size" :type hdf5::hsize-t)
          (heap-size  "heap_size"  :type hdf5::hsize-t))
