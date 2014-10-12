@@ -64,6 +64,13 @@
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html#Dataspace-IsSimple"
   (space-id hid-t))
 
+(cffi:defcfun "H5Sselect_elements" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html#Dataspace-SelectElements"
+  (space-id         hid-t)
+  (select-operation h5s-seloper-t)
+  (num-elements     size-t)
+  (coord            (:pointer hsize-t)))
+
 (cffi:defcfun "H5Sselect_hyperslab" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html#Dataspace-SelectHyperslab"
   (space-id         hid-t)

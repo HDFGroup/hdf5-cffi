@@ -330,6 +330,7 @@
 	   h5sget-simple-extent-npoints
 	   h5sget-simple-extent-type
 	   h5sis-simple
+	   h5sselect-elements
 	   h5sselect-hyperslab
 	   h5sselect-valid
 
