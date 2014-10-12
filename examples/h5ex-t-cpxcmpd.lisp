@@ -40,7 +40,8 @@
 (defparameter *FILE*    "h5ex_t_cpxcmpd.h5")
 (defparameter *DATASET* "DS1")
 (defparameter *DIM0*    2)
-(defparameter *LEN*     4)
+(defparameter *LENA*    4)
+(defparameter *LENB*    1)
 
 (cffi:defcstruct sensor-t
     "sensor_t"
@@ -85,7 +86,8 @@
        (file (prog2
 		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		 (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl)))
-       (ptr (cffi:foreign-alloc '(:struct sensor-t) :count *LEN*)))
+       (ptrA (cffi:foreign-alloc '(:struct sensor-t) :count *LENA*))
+       (ptrB (cffi:foreign-alloc '(:struct sensor-t) :count *LENB*)))
   
     (unwind-protect
 
@@ -102,7 +104,7 @@
 			   (setf (cffi:mem-aref adims2 'hsize-t 0) 32
 				 (cffi:mem-aref adims2 'hsize-t 1) 32)
 			   (h5screate-simple 2 adims2 (cffi:null-pointer))))
-		(dset (h5dcreate2 file "Ambient Temperature"
+		(dset (h5dcreate2 file "Ambient_Temperature"
 				  +H5T-NATIVE-DOUBLE+ shape
 				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	     (h5dwrite dset +H5T-NATIVE-DOUBLE+ +H5S-ALL+ +H5S-ALL+
@@ -121,12 +123,12 @@
 		  (cffi:foreign-slot-pointer
 		   (cffi:mem-aptr wdata '(:struct vehicle-t) 0)
 		   '(:struct vehicle-t) 'sensors)
-		  '(:struct hvl-t) 'len) *LEN*)
+		  '(:struct hvl-t) 'len) *LENA*)
 	   (let*
-	       ((ptr[0] (cffi:mem-aptr ptr '(:struct sensor-t) 0))
-		(ptr[1] (cffi:mem-aptr ptr '(:struct sensor-t) 1))
-		(ptr[2] (cffi:mem-aptr ptr '(:struct sensor-t) 2))
-		(ptr[3] (cffi:mem-aptr ptr '(:struct sensor-t) 3)))
+	       ((ptr[0] (cffi:mem-aptr ptrA '(:struct sensor-t) 0))
+		(ptr[1] (cffi:mem-aptr ptrA '(:struct sensor-t) 1))
+		(ptr[2] (cffi:mem-aptr ptrA '(:struct sensor-t) 2))
+		(ptr[3] (cffi:mem-aptr ptrA '(:struct sensor-t) 3)))
 	     (cffi:with-foreign-slots
 		 ((serial-no location temperature pressure)
 		  ptr[0] (:struct sensor-t))
@@ -151,13 +153,97 @@
 		  (cffi:foreign-slot-pointer
 		   (cffi:mem-aptr wdata '(:struct vehicle-t) 0)
 		   '(:struct vehicle-t) 'sensors)
-		  '(:struct hvl-t) 'p) ptr)
+		  '(:struct hvl-t) 'p) ptrA)
 
 	   ;; Initialize other fields in the first data element.
-	   
+	   (let ((wdata[0] (cffi:mem-aptr wdata '(:struct vehicle-t) 0)))
+	     (cffi:with-foreign-slots
+		 ((name color location) wdata[0] (:struct vehicle-t))
+	       (setf name "Airplane"
+		     color :GREEN
+		     (cffi:mem-aref location :double 0) -103234.21d0
+	             (cffi:mem-aref location :double 1) 422638.78d0
+		     (cffi:mem-aref location :double 2) 5996.43d0))
+	     (h5rcreate (cffi:foreign-slot-pointer
+			 wdata[0] '(:struct vehicle-t) 'group)
+			file "Air_Vehicles" :H5R-OBJECT -1)	     
+	     (let ((shape (prog2
+			      (setf (cffi:mem-aref adims2 'hsize-t 0) 32
+				    (cffi:mem-aref adims2 'hsize-t 1) 32)
+			      (h5screate-simple 2 adims2 (cffi:null-pointer)))))
+	       (h5sselect-elements shape :H5S-SELECT-SET 3 coords)
+	       (h5rcreate (cffi:foreign-slot-pointer wdata[0]
+			   '(:struct vehicle-t) 'surveyed-areas)
+			  file "Ambient_Temperature" :H5R-DATASET-REGION shape)
+	       (h5sclose shape)))
+
+	   ;; Initialize variable-length compound in the second data element.
+	   (setf (cffi:foreign-slot-value
+		  (cffi:foreign-slot-pointer
+		   (cffi:mem-aptr wdata '(:struct vehicle-t) 1)
+		   '(:struct vehicle-t) 'sensors)
+		  '(:struct hvl-t) 'len) *LENB*)
+	   (let* ((ptr[0] (cffi:mem-aptr ptrB '(:struct sensor-t) 0)))
+	     (cffi:with-foreign-slots
+		 ((serial-no location temperature pressure)
+		  ptr[0] (:struct sensor-t))
+	       (setf serial-no 3244 location "Roof"
+		     temperature 83.82d0 pressure 29.92d0)))
+	   (setf (cffi:foreign-slot-value
+		  (cffi:foreign-slot-pointer
+		   (cffi:mem-aptr wdata '(:struct vehicle-t) 1)
+		   '(:struct vehicle-t) 'sensors)
+		  '(:struct hvl-t) 'p) ptrB)
+
+	   ;; Initialize other fields in the second data element.
+	   (let ((wdata[1] (cffi:mem-aptr wdata '(:struct vehicle-t) 1)))
+	     (cffi:with-foreign-slots
+		 ((name color location) wdata[1] (:struct vehicle-t))
+	       (setf name "Automobile"
+		     color :RED
+		     (cffi:mem-aref location :double 0) 326734.36d0
+	             (cffi:mem-aref location :double 1) 221568.23d0
+		     (cffi:mem-aref location :double 2) 432.36d0))
+	     (h5rcreate (cffi:foreign-slot-pointer
+			 wdata[1] '(:struct vehicle-t) 'group)
+			file "Land_Vehicles" :H5R-OBJECT -1)	     
+	     (let ((shape (prog2
+			      (setf (cffi:mem-aref adims2 'hsize-t 0) 32
+				    (cffi:mem-aref adims2 'hsize-t 1) 32)
+			      (h5screate-simple 2 adims2 (cffi:null-pointer)))))
+	       (setf (cffi:mem-aref start 'hsize-t 0) 8
+		     (cffi:mem-aref start 'hsize-t 1) 26
+		     (cffi:mem-aref count 'hsize-t 0) 4
+		     (cffi:mem-aref count 'hsize-t 1) 3)
+	       (h5sselect-hyperslab shape :H5S-SELECT-SET
+				    start (cffi:null-pointer)
+				    count (cffi:null-pointer))
+	       (h5rcreate (cffi:foreign-slot-pointer wdata[1]
+			   '(:struct vehicle-t) 'surveyed-areas)
+			  file "Ambient_Temperature" :H5R-DATASET-REGION shape)
+	       (h5sclose shape)))
+
+	   ;; Create variable-length string datatype.
+
+	   ;; Create the nested compound datatype.
+
+	   ;; Create the variable-length datatype.
+
+	   ;; Create the enumerated datatype.
+
+	   ;; Create the array datatype.
+
+	   ;; Create the main compound datatype.
+
+	   ;; Create dataspace. Setting maximum size to NULL sets the maximum
+           ;; size to be the current size.
+
+	   ;; Create the dataset and write the compound data to it.
+
 	   )
 
-      (cffi:foreign-free ptr)
+      (cffi:foreign-free ptrB)
+      (cffi:foreign-free ptrA)
       (h5fclose file)
       (h5pclose fapl))))
 
