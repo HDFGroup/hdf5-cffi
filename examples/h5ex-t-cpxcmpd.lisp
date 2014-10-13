@@ -305,18 +305,26 @@
 		     		
 		;; Create dataspace. Setting maximum size to NULL sets the
 		;; maximum size to be the current size.
-
-		;; Create the dataset and write the compound data to it.
-		)
+		(space
+		 (prog2
+		     (setf (cffi:mem-ref dims 'hsize-t) *DIM0*)
+		     (h5screate-simple 1 dims (cffi:null-pointer))))		
 		
+		;; Create the dataset
+		(dset (h5dcreate2 file *DATASET* vehicletype space
+				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+
+	     ;; Finally, write the compound data to it.
+	     (h5dwrite dset vehicletype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
+
+	     (h5dclose dset)
+	     (h5sclose space)
 	     (h5tclose vehicletype)
 	     (h5tclose loctype)
 	     (h5tclose colortype)
 	     (h5tclose sensortype)
 	     (h5tclose sensorstype)
-	     (h5tclose strtype))
-
-	   )
+	     (h5tclose strtype)))
 
       (cffi:foreign-free ptrB)
       (cffi:foreign-free ptrA)
