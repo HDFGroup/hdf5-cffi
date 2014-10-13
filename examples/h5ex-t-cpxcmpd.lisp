@@ -308,6 +308,10 @@
 
 		;; Create the dataset and write the compound data to it.
 		)
+		
+	     (h5tclose vehicletype)
+	     (h5tclose loctype)
+	     (h5tclose colortype)
 	     (h5tclose sensortype)
 	     (h5tclose sensorstype)
 	     (h5tclose strtype))
