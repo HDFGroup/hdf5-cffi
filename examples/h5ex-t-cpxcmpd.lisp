@@ -223,22 +223,94 @@
 			  file "Ambient_Temperature" :H5R-DATASET-REGION shape)
 	       (h5sclose shape)))
 
-	   ;; Create variable-length string datatype.
+	   (let*
+	       (;; Create variable-length string datatype.
+		(strtype (let ((tmp (h5tcopy +H5T-C-S1+)))
+			   (prog1 tmp
+			     (h5tset-size tmp +H5T-VARIABLE+))))
+		;; Create the nested compound datatype.
+		(sensortype
+		 (let ((tmp (h5tcreate
+			     :H5T-COMPOUND
+			     (cffi:foreign-type-size '(:struct sensor-t)))))
+		   (prog1 tmp
+		     (h5tinsert
+		      tmp "Serial number"
+		      (cffi:foreign-slot-offset '(:struct sensor-t) 'serial-no)
+		      +H5T-NATIVE-INT+)
+		     (h5tinsert
+		      tmp "Location"
+		      (cffi:foreign-slot-offset '(:struct sensor-t) 'location)
+		      strtype)
+		     (h5tinsert
+		      tmp "Temperature (F)"
+		      (cffi:foreign-slot-offset '(:struct sensor-t)
+						'temperature)
+		      +H5T-NATIVE-DOUBLE+)
+		     (h5tinsert tmp "Pressure"
+		      (cffi:foreign-slot-offset '(:struct sensor-t) 'pressure)
+		      +H5T-NATIVE-DOUBLE+))))
 
-	   ;; Create the nested compound datatype.
+		;; Create the variable-length datatype.
+		(sensorstype (h5tvlen-create sensortype))
+		
+		;; Create the enumerated datatype.
+		(colortype
+		 (let ((tmp (h5tenum-create +H5T-NATIVE-INT+)))
+		   (prog1 tmp
+		     (setf (cffi:mem-ref val 'color-t) :RED)
+		     (h5tenum-insert tmp "Red" val)
+		     (setf (cffi:mem-ref val 'color-t) :GREEN)
+		     (h5tenum-insert tmp "Green" val)
+		     (setf (cffi:mem-ref val 'color-t) :BLUE)
+		     (h5tenum-insert tmp "Blue" val))))
 
-	   ;; Create the variable-length datatype.
+		;; Create the array datatype.
+		(loctype
+		 (prog2
+		     (setf (cffi:mem-aref adims 'hsize-t 0) 3)
+		     (h5tarray-create2 +H5T-NATIVE-DOUBLE+ 1 adims)))
 
-	   ;; Create the enumerated datatype.
+		;; Create the main compound datatype.
+		(vehicletype
+		 (let ((tmp (h5tcreate
+			     :H5T-COMPOUND
+			     (cffi:foreign-type-size '(:struct vehicle-t)))))
+		   (prog1 tmp
+		     (h5tinsert
+		      tmp "Sensors"
+		      (cffi:foreign-slot-offset '(:struct vehicle-t) 'sensors)
+		      sensorstype)
+		     (h5tinsert
+		      tmp "Name"
+		      (cffi:foreign-slot-offset '(:struct vehicle-t) 'name)
+		      strtype)
+		     (h5tinsert
+		      tmp "Color"
+		      (cffi:foreign-slot-offset '(:struct vehicle-t) 'color)
+		      colortype)
+		     (h5tinsert
+		      tmp "Location"
+		      (cffi:foreign-slot-offset '(:struct vehicle-t) 'location)
+		      loctype)
+		     (h5tinsert
+		      tmp "Group"
+		      (cffi:foreign-slot-offset '(:struct vehicle-t) 'group)
+		      +H5T-STD-REF-OBJ+)
+		     (h5tinsert
+		      tmp "Surveyed areas"
+		      (cffi:foreign-slot-offset '(:struct vehicle-t)
+						'surveyed-areas)
+		      +H5T-STD-REF-DSETREG+))))
+		     		
+		;; Create dataspace. Setting maximum size to NULL sets the
+		;; maximum size to be the current size.
 
-	   ;; Create the array datatype.
-
-	   ;; Create the main compound datatype.
-
-	   ;; Create dataspace. Setting maximum size to NULL sets the maximum
-           ;; size to be the current size.
-
-	   ;; Create the dataset and write the compound data to it.
+		;; Create the dataset and write the compound data to it.
+		)
+	     (h5tclose sensortype)
+	     (h5tclose sensorstype)
+	     (h5tclose strtype))
 
 	   )
 
