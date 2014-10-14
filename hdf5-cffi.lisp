@@ -12,6 +12,6 @@
 
 (progn
   (pushnew :hdf5 *features*)
-  (defvar *hdf5-header-file* "/usr/local/include/mpi/hdf5.h")
+  (defvar *hdf5-header-file* "hdf5.h")
   (defun load-hdf5-foreign-libraries ()
-    (cffi:use-foreign-library "/usr/local/lib/libhdf5.so")))
+    (cffi:use-foreign-library "libhdf5.so")))
