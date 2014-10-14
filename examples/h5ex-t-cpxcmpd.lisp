@@ -331,4 +331,87 @@
       (h5fclose file)
       (h5pclose fapl))))
 
+(cffi:with-foreign-objects
+    ((ndims 'hsize-t 1)
+     (dims 'hsize-t 1))
+
+  (let*
+      ((fapl (h5pcreate +H5P-FILE-ACCESS+))
+       (file (prog2
+		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+		 (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
+
+    (unwind-protect
+
+	 (progn
+	   (let*
+	       ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
+		;; Create variable-length string datatype.
+		(strtype (let ((tmp (h5tcopy +H5T-C-S1+)))
+			   (prog1 tmp
+			     (h5tset-size tmp +H5T-VARIABLE+))))
+		;; Create the nested compound datatype for reading.
+		;; Even though it has only one field, it must still
+		;; be defined as a compound type so the library can
+		;; match the correct field in the file type. This matching
+		;; is done by name.  However, we do not need to define a
+		;; structure for the read buffer as we can simply treat it
+		;; as a char *.
+		(rsensortype
+		 (let ((tmp (h5tcreate
+			     :H5T-COMPOUND
+			     (cffi:foreign-type-size '(:pointer :char)))))
+		   (prog1 tmp
+		     (h5tinsert tmp "Location" 0 strtype))))
+		;; Create the variable-length datatype for reading.
+		(rsensorstype (h5tvlen-create rsensortype))
+		;; Create the main compound datatype for reading.
+		(rvehicletype
+		 (let ((tmp (h5tcreate
+			     :H5T-COMPOUND
+			     (cffi:foreign-type-size '(:struct rvehicle-t)))))
+		   (prog1 tmp
+		     (h5tinsert tmp "Sensors"
+				(cffi:foreign-slot-offset '(:struct rvehicle-t)
+							  'sensors)
+				rsensorstype)
+		     (h5tinsert tmp "Name"
+				(cffi:foreign-slot-offset '(:struct rvehicle-t)
+							  'name)
+				strtype))))
+		(space (h5dget-space dset)))
+
+	     (setf (cffi:mem-ref ndims 'hsize-t 0)
+		   (h5sget-simple-extent-dims space dims (cffi:null-pointer)))
+
+	     ;;	Allocate memory for read buffer.
+	     (let ((rdata (cffi:foreign-alloc
+			   '(:struct rvehicle-t)
+			   :count (cffi:mem-aref dims 'hsize-t 0))))
+
+	       ;; Read the data.
+	       (h5dread dset rvehicletype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
+			rdata)
+
+	       ;; Output the data to the screen.
+	       ;;
+	       ;; TODO
+	       ;;
+
+	       ;; Close and release resources. H5Dvlen_reclaim will
+	       ;; automatically traverse the structure and free any vlen
+	       ;; data (including strings).
+	       (h5dvlen-reclaim rvehicletype space +H5P-DEFAULT+ rdata)
+	       (cffi:foreign-free rdata))
+      
+	     (h5sclose space)
+	     (h5tclose rvehicletype)
+	     (h5tclose rsensorstype)
+	     (h5tclose rsensortype)
+	     (h5tclose strtype)
+	     (h5dclose dset)))
+
+      (h5fclose file)
+      (h5pclose fapl))))
+
 #+sbcl(sb-ext:quit)
