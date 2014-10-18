@@ -195,7 +195,12 @@
 		     temperature 83.82d0 pressure 29.92d0)))
 
 	   ;; Initialize other fields in the second data element.
-	   (let ((wdata[1] (cffi:mem-aptr wdata '(:struct vehicle-t) 1)))
+	   (let
+	       ((wdata[1] (cffi:mem-aptr wdata '(:struct vehicle-t) 1))
+		(shape (prog2
+			   (setf (cffi:mem-aref adims2 'hsize-t 0) 32
+				 (cffi:mem-aref adims2 'hsize-t 1) 32)
+			   (h5screate-simple 2 adims2 +NULL+))))
 
 	     (cffi:with-foreign-slots
 		 ((name color location) wdata[1] (:struct vehicle-t))
@@ -208,21 +213,16 @@
 			 wdata[1] '(:struct vehicle-t) 'group)
 			file "Land_Vehicles" :H5R-OBJECT -1)	     
 
-	     (let ((shape (prog2
-			      (setf (cffi:mem-aref adims2 'hsize-t 0) 32
-				    (cffi:mem-aref adims2 'hsize-t 1) 32)
-			      (h5screate-simple 2 adims2 +NULL+))))
-
-	       (setf (cffi:mem-aref start 'hsize-t 0) 8
-		     (cffi:mem-aref start 'hsize-t 1) 26
-		     (cffi:mem-aref count 'hsize-t 0) 4
-		     (cffi:mem-aref count 'hsize-t 1) 3)
-	       (h5sselect-hyperslab shape :H5S-SELECT-SET
-				    start +NULL+ count +NULL+)
-	       (h5rcreate (cffi:foreign-slot-pointer wdata[1]
-			   '(:struct vehicle-t) 'surveyed-areas)
-			  file "Ambient_Temperature" :H5R-DATASET-REGION shape)
-	       (h5sclose shape)))
+	     (setf (cffi:mem-aref start 'hsize-t 0) 8
+		   (cffi:mem-aref start 'hsize-t 1) 26
+		   (cffi:mem-aref count 'hsize-t 0) 4
+		   (cffi:mem-aref count 'hsize-t 1) 3)
+	     (h5sselect-hyperslab shape :H5S-SELECT-SET start +NULL+
+				  count +NULL+)
+	     (h5rcreate (cffi:foreign-slot-pointer
+			 wdata[1] '(:struct vehicle-t) 'surveyed-areas)
+			file "Ambient_Temperature" :H5R-DATASET-REGION shape)
+	     (h5sclose shape))
 
 	   (let*
 	       (;; Create variable-length string datatype.
