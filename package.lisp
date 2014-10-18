@@ -12,6 +12,7 @@
   (:documentation "hdf5-cffi library: Common LISP binding for the HDF5 library")
   (:use #:cl)
   (:export load-hdf5-foreign-libraries
+	   +NULL+
 	   size-t
 	   time-t
 	   off-t

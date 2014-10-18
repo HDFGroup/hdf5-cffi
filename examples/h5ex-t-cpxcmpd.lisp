@@ -44,20 +44,17 @@
 (defparameter *LENB*    1)
 
 (cffi:defcstruct sensor-t
-    "sensor_t"
   (serial-no   :int)
   (location    :string)
   (temperature :double)
   (pressure    :double))
 
 (cffi:defcenum color-t
-    "color_t"
   :RED
   :GREEN
   :BLUE)
 
 (cffi:defcstruct vehicle-t
-    "vehicle_t"
   (sensors        (:struct hvl-t))
   (name           :string)
   (color          color-t)
@@ -66,16 +63,15 @@
   (surveyed-areas (:struct hdset-reg-ref-t)))
 
 (cffi:defcstruct rvehicle-t
-    "rvehicle_t"
   (sensors (:struct hvl-t))
   (name    :string))
 
 (cffi:with-foreign-objects
-    ((dims 'hsize-t 1)
-     (adims 'hsize-t 1)
+    ((dims   'hsize-t 1)
+     (adims  'hsize-t 1)
      (adims2 'hsize-t 2)
-     (start 'hsize-t 2)
-     (count 'hsize-t 2)
+     (start  'hsize-t 2)
+     (count  'hsize-t 2)
      (coords 'hsize-t (* 3 2))
      (wdata  '(:struct vehicle-t) 2)
      (val    'color-t)
@@ -103,7 +99,7 @@
 	       ((shape (prog2
 			   (setf (cffi:mem-aref adims2 'hsize-t 0) 32
 				 (cffi:mem-aref adims2 'hsize-t 1) 32)
-			   (h5screate-simple 2 adims2 (cffi:null-pointer))))
+			   (h5screate-simple 2 adims2 +NULL+)))
 		(dset (h5dcreate2 file "Ambient_Temperature"
 				  +H5T-NATIVE-DOUBLE+ shape
 				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
@@ -170,7 +166,7 @@
 	     (let ((shape (prog2
 			      (setf (cffi:mem-aref adims2 'hsize-t 0) 32
 				    (cffi:mem-aref adims2 'hsize-t 1) 32)
-			      (h5screate-simple 2 adims2 (cffi:null-pointer)))))
+			      (h5screate-simple 2 adims2 +NULL+))))
 	       (h5sselect-elements shape :H5S-SELECT-SET 3 coords)
 	       (h5rcreate (cffi:foreign-slot-pointer wdata[0]
 			   '(:struct vehicle-t) 'surveyed-areas)
@@ -210,14 +206,13 @@
 	     (let ((shape (prog2
 			      (setf (cffi:mem-aref adims2 'hsize-t 0) 32
 				    (cffi:mem-aref adims2 'hsize-t 1) 32)
-			      (h5screate-simple 2 adims2 (cffi:null-pointer)))))
+			      (h5screate-simple 2 adims2 +NULL+))))
 	       (setf (cffi:mem-aref start 'hsize-t 0) 8
 		     (cffi:mem-aref start 'hsize-t 1) 26
 		     (cffi:mem-aref count 'hsize-t 0) 4
 		     (cffi:mem-aref count 'hsize-t 1) 3)
 	       (h5sselect-hyperslab shape :H5S-SELECT-SET
-				    start (cffi:null-pointer)
-				    count (cffi:null-pointer))
+				    start +NULL+ count +NULL+)
 	       (h5rcreate (cffi:foreign-slot-pointer wdata[1]
 			   '(:struct vehicle-t) 'surveyed-areas)
 			  file "Ambient_Temperature" :H5R-DATASET-REGION shape)
@@ -308,7 +303,7 @@
 		(space
 		 (prog2
 		     (setf (cffi:mem-ref dims 'hsize-t) *DIM0*)
-		     (h5screate-simple 1 dims (cffi:null-pointer))))		
+		     (h5screate-simple 1 dims +NULL+)))		
 		
 		;; Create the dataset
 		(dset (h5dcreate2 file *DATASET* vehicletype space
@@ -382,7 +377,7 @@
 		(space (h5dget-space dset)))
 
 	     (setf (cffi:mem-ref ndims 'hsize-t 0)
-		   (h5sget-simple-extent-dims space dims (cffi:null-pointer)))
+		   (h5sget-simple-extent-dims space dims +NULL+))
 
 	     ;;	Allocate memory for read buffer.
 	     (let ((rdata (cffi:foreign-alloc
@@ -394,10 +389,30 @@
 			rdata)
 
 	       ;; Output the data to the screen.
-	       ;;
-	       ;; TODO
-	       ;;
-
+	       (dotimes (i *DIM0*)
+		 (let*
+		     ((rdata_ptr
+		       (cffi:mem-aptr rdata '(:struct rvehicle-t) i))
+		      (rdata_sensors_ptr
+		       (cffi:foreign-slot-pointer
+			rdata_ptr '(:struct rvehicle-t) 'sensors)))
+		 
+		   (format t "~a[~a]:~%" *DATASET* i)
+		   (format t "   Vehicle name :~%      ~a~%"
+			   (cffi:foreign-slot-value
+			    rdata_ptr '(:struct rvehicle-t) 'name))
+		   
+		   (format t "   Sensor locations :~%")
+		   (dotimes (j (cffi:foreign-slot-value
+				rdata_sensors_ptr '(:struct hvl-t) 'len))
+		     (format t "      ~a~%"
+			     (cffi:mem-ref
+			      (cffi:mem-aptr
+			       (cffi:foreign-slot-value
+				rdata_sensors_ptr '(:struct hvl-t) 'p)
+			       :pointer j)
+			      :string)))))
+	       
 	       ;; Close and release resources. H5Dvlen_reclaim will
 	       ;; automatically traverse the structure and free any vlen
 	       ;; data (including strings).
