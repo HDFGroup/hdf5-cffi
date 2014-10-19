@@ -11,7 +11,7 @@
 ;;; This example shows how to recursively traverse a file
 ;;; using H5Ovisit and H5Lvisit.  The program prints all of
 ;;; the objects in the file specified in FILE, then prints all
-;;;  of the links in that file.
+;;; of the links in that file.
 
 ;;; http://www.hdfgroup.org/ftp/HDF5/examples/examples-by-api/hdf5-examples/1_8/C/H5G/h5ex_g_visit.c
 
@@ -30,16 +30,17 @@
 ;;; This is a workaround...
 
 (defun print-info-et-name (info name)
-    (let ((type (cffi:foreign-slot-value info '(:struct h5o-info-t) 'type)))
-      (if (equal name ".")
-	  (format t "  (Group)~%")
-	  (cond ((eql type :H5O-TYPE-GROUP)
-		 (format t "  Group: ~S~%" name))
-		((eql type :H5O-TYPE-DATASET)
-		 (format t "  Dataset: ~S~%" name))
-		((eql type :H5O-TYPE-NAMED-DATATYPE)
-		 (format t "  Datatype: ~S~%" name))
-		(t (format t "  Unknown: ~S~%" name))))))
+  (format t "/")
+  (let ((type (cffi:foreign-slot-value info '(:struct h5o-info-t) 'type)))
+    (if (equal name ".")
+	(format t "  (Group)~%")
+	(cond ((eql type :H5O-TYPE-GROUP)
+	       (format t "~a  (Group)~%" name))
+	      ((eql type :H5O-TYPE-DATASET)
+	       (format t "~a  (Dataset)~%" name))
+	      ((eql type :H5O-TYPE-NAMED-DATATYPE)
+	       (format t "~a  (Datatype)~%" name))
+	      (t (format t "~a  (Unknown)~%" name))))))
   
 ;;; the callback function for H5Ovisit
 
@@ -80,7 +81,7 @@
 	 (format t "Objects in the file:~%")
 	 (h5ovisit file :H5-INDEX-NAME :H5-ITER-NATIVE
 		   (cffi:callback op-func) (cffi:null-pointer))
-	 (format t "Links in the file:~%")
+	 (format t "~%Links in the file:~%")
 	 (h5lvisit file :H5-INDEX-NAME :H5-ITER-NATIVE
 		   (cffi:callback op-func-l) (cffi:null-pointer))))
     

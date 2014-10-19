@@ -35,9 +35,11 @@
       (h5oget-info-by-name loc-id name
 			   (cffi:mem-aptr infobuf '(:struct h5o-info-t) 0)
 			   +H5P-DEFAULT+)
+      
       ;; retrieve the object type and display the link name
-      (let ((type (cffi:foreign-slot-value infobuf
-					   '(:struct h5o-info-t) 'type)))
+      (let ((type (cffi:foreign-slot-value
+		   infobuf '(:struct h5o-info-t) 'type)))
+	
 	(cond ((eql type :H5O-TYPE-GROUP)
 	       (format t "  Group: ~S~%" name))
 	      ((eql type :H5O-TYPE-DATASET)
@@ -56,10 +58,12 @@
 	       (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
   
   (unwind-protect
-       
-       ;; iterate over the links and invoke the callback
-       (h5literate file :H5-INDEX-NAME :H5-ITER-NATIVE (cffi:null-pointer)
-		   (cffi:callback op-func) (cffi:null-pointer))
+
+       (progn
+	 ;; iterate over the links and invoke the callback
+	 (format t "Objects in root group:~%")
+	 (h5literate file :H5-INDEX-NAME :H5-ITER-NATIVE (cffi:null-pointer)
+		     (cffi:callback op-func) (cffi:null-pointer)))
 
     (h5fclose file)
     (h5pclose fapl)))
