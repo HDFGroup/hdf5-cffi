@@ -17,10 +17,6 @@
 
 (in-package :hdf5)
 
-;;; Download the input file from
-;;; http://www.hdfgroup.org/ftp/HDF5/examples/files/exbyapi/h5ex_g_iterate.h5
-;;; or use one of your own files.
-
 (defparameter *FILE* "h5ex_g_iterate.h5")
 
 ;;; the callback function
