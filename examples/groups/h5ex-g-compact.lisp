@@ -26,122 +26,116 @@
 (defparameter *FILE2* "h5ex_g_compact2.h5")
 (defparameter *GROUP* "G1")
 
-(cffi:with-foreign-objects ((ginfo '(:struct h5g-info-t) 1))
+(cffi:with-foreign-objects ((ginfo '(:struct h5g-info-t) 1)
+			    (size 'hsize-t 1))
 
-  ;; Create file 1.  This file will use original format groups.
+  (let
+      ((ginfo-ptr (cffi:mem-aptr ginfo '(:struct h5g-info-t) 0))
+       (size-ptr  (cffi:mem-aptr size  'hsize-t              0)))
   
-  (let*
-      ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-       (file (prog2
-		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		 (h5fcreate *FILE1* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
+    ;; Create file 1.  This file will use original format groups.
   
-    (unwind-protect
-       
-	 (let ((group (h5gcreate2 file *GROUP*
-				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+))
-	       (ginfo-ptr (cffi:mem-aptr ginfo '(:struct h5g-info-t) 0)))
+    (let*
+	((fapl (h5pcreate +H5P-FILE-ACCESS+))
+	 (file (prog2
+		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+		   (h5fcreate *FILE1* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl)))
+	 (group (h5gcreate2 file *GROUP*
+			    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+  
+      (unwind-protect
 	   (progn
-
 	     ;; Obtain the group info and print the group storage type.
 	     
 	     (h5gget-info group ginfo-ptr)
 	     (format t "Group storage type for ~a is: " *FILE1*)
-	     (let ((ginfo.storage-type (cffi:foreign-slot-value
-					ginfo-ptr '(:struct h5g-info-t)
-					'storage-type)))	     
-	       (cond ((eql ginfo.storage-type :H5G-STORAGE-TYPE-SYMBOL-TABLE)
-		      (format t "~a~%" "H5G_STORAGE_TYPE_SYMBOL_TABLE"))
-		     ((eql ginfo.storage-type :H5G-STORAGE-TYPE-COMPACT)
-		      (format t "~a~%" "H5G_STORAGE_TYPE_COMPACT"))
-		     ((eql ginfo.storage-type :H5G-STORAGE-TYPE-DENSE)
-		      (format t "~a~%" "H5G_STORAGE_TYPE_DENSE"))
-		     (t (format t "~a~%" "H5G_STORAGE_TYPE_UNKNOWN"))))
-	     (h5gclose group)))
+	       
+	     (let
+		 ((ginfo.storage-type (cffi:foreign-slot-value
+				       ginfo-ptr '(:struct h5g-info-t)
+				       'storage-type)))	     
+	       (cond
+		 ((eql ginfo.storage-type :H5G-STORAGE-TYPE-SYMBOL-TABLE)
+		  (format t "~a~%" "H5G_STORAGE_TYPE_SYMBOL_TABLE"))
+		 ((eql ginfo.storage-type :H5G-STORAGE-TYPE-COMPACT)
+		  (format t "~a~%" "H5G_STORAGE_TYPE_COMPACT"))
+		 ((eql ginfo.storage-type :H5G-STORAGE-TYPE-DENSE)
+		  (format t "~a~%" "H5G_STORAGE_TYPE_DENSE"))
+		 (t (format t "~a~%" "H5G_STORAGE_TYPE_UNKNOWN")))))
 
-      ;; Close and re-open file. Needed to get the correct file size.
-      
-      (h5fclose file)
-      (h5pclose fapl))))
+	;; Close and re-open file. Needed to get the correct file size.
+	(h5gclose group)
+	(h5fclose file)
+	(h5pclose fapl)))
 
-(cffi:with-foreign-objects ((size 'hsize-t 1))
-  (let*
-      ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-       (file (prog2
-		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		 (h5fopen *FILE1* +H5F-ACC-RDONLY+ fapl))))
+    (let*
+	((fapl (h5pcreate +H5P-FILE-ACCESS+))
+	 (file (prog2
+		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+		   (h5fopen *FILE1* +H5F-ACC-RDONLY+ fapl))))
   
-    (unwind-protect
-       
-	 (progn
-	   (h5fget-filesize file (cffi:mem-aptr size 'hsize-t 0))
-	   (format t "File size for ~a is: ~a bytes~%~%" *FILE1*
-		   (cffi:mem-aref size 'hsize-t 0)))
-      
-      (h5fclose file)
-      (h5pclose fapl))))
-
-;; Set file access property list to allow the latest file format.
-;; This will allow the library to create new compact format groups.
-
-(cffi:with-foreign-objects ((ginfo '(:struct h5g-info-t) 1))
-
-  ;; Set file access property list to allow the latest file format.
-  ;; This will allow the library to create new compact format groups.
-  ;;
-  ;; Create file 2 using the new file access property list.
-  
-  (let*
-      ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-       (file (progn
-		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		 (h5pset-libver-bounds
-		  fapl :H5F-LIBVER-LATEST :H5F-LIBVER-LATEST)
-		 (h5fcreate *FILE2* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
-  
-    (unwind-protect
-       
-	 (let ((group (h5gcreate2 file *GROUP*
-				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+))
-	       (ginfo-ptr (cffi:mem-aptr ginfo '(:struct h5g-info-t) 0)))
+      (unwind-protect
 	   (progn
+	     (h5fget-filesize file size-ptr)
+	     (format t "File size for ~a is: ~a bytes~%~%" *FILE1*
+		     (cffi:mem-aref size 'hsize-t 0)))      
+	(h5fclose file)
+	(h5pclose fapl)))
 
+    ;; Set file access property list to allow the latest file format.
+    ;; This will allow the library to create new compact format groups.
+
+    ;; Set file access property list to allow the latest file format.
+    ;; This will allow the library to create new compact format groups.
+    ;;
+    ;; Create file 2 using the new file access property list.
+  
+    (let*
+	((fapl (h5pcreate +H5P-FILE-ACCESS+))
+	 (file (progn
+		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+		 (h5pset-libver-bounds fapl
+				       :H5F-LIBVER-LATEST :H5F-LIBVER-LATEST)
+		 (h5fcreate *FILE2* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl)))
+	 (group (h5gcreate2 file *GROUP*
+			    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+  
+      (unwind-protect
+	   (progn
 	     ;; Obtain the group info and print the group storage type.
 	     
 	     (h5gget-info group ginfo-ptr)
 	     (format t "Group storage type for ~a is: " *FILE2*)
-	     (let ((ginfo.storage-type (cffi:foreign-slot-value
-					ginfo-ptr '(:struct h5g-info-t)
-					'storage-type)))	     
-	       (cond ((eql ginfo.storage-type :H5G-STORAGE-TYPE-SYMBOL-TABLE)
-		      (format t "~a~%" "H5G_STORAGE_TYPE_SYMBOL_TABLE"))
-		     ((eql ginfo.storage-type :H5G-STORAGE-TYPE-COMPACT)
-		      (format t "~a~%" "H5G_STORAGE_TYPE_COMPACT"))
-		     ((eql ginfo.storage-type :H5G-STORAGE-TYPE-DENSE)
-		      (format t "~a~%" "H5G_STORAGE_TYPE_DENSE"))
-		     (t (format t "~a~%" "H5G_STORAGE_TYPE_UNKNOWN"))))
-	     (h5gclose group)))
+	     (let
+		 ((ginfo.storage-type (cffi:foreign-slot-value
+				       ginfo-ptr '(:struct h5g-info-t)
+				       'storage-type)))	     
+	       (cond
+		 ((eql ginfo.storage-type :H5G-STORAGE-TYPE-SYMBOL-TABLE)
+		  (format t "~a~%" "H5G_STORAGE_TYPE_SYMBOL_TABLE"))
+		 ((eql ginfo.storage-type :H5G-STORAGE-TYPE-COMPACT)
+		  (format t "~a~%" "H5G_STORAGE_TYPE_COMPACT"))
+		 ((eql ginfo.storage-type :H5G-STORAGE-TYPE-DENSE)
+		  (format t "~a~%" "H5G_STORAGE_TYPE_DENSE"))
+		 (t (format t "~a~%" "H5G_STORAGE_TYPE_UNKNOWN")))))
 
-      ;; Close and re-open file. Needed to get the correct file size.
-      
-      (h5fclose file)
-      (h5pclose fapl))))
+	;; Close and re-open file. Needed to get the correct file size.
+	(h5gclose group)
+	(h5fclose file)
+	(h5pclose fapl)))
 
-(cffi:with-foreign-objects ((size 'hsize-t 1))
-  (let*
-      ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-       (file (prog2
-		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		 (h5fopen *FILE2* +H5F-ACC-RDONLY+ fapl))))
+    (let*
+	((fapl (h5pcreate +H5P-FILE-ACCESS+))
+	 (file (prog2
+		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+		   (h5fopen *FILE2* +H5F-ACC-RDONLY+ fapl))))
   
-    (unwind-protect
-       
-	 (progn
-	   (h5fget-filesize file (cffi:mem-aptr size 'hsize-t 0))
-	   (format t "File size for ~a is: ~a bytes~%~%" *FILE2*
-		   (cffi:mem-aref size 'hsize-t 0)))
-      
-      (h5fclose file)
-      (h5pclose fapl))))
+      (unwind-protect
+	   (progn
+	     (h5fget-filesize file size-ptr)
+	     (format t "File size for ~a is: ~a bytes~%~%" *FILE2*
+		     (cffi:mem-aref size 'hsize-t 0)))    
+	(h5fclose file)
+	(h5pclose fapl)))))
 
 #+sbcl(sb-ext:quit)
