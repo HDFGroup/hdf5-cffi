@@ -38,12 +38,12 @@
 	      (format t "  (Group)~%")
 	      (cond
 		((eql type :H5O-TYPE-GROUP)
-		 (format t "~S  (Group)~%" name))
+		 (format t "~a  (Group)~%" name))
 		((eql type :H5O-TYPE-DATASET)
-		 (format t "~S  (Dataset)~%" name))
+		 (format t "~a  (Dataset)~%" name))
 		((eql type :H5O-TYPE-NAMED-DATATYPE)
-		 (format t "~S  (Datatype)~%" name))
-		(t (format t "~S  (Unknown)~%" name)))))
+		 (format t "~a  (Datatype)~%" name))
+		(t (format t "~a  (Unknown)~%" name)))))
 	0))
 
 ;;; Showtime
@@ -67,7 +67,7 @@
        (progn
 	 (format t "Objects in the file:~%")
 	 (h5ovisit file :H5-INDEX-NAME :H5-ITER-NATIVE
-		   (cffi:callback op-func) (cffi:null-pointer)))
+		   (cffi:callback op-func) +NULL+))
 	   
     (h5gclose group)
     (h5pclose gcpl)
