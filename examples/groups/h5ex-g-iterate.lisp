@@ -26,10 +26,11 @@
 ;;; the callback function
 
 (cffi:defcallback op-func herr-t
-    ((loc-id hid-t)
-     (name :string)
-     (info (:pointer (:struct h5l-info-t)))
+    ((loc-id        hid-t)
+     (name          :string)
+     (info          (:pointer (:struct h5l-info-t)))
      (operator-data :pointer))
+    
   (progn
     (cffi:with-foreign-object (infobuf '(:struct h5o-info-t) 1)
       (h5oget-info-by-name loc-id name
@@ -38,15 +39,15 @@
       
       ;; retrieve the object type and display the link name
       (let ((type (cffi:foreign-slot-value
-		   infobuf '(:struct h5o-info-t) 'type)))
-	
-	(cond ((eql type :H5O-TYPE-GROUP)
-	       (format t "  Group: ~S~%" name))
-	      ((eql type :H5O-TYPE-DATASET)
-	       (format t "  Dataset: ~S~%" name))
-	      ((eql type :H5O-TYPE-NAMED-DATATYPE)
-	       (format t "  Datatype: ~S~%" name))
-	      (t (format t "  Unknown: ~S~%" name)))))
+		   infobuf '(:struct h5o-info-t) 'type)))	
+	(cond
+	  ((eql type :H5O-TYPE-GROUP)
+	   (format t "  Group: ~a~%" name))
+	  ((eql type :H5O-TYPE-DATASET)
+	   (format t "  Dataset: ~a~%" name))
+	  ((eql type :H5O-TYPE-NAMED-DATATYPE)
+	   (format t "  Datatype: ~a~%" name))
+	  (t (format t "  Unknown: ~a~%" name)))))
     0))
 
 ;;; Showtime
@@ -58,12 +59,11 @@
 	       (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
   
   (unwind-protect
-
        (progn
 	 ;; iterate over the links and invoke the callback
 	 (format t "Objects in root group:~%")
-	 (h5literate file :H5-INDEX-NAME :H5-ITER-NATIVE (cffi:null-pointer)
-		     (cffi:callback op-func) (cffi:null-pointer)))
+	 (h5literate file :H5-INDEX-NAME :H5-ITER-NATIVE
+		     +NULL+ (cffi:callback op-func) +NULL+))
 
     (h5fclose file)
     (h5pclose fapl)))
