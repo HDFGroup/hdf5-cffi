@@ -39,34 +39,35 @@
 	((fapl (h5pcreate +H5P-FILE-ACCESS+))
 	 (file (prog2
 		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		   (h5fcreate *FILE1* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl)))
-	 (group (h5gcreate2 file *GROUP*
-			    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+		   (h5fcreate *FILE1* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
   
       (unwind-protect
 	   (progn
 	     ;; Obtain the group info and print the group storage type.
-	     
-	     (h5gget-info group ginfo-ptr)
-	     (format t "Group storage type for ~a is: " *FILE1*)
-	       
-	     (let
-		 ((ginfo.storage-type (cffi:foreign-slot-value
-				       ginfo-ptr '(:struct h5g-info-t)
-				       'storage-type)))	     
-	       (cond
-		 ((eql ginfo.storage-type :H5G-STORAGE-TYPE-SYMBOL-TABLE)
-		  (format t "~a~%" "H5G_STORAGE_TYPE_SYMBOL_TABLE"))
-		 ((eql ginfo.storage-type :H5G-STORAGE-TYPE-COMPACT)
-		  (format t "~a~%" "H5G_STORAGE_TYPE_COMPACT"))
-		 ((eql ginfo.storage-type :H5G-STORAGE-TYPE-DENSE)
-		  (format t "~a~%" "H5G_STORAGE_TYPE_DENSE"))
-		 (t (format t "~a~%" "H5G_STORAGE_TYPE_UNKNOWN")))))
 
+	     (let ((group (h5gcreate2 file *GROUP* +H5P-DEFAULT+
+				      +H5P-DEFAULT+ +H5P-DEFAULT+)))
+	       (h5gget-info group ginfo-ptr)
+	       (format t "Group storage type for ~a is: " *FILE1*)
+	       
+	       (let
+		   ((ginfo.storage-type (cffi:foreign-slot-value
+					 ginfo-ptr '(:struct h5g-info-t)
+					 'storage-type)))	     
+		 (cond
+		   ((eql ginfo.storage-type :H5G-STORAGE-TYPE-SYMBOL-TABLE)
+		    (format t "~a~%" "H5G_STORAGE_TYPE_SYMBOL_TABLE"))
+		   ((eql ginfo.storage-type :H5G-STORAGE-TYPE-COMPACT)
+		    (format t "~a~%" "H5G_STORAGE_TYPE_COMPACT"))
+		   ((eql ginfo.storage-type :H5G-STORAGE-TYPE-DENSE)
+		    (format t "~a~%" "H5G_STORAGE_TYPE_DENSE"))
+		   (t (format t "~a~%" "H5G_STORAGE_TYPE_UNKNOWN"))))
+	       
+	       (h5gclose group)))
+	     
 	;; Close and re-open file. Needed to get the correct file size.
-	(h5gclose group)
 	(h5fclose file)
-	(h5pclose fapl)))
+	(h5pclose fapl))
 
     (let*
 	((fapl (h5pcreate +H5P-FILE-ACCESS+))
@@ -96,31 +97,33 @@
 		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		 (h5pset-libver-bounds fapl
 				       :H5F-LIBVER-LATEST :H5F-LIBVER-LATEST)
-		 (h5fcreate *FILE2* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl)))
-	 (group (h5gcreate2 file *GROUP*
-			    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+		 (h5fcreate *FILE2* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
   
       (unwind-protect
 	   (progn
-	     ;; Obtain the group info and print the group storage type.
+	     (let ((group (h5gcreate2 file *GROUP* +H5P-DEFAULT+
+				      +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	     
-	     (h5gget-info group ginfo-ptr)
-	     (format t "Group storage type for ~a is: " *FILE2*)
-	     (let
-		 ((ginfo.storage-type (cffi:foreign-slot-value
-				       ginfo-ptr '(:struct h5g-info-t)
-				       'storage-type)))	     
-	       (cond
-		 ((eql ginfo.storage-type :H5G-STORAGE-TYPE-SYMBOL-TABLE)
-		  (format t "~a~%" "H5G_STORAGE_TYPE_SYMBOL_TABLE"))
-		 ((eql ginfo.storage-type :H5G-STORAGE-TYPE-COMPACT)
-		  (format t "~a~%" "H5G_STORAGE_TYPE_COMPACT"))
-		 ((eql ginfo.storage-type :H5G-STORAGE-TYPE-DENSE)
-		  (format t "~a~%" "H5G_STORAGE_TYPE_DENSE"))
-		 (t (format t "~a~%" "H5G_STORAGE_TYPE_UNKNOWN")))))
+	       ;; Obtain the group info and print the group storage type.
+	     
+	       (h5gget-info group ginfo-ptr)
+	       (format t "Group storage type for ~a is: " *FILE2*)
+	       (let
+		   ((ginfo.storage-type (cffi:foreign-slot-value
+					 ginfo-ptr '(:struct h5g-info-t)
+					 'storage-type)))	     
+		 (cond
+		   ((eql ginfo.storage-type :H5G-STORAGE-TYPE-SYMBOL-TABLE)
+		    (format t "~a~%" "H5G_STORAGE_TYPE_SYMBOL_TABLE"))
+		   ((eql ginfo.storage-type :H5G-STORAGE-TYPE-COMPACT)
+		    (format t "~a~%" "H5G_STORAGE_TYPE_COMPACT"))
+		   ((eql ginfo.storage-type :H5G-STORAGE-TYPE-DENSE)
+		    (format t "~a~%" "H5G_STORAGE_TYPE_DENSE"))
+		   (t (format t "~a~%" "H5G_STORAGE_TYPE_UNKNOWN"))))
 
+	       (h5gclose group)))
+	
 	;; Close and re-open file. Needed to get the correct file size.
-	(h5gclose group)
 	(h5fclose file)
 	(h5pclose fapl)))
 
@@ -136,6 +139,6 @@
 	     (format t "File size for ~a is: ~a bytes~%~%" *FILE2*
 		     (cffi:mem-aref size 'hsize-t 0)))    
 	(h5fclose file)
-	(h5pclose fapl)))))
+	(h5pclose fapl))))))
 
 #+sbcl(sb-ext:quit)
