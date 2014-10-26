@@ -52,25 +52,24 @@
     ((fapl (h5pcreate +H5P-FILE-ACCESS+))
      (file (prog2
 	       (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-	       (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl)))
-     (gcpl (h5pcreate +H5P-LINK-CREATE+))
-     (group (prog2
-		(h5pset-create-intermediate-group gcpl 1)
-		;; Create the group /G1/G2/G3. Note that /G1 and
-		;; /G1/G2 do not exist yet. This call would cause
-		;; an error if we did not use the previously created
-		;; property list.
-		(h5gcreate2 file "/G1/G2/G3" gcpl
-			    +H5P-DEFAULT+ +H5P-DEFAULT+))))
+	       (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
   
   (unwind-protect
        (progn
-	 (format t "Objects in the file:~%")
-	 (h5ovisit file :H5-INDEX-NAME :H5-ITER-NATIVE
-		   (cffi:callback op-func) +NULL+))
-	   
-    (h5gclose group)
-    (h5pclose gcpl)
+	 (let* ((gcpl (h5pcreate +H5P-LINK-CREATE+))
+		(group (prog2
+			   (h5pset-create-intermediate-group gcpl 1)
+			   ;; Create the group /G1/G2/G3. Note that /G1 and
+			   ;; /G1/G2 do not exist yet. This call would cause
+			   ;; an error if we did not use the previously created
+			   ;; property list.
+			   (h5gcreate2 file "/G1/G2/G3" gcpl
+				       +H5P-DEFAULT+ +H5P-DEFAULT+))))
+	   (format t "Objects in the file:~%")
+	   (h5ovisit file :H5-INDEX-NAME :H5-ITER-NATIVE
+		     (cffi:callback op-func) +NULL+)
+	   (h5gclose group)
+	   (h5pclose gcpl)))
     (h5fclose file)
     (h5pclose fapl)))
 
