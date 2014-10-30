@@ -13,7 +13,6 @@
 ;;; then reads back their names: first in alphabetical order,
 ;;; then in creation order.
 
-
 ;;; http://www.hdfgroup.org/ftp/HDF5/examples/examples-by-api/hdf5-examples/1_8/C/H5G/h5ex_g_corder.c 
 
 #+sbcl(require 'asdf)
@@ -75,16 +74,16 @@
 		 (dotimes (i ginfo.nlinks)
 		   ;; Get size of name, add 1 for null terminator.
 		   ;; Allocate storage for name.
-		   (let* ((size (h5lget-name-by-idx group "." :H5-INDEX-NAME
-						    :H5-ITER-INC i +NULL+ 0
-						    +H5P-DEFAULT+))
-			  (name (cffi:foreign-alloc :char :count (1+ size))))
+		   (let* ((size (1+ (h5lget-name-by-idx group "."
+							:H5-INDEX-NAME
+							:H5-ITER-INC i +NULL+ 0
+							+H5P-DEFAULT+)))
+			  (name (cffi:foreign-alloc :char :count size)))
 
 		     ;; Retrieve name, print it, and free the previously
 		     ;; allocated space.
 		     (h5lget-name-by-idx group "." :H5-INDEX-NAME
-					 :H5-ITER-INC i name (1+ size)
-					 +H5P-DEFAULT+)
+					 :H5-ITER-INC i name size +H5P-DEFAULT+)
 		     (format t "Index ~a: ~a~%" i
 			     (cffi:foreign-string-to-lisp name))
 		     (cffi:foreign-free name)))
@@ -96,17 +95,16 @@
 		 (dotimes (i ginfo.nlinks)
 		   ;; Get size of name, add 1 for null terminator.
 		   ;; Allocate storage for name.
-		   (let* ((size (h5lget-name-by-idx group "."
+		   (let* ((size (1+ (h5lget-name-by-idx group "."
 						    :H5-INDEX-CRT-ORDER
 						    :H5-ITER-INC i +NULL+ 0
-						    +H5P-DEFAULT+))
-			  (name (cffi:foreign-alloc :char :count (1+ size))))
+						    +H5P-DEFAULT+)))
+			  (name (cffi:foreign-alloc :char :count size)))
 
 		     ;; Retrieve name, print it, and free the previously
 		     ;; allocated space.
 		     (h5lget-name-by-idx group "." :H5-INDEX-CRT-ORDER
-					 :H5-ITER-INC i name (1+ size)
-					 +H5P-DEFAULT+)
+					 :H5-ITER-INC i name size +H5P-DEFAULT+)
 		     (format t "Index ~a: ~a~%" i
 			     (cffi:foreign-string-to-lisp name))
 		     (cffi:foreign-free name))))
