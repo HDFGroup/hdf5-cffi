@@ -202,6 +202,11 @@
   (libver-low  h5f-libver-t)
   (libver-high h5f-libver-t))
 
+(cffi:defcfun "H5Pset_link_creation_order" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetLinkCreationOrder"
+  (gcpl-id         hid-t)
+  (crt-order-flags :unsigned-int))
+
 (cffi:defcfun "H5Pset_shuffle" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetShuffle"
   (plist-id hid-t))

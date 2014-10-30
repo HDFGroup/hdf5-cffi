@@ -264,6 +264,7 @@
 	   h5lcreate-soft
 	   h5ldelete
 	   h5lexists
+	   h5lget-name-by-idx
 	   h5literate
 	   h5lvisit
 	   h5lvisit-by-name
@@ -539,6 +540,7 @@
 	   h5pset-fill-value
 	   h5pset-fletcher32
 	   h5pset-layout
+	   h5pset-link-creation-order
 	   h5pset-libver-bounds
 	   h5pset-szip
 	   h5pset-shuffle

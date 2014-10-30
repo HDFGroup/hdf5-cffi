@@ -66,6 +66,17 @@
   (link-buff   (:pointer (:struct h5l-info-t)))
   (lapl-id     hid-t))
 
+(cffi:defcfun "H5Lget_name_by_idx" ssize-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-GetNameByIdx"
+  (link-loc-id hid-t)
+  (group-name  :string)
+  (index-field h5-index-t)
+  (order       h5-iter-order-t)
+  (n           hsize-t)
+  (name        (:pointer :char))
+  (size        size-t)
+  (lapl-id     hid-t))
+
 (cffi:defcfun "H5Literate" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Iterate"
   (group-id   hid-t)
