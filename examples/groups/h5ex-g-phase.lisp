@@ -24,6 +24,19 @@
 (defparameter *MAX-COMPACT* 5)
 (defparameter *MIN-DENSE* 3)
 
+
+(defun print-groups-storage-type (nlinks type)
+  (format t "~a Group~a: Storage type is " nlinks
+	  (if (eql nlinks 1) " " "s"))
+  (cond ((eql type :H5G-STORAGE-TYPE-COMPACT) ; New compact format
+	 (format t "~a~%" "H5G_STORAGE_TYPE_COMPACT"))
+    ((eql type :H5G-STORAGE-TYPE-DENSE)	      ; New dense (indexed) format
+     (format t "~a~%" "H5G_STORAGE_TYPE_DENSE"))
+    ((eql type :H5G-STORAGE-TYPE-SYMBOL-TABLE) ; Original format
+     (format t "~a~%" "H5G_STORAGE_TYPE_SYMBOL_TABLE"))
+    (t (format t "~a~%" "H5G_STORAGE_TYPE_UNKNOWN"))))
+
+
 (cffi:with-foreign-objects ((ginfo '(:struct h5g-info-t) 1))
 
   (let ((ginfo-ptr (cffi:mem-aptr ginfo '(:struct h5g-info-t) 0)))
@@ -71,19 +84,8 @@
 			 (ginfo.storage-type (cffi:foreign-slot-value
 					ginfo-ptr '(:struct h5g-info-t)
 					'storage-type)))
-		     (format t "~a Group~a: Storage type is " ginfo.nlinks
-			     (if (eql ginfo.nlinks 1) " " "s"))
-		     (cond
-		       ((eql ginfo.storage-type :H5G-STORAGE-TYPE-COMPACT)
-			; New compact format
-			(format t "~a~%" "H5G_STORAGE_TYPE_COMPACT"))
-		       ((eql ginfo.storage-type :H5G-STORAGE-TYPE-DENSE)
-			; New dense (indexed) format
-			(format t "~a~%" "H5G_STORAGE_TYPE_DENSE"))
-		       ((eql ginfo.storage-type :H5G-STORAGE-TYPE-SYMBOL-TABLE)
-			; Original format
-			(format t "~a~%" "H5G_STORAGE_TYPE_SYMBOL_TABLE"))
-		       (t (format t "~a~%" "H5G_STORAGE_TYPE_UNKNOWN")))))
+		     (print-groups-storage-type ginfo.nlinks
+						ginfo.storage-type)))
 
 	       (format t "~%")
 
@@ -105,20 +107,9 @@
 			 (ginfo.storage-type (cffi:foreign-slot-value
 					ginfo-ptr '(:struct h5g-info-t)
 					'storage-type)))
-		     (format t "~a Group~a: Storage type is " ginfo.nlinks
-			     (if (eql ginfo.nlinks 1) " " "s"))
-		     (cond
-		       ((eql ginfo.storage-type :H5G-STORAGE-TYPE-COMPACT)
-			; New compact format
-			(format t "~a~%" "H5G_STORAGE_TYPE_COMPACT"))
-		       ((eql ginfo.storage-type :H5G-STORAGE-TYPE-DENSE)
-			; New dense (indexed) format
-			(format t "~a~%" "H5G_STORAGE_TYPE_DENSE"))
-		       ((eql ginfo.storage-type :H5G-STORAGE-TYPE-SYMBOL-TABLE)
-			; Original format
-			(format t "~a~%" "H5G_STORAGE_TYPE_SYMBOL_TABLE"))
-		       (t (format t "~a~%" "H5G_STORAGE_TYPE_UNKNOWN")))))
-	       
+		     (print-groups-storage-type ginfo.nlinks
+						ginfo.storage-type)))
+
 	       (h5gclose group)
 	       (h5pclose gcpl)))
 	     
