@@ -541,6 +541,7 @@
 	   h5pset-fletcher32
 	   h5pset-layout
 	   h5pset-link-creation-order
+	   h5pset-link-phase-change
 	   h5pset-libver-bounds
 	   h5pset-szip
 	   h5pset-shuffle
