@@ -46,9 +46,8 @@
      (name          :string)
      (info          (:pointer (:struct h5o-info-t)))
      (operator-data :pointer))
-  (prog2
     (print-info-et-name info name)
-    0))
+    0)
 
 ;;; the callback function for H5Lvisit
 
@@ -57,13 +56,10 @@
      (name          :string)
      (info          (:pointer (:struct h5l-info-t)))
      (operator-data :pointer))
-  (progn
     (cffi:with-foreign-object (infobuf '(:struct h5o-info-t) 1)
-      (let
-	  ((infobuf-ptr (cffi:mem-aptr infobuf '(:struct h5o-info-t) 0)))
-	(h5oget-info-by-name loc-id name infobuf-ptr +H5P-DEFAULT+)
-	(print-info-et-name infobuf-ptr name)
-	0))))
+      (h5oget-info-by-name loc-id name infobuf +H5P-DEFAULT+)
+      (print-info-et-name infobuf name))
+    0)
 
 ;;; Showtime
 
@@ -77,7 +73,7 @@
        (progn
 	 (format t "Objects in the file:~%")
 	 (h5ovisit file :H5-INDEX-NAME :H5-ITER-NATIVE
-		   (cffi:callback op-func) (cffi:null-pointer))
+		   (cffi:callback op-func) +NULL+)
 	 (format t "~%Links in the file:~%")
 	 (h5lvisit file :H5-INDEX-NAME :H5-ITER-NATIVE
 		   (cffi:callback op-func-l) +NULL+)))
