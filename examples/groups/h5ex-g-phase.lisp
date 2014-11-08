@@ -76,7 +76,8 @@
 	       (h5gget-info group ginfo)
 
 	       (cffi:with-foreign-slots ((nlinks storage-type)
-					 ginfo (:struct h5g-info-t))				 (print-groups-storage-type nlinks storage-type)))
+					 ginfo (:struct h5g-info-t))
+		 (print-groups-storage-type nlinks storage-type)))
 
 	     (format t "~%")
 
@@ -93,7 +94,8 @@
 	       (h5gget-info group ginfo)
 
 	       (cffi:with-foreign-slots ((nlinks storage-type)
-					 ginfo (:struct h5g-info-t))				 (print-groups-storage-type nlinks storage-type)))
+					 ginfo (:struct h5g-info-t))
+		 (print-groups-storage-type nlinks storage-type)))
 
 	     (h5gclose group)
 	     (h5pclose gcpl)))
