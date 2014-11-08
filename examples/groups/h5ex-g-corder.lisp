@@ -22,7 +22,7 @@
 
 (defparameter *FILE* "h5ex_g_corder.h5")
 
-(cffi:with-foreign-objects ((ginfo '(:struct h5g-info-t) 1))
+(cffi:with-foreign-object (ginfo '(:struct h5g-info-t) 1)
 
   ;; Create a new file using the default properties.
 
@@ -65,9 +65,8 @@
 	     ;; (H5_INDEX_NAME).
 
 	     (format t "Traversing group using alphabetical indices:~%~%")
-	     (let ((ginfo.nlinks (cffi:foreign-slot-value
-				  ginfo '(:struct h5g-info-t) 'nlinks)))
-	       (dotimes (i ginfo.nlinks)
+	     (cffi:with-foreign-slots ((nlinks) ginfo (:struct h5g-info-t))
+	       (dotimes (i nlinks)
 		 ;; Get size of name, add 1 for null terminator.
 		 ;; Allocate storage for name.
 		 (let* ((size (1+ (h5lget-name-by-idx group "."
@@ -88,7 +87,7 @@
 	       ;; (H5_INDEX_CRT_ORDER).
 
 	       (format t "~%Traversing group using creation order indices:~%~%")
-	       (dotimes (i ginfo.nlinks)
+	       (dotimes (i nlinks)
 		 ;; Get size of name, add 1 for null terminator.
 		 ;; Allocate storage for name.
 		 (let* ((size (1+ (h5lget-name-by-idx group "."
