@@ -28,23 +28,19 @@
      (info          (:pointer (:struct h5o-info-t)))
      (operator-data :pointer))
     
-    (prog2
-	(let
-	    ((type (cffi:foreign-slot-value info
-					    '(:struct h5o-info-t)
-					    'type)))
-	  (format t "/")
-	  (if (equal name ".")
-	      (format t "  (Group)~%")
-	      (cond
-		((eql type :H5O-TYPE-GROUP)
-		 (format t "~a  (Group)~%" name))
-		((eql type :H5O-TYPE-DATASET)
-		 (format t "~a  (Dataset)~%" name))
-		((eql type :H5O-TYPE-NAMED-DATATYPE)
-		 (format t "~a  (Datatype)~%" name))
-		(t (format t "~a  (Unknown)~%" name)))))
-	0))
+    (cffi:with-foreign-slots ((type) info (:struct h5o-info-t))
+      (format t "/")
+      (if (equal name ".")
+	  (format t "  (Group)~%")
+	  (cond
+	    ((eql type :H5O-TYPE-GROUP)
+	     (format t "~a  (Group)~%" name))
+	    ((eql type :H5O-TYPE-DATASET)
+	     (format t "~a  (Dataset)~%" name))
+	    ((eql type :H5O-TYPE-NAMED-DATATYPE)
+	     (format t "~a  (Datatype)~%" name))
+	    (t (format t "~a  (Unknown)~%" name))))
+      0))
 
 ;;; Showtime
 
