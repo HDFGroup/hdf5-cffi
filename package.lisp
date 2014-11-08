@@ -266,6 +266,7 @@
 	   h5lexists
 	   h5lget-name-by-idx
 	   h5literate
+	   h5literate-by-name
 	   h5lvisit
 	   h5lvisit-by-name
 

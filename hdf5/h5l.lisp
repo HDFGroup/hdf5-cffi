@@ -86,6 +86,17 @@
   (op         :pointer)
   (op-data    :pointer))
 
+(cffi:defcfun "H5Literate_by_name" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-IterateByName"
+  (loc-id     hid-t)
+  (group-name (:pointer :char))
+  (index-type h5-index-t)
+  (order      h5-iter-order-t)
+  (idx        (:pointer hsize-t))
+  (op         :pointer)
+  (op-data    :pointer)
+  (lapl-id    hid-t))
+
 (cffi:defcfun "H5Lvisit" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Visit"
   (group-id   hid-t)
