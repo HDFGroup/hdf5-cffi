@@ -54,11 +54,9 @@
 				    +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	     (h5gget-info group ginfo)
 	     (format t "Group storage type for ~a is: " *FILE1*)
-
-	     (let ((ginfo.storage-type (cffi:foreign-slot-value
-					ginfo '(:struct h5g-info-t)
-					'storage-type)))
-	       (print-storage-type ginfo.storage-type))
+	     (cffi:with-foreign-slots ((storage-type)
+				       ginfo (:struct h5g-info-t))
+	       (print-storage-type storage-type))
 	     (h5gclose group)))
 	     
       ;; Close and re-open file. Needed to get the correct file size.
@@ -100,10 +98,9 @@
 	       ;; Obtain the group info and print the group storage type.
 	       (h5gget-info group ginfo)
 	       (format t "Group storage type for ~a is: " *FILE2*)
-	       (let ((ginfo.storage-type (cffi:foreign-slot-value
-					  ginfo '(:struct h5g-info-t)
-					  'storage-type)))	     
-		 (print-storage-type ginfo.storage-type))
+	       (cffi:with-foreign-slots ((storage-type)
+					 ginfo (:struct h5g-info-t))
+		 (print-storage-type storage-type))
 	       (h5gclose group)))
 	
 	;; Close and re-open file. Needed to get the correct file size.
