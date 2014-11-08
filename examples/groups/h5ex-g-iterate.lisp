@@ -27,15 +27,13 @@
      (info          (:pointer (:struct h5l-info-t)))
      (operator-data :pointer))
     
-  (progn
     (cffi:with-foreign-object (infobuf '(:struct h5o-info-t) 1)
       (h5oget-info-by-name loc-id name
 			   (cffi:mem-aptr infobuf '(:struct h5o-info-t) 0)
 			   +H5P-DEFAULT+)
       
       ;; retrieve the object type and display the link name
-      (let ((type (cffi:foreign-slot-value
-		   infobuf '(:struct h5o-info-t) 'type)))	
+      (cffi:with-foreign-slots ((type) infobuf (:struct h5o-info-t))
 	(cond
 	  ((eql type :H5O-TYPE-GROUP)
 	   (format t "  Group: ~a~%" name))
@@ -43,8 +41,8 @@
 	   (format t "  Dataset: ~a~%" name))
 	  ((eql type :H5O-TYPE-NAMED-DATATYPE)
 	   (format t "  Datatype: ~a~%" name))
-	  (t (format t "  Unknown: ~a~%" name)))))
-    0))
+	  (t (format t "  Unknown: ~a~%" name))))
+      0))
 
 ;;; Showtime
 
