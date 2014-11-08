@@ -21,9 +21,8 @@
 
 ;;; Create a new file using the default properties.
 
-(let*
-    ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-     (file (prog2
+(let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
+       (file (prog2
 	       (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 	       (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
   
