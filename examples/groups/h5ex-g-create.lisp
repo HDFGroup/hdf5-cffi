@@ -28,12 +28,10 @@
   
       (unwind-protect
 	   (progn
-	     
 	     ;; Create a group named "G1" in the file.
 	     (let ((group (h5gcreate2 file "/G1" +H5P-DEFAULT+
 				     +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	       (h5gclose group))
-	     
 	     ;; Re-open the group, obtaining a new handle.
 	     (let ((group (h5gopen2 file "/G1" +H5P-DEFAULT+)))
 	       (h5gclose group)))
