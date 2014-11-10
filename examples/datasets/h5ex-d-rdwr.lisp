@@ -37,8 +37,7 @@
   ;; initialize the data to be written
   (dotimes (i *DIM0*)
     (dotimes (j *DIM1*)
-      (let ((pos (pos *DIM1* i j)))
-	(setf (cffi:mem-aref wdata :int pos) (- (* i j) j)))))
+      (setf (cffi:mem-aref wdata :int (pos *DIM1* i j)) (- (* i j) j))))
 
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
 	 (file (prog2
@@ -82,8 +81,7 @@
 	     (dotimes (i *DIM0*)
 	       (format t " [")
 	       (dotimes (j *DIM1*)
-		 (let ((pos (pos *DIM1* i j)))
-		   (format t " ~3d" (cffi:mem-aref rdata :int pos))))
+		 (format t " ~3d" (cffi:mem-aref rdata :int (pos *DIM1* i j))))
 	       (format t "]~%"))
 	     (h5dclose dset)))
       (h5fclose file)
