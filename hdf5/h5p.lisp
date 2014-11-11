@@ -129,6 +129,11 @@
   (stab     (:pointer :uint))
   (shhdr    (:pointer :uint)))
 
+(cffi:defcfun "H5Pset_alloc_time" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetAllocTime"
+  (plist-id hid-t)
+  (alloc-time h5d-alloc-time-t))
+
 (cffi:defcfun "H5Pset_char_encoding" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetCharEncoding"
   (plist-id hid-t)

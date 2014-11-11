@@ -529,6 +529,7 @@
 	   h5pget-sizes
 	   h5pget-userblock
 	   h5pget-version
+	   h5pset-alloc-time
 	   h5pset-char-encoding
 	   h5pset-chunk
 	   h5pset-core-write-tracking
