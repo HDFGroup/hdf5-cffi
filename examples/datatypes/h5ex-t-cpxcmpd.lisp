@@ -77,16 +77,14 @@
      (val    'color-t)
      (wdata2 :double (* 32 32)))
 
-  (let*
-      ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-       (file (prog2
-		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		 (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl)))
-       (ptrA (cffi:foreign-alloc '(:struct sensor-t) :count *LENA*))
-       (ptrB (cffi:foreign-alloc '(:struct sensor-t) :count *LENB*)))
-  
+  (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
+	 (file (prog2
+		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+		   (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl)))
+	 (ptrA (cffi:foreign-alloc '(:struct sensor-t) :count *LENA*))
+	 (ptrB (cffi:foreign-alloc '(:struct sensor-t) :count *LENB*)))
+    
     (unwind-protect
-
 	 (progn
 	   ;; create a dataset to use for region references
 	   (dotimes (i 32)
@@ -95,14 +93,13 @@
 		     (+ 70.0d0
 			(* 0.1d0 (- i 16.0d0))
 			(* 0.1d0 (- j 16.0d0))))))
-	   (let*
-	       ((shape (prog2
-			   (setf (cffi:mem-aref adims2 'hsize-t 0) 32
-				 (cffi:mem-aref adims2 'hsize-t 1) 32)
-			   (h5screate-simple 2 adims2 +NULL+)))
-		(dset (h5dcreate2 file "Ambient_Temperature"
-				  +H5T-NATIVE-DOUBLE+ shape
-				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+	   (let* ((shape (prog2
+			     (setf (cffi:mem-aref adims2 'hsize-t 0) 32
+				   (cffi:mem-aref adims2 'hsize-t 1) 32)
+			     (h5screate-simple 2 adims2 +NULL+)))
+		  (dset (h5dcreate2 file "Ambient_Temperature"
+				    +H5T-NATIVE-DOUBLE+ shape
+				    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	     
 	     (h5dwrite dset +H5T-NATIVE-DOUBLE+ +H5S-ALL+ +H5S-ALL+
 		       +H5P-DEFAULT+ wdata2)
@@ -115,21 +112,18 @@
 	   (h5gclose (h5gcreate2 file "Air_Vehicles"
 				 +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+))
 
-	   (let
-	       ((sensors-ptr
-		 (cffi:foreign-slot-pointer
-		  (cffi:mem-aptr wdata '(:struct vehicle-t) 0)
-		  '(:struct vehicle-t) 'sensors))
-		(ptr[0] (cffi:mem-aptr ptrA '(:struct sensor-t) 0))
-		(ptr[1] (cffi:mem-aptr ptrA '(:struct sensor-t) 1))
-		(ptr[2] (cffi:mem-aptr ptrA '(:struct sensor-t) 2))
-		(ptr[3] (cffi:mem-aptr ptrA '(:struct sensor-t) 3)))
+	   (let ((sensors-ptr
+		  (cffi:foreign-slot-pointer
+		   (cffi:mem-aptr wdata '(:struct vehicle-t) 0)
+		   '(:struct vehicle-t) 'sensors))
+		 (ptr[0] (cffi:mem-aptr ptrA '(:struct sensor-t) 0))
+		 (ptr[1] (cffi:mem-aptr ptrA '(:struct sensor-t) 1))
+		 (ptr[2] (cffi:mem-aptr ptrA '(:struct sensor-t) 2))
+		 (ptr[3] (cffi:mem-aptr ptrA '(:struct sensor-t) 3)))
 	     
 	     ;; Initialize variable-length compound in the first data element.
-	     (setf (cffi:foreign-slot-value
-		    sensors-ptr '(:struct hvl-t) 'len) *LENA*
-		   (cffi:foreign-slot-value
-		    sensors-ptr '(:struct hvl-t) 'p) ptrA)
+	     (cffi:with-foreign-slots ((len p) sensors-ptr (:struct hvl-t))
+	       (setf len *LENA* p ptrA))
 	     (cffi:with-foreign-slots
 		 ((serial-no location temperature pressure)
 		  ptr[0] (:struct sensor-t))
@@ -152,12 +146,11 @@
 		     temperature 1252.89d0 pressure 84.11d0)))
 	   
 	   ;; Initialize other fields in the first data element.
-	   (let
-	       ((wdata[0] (cffi:mem-aptr wdata '(:struct vehicle-t) 0))
-		(shape (prog2
-			   (setf (cffi:mem-aref adims2 'hsize-t 0) 32
-				 (cffi:mem-aref adims2 'hsize-t 1) 32)
-			   (h5screate-simple 2 adims2 +NULL+))))
+	   (let ((wdata[0] (cffi:mem-aptr wdata '(:struct vehicle-t) 0))
+		 (shape (prog2
+			    (setf (cffi:mem-aref adims2 'hsize-t 0) 32
+				  (cffi:mem-aref adims2 'hsize-t 1) 32)
+			    (h5screate-simple 2 adims2 +NULL+))))
 
 	     (cffi:with-foreign-slots
 		 ((name color location) wdata[0] (:struct vehicle-t))
@@ -177,17 +170,14 @@
 	     (h5sclose shape))
 
 	   ;; Initialize variable-length compound in the second data element.
-	   (let
-	       ((sensors-ptr
-		 (cffi:foreign-slot-pointer
-		  (cffi:mem-aptr wdata '(:struct vehicle-t) 1)
-		  '(:struct vehicle-t) 'sensors))
-		(ptr[0] (cffi:mem-aptr ptrB '(:struct sensor-t) 0)))
-	     
-	     (setf (cffi:foreign-slot-value
-		    sensors-ptr '(:struct hvl-t) 'len) *LENB*
-		   (cffi:foreign-slot-value
-		    sensors-ptr '(:struct hvl-t) 'p) ptrB)
+	   (let ((sensors-ptr
+		  (cffi:foreign-slot-pointer
+		   (cffi:mem-aptr wdata '(:struct vehicle-t) 1)
+		   '(:struct vehicle-t) 'sensors))
+		 (ptr[0] (cffi:mem-aptr ptrB '(:struct sensor-t) 0)))
+
+	     (cffi:with-foreign-slots ((len p) sensors-ptr (:struct hvl-t))
+	       (setf len *LENB* p ptrB))
 	     (cffi:with-foreign-slots
 		 ((serial-no location temperature pressure)
 		  ptr[0] (:struct sensor-t))
@@ -195,12 +185,11 @@
 		     temperature 83.82d0 pressure 29.92d0)))
 
 	   ;; Initialize other fields in the second data element.
-	   (let
-	       ((wdata[1] (cffi:mem-aptr wdata '(:struct vehicle-t) 1))
-		(shape (prog2
-			   (setf (cffi:mem-aref adims2 'hsize-t 0) 32
-				 (cffi:mem-aref adims2 'hsize-t 1) 32)
-			   (h5screate-simple 2 adims2 +NULL+))))
+	   (let ((wdata[1] (cffi:mem-aptr wdata '(:struct vehicle-t) 1))
+		 (shape (prog2
+			    (setf (cffi:mem-aref adims2 'hsize-t 0) 32
+				  (cffi:mem-aref adims2 'hsize-t 1) 32)
+			    (h5screate-simple 2 adims2 +NULL+))))
 
 	     (cffi:with-foreign-slots
 		 ((name color location) wdata[1] (:struct vehicle-t))
@@ -224,17 +213,15 @@
 			file "Ambient_Temperature" :H5R-DATASET-REGION shape)
 	     (h5sclose shape))
 
-	   (let*
-	       (;; Create variable-length string datatype.
-		(strtype (let ((tmp (h5tcopy +H5T-C-S1+)))
-			   (prog1 tmp
-			     (h5tset-size tmp +H5T-VARIABLE+))))
-		;; Create the nested compound datatype.
-		(sensortype
-		 (let ((tmp (h5tcreate
-			     :H5T-COMPOUND
-			     (cffi:foreign-type-size '(:struct sensor-t)))))
-		   (prog1 tmp
+	   (let* (;; Create variable-length string datatype.
+		  (strtype (let ((tmp (h5tcopy +H5T-C-S1+)))
+			     (h5tset-size tmp +H5T-VARIABLE+)
+			     tmp))
+		  ;; Create the nested compound datatype.
+		  (sensortype
+		   (let ((tmp (h5tcreate
+			       :H5T-COMPOUND
+			       (cffi:foreign-type-size '(:struct sensor-t)))))
 		     (h5tinsert tmp "Serial number"
 				(cffi:foreign-slot-offset '(:struct sensor-t)
 							  'serial-no)
@@ -250,34 +237,34 @@
 		     (h5tinsert tmp "Pressure"
 				(cffi:foreign-slot-offset '(:struct sensor-t)
 							  'pressure)
-				+H5T-NATIVE-DOUBLE+))))
-
-		;; Create the variable-length datatype.
-		(sensorstype (h5tvlen-create sensortype))
-		
-		;; Create the enumerated datatype.
-		(colortype
-		 (let ((tmp (h5tenum-create +H5T-NATIVE-INT+)))
-		   (prog1 tmp
+				+H5T-NATIVE-DOUBLE+)
+		     tmp))
+		  
+		  ;; Create the variable-length datatype.
+		  (sensorstype (h5tvlen-create sensortype))
+		  
+		  ;; Create the enumerated datatype.
+		  (colortype
+		   (let ((tmp (h5tenum-create +H5T-NATIVE-INT+)))
 		     (setf (cffi:mem-ref val 'color-t) :RED)
 		     (h5tenum-insert tmp "Red" val)
 		     (setf (cffi:mem-ref val 'color-t) :GREEN)
 		     (h5tenum-insert tmp "Green" val)
 		     (setf (cffi:mem-ref val 'color-t) :BLUE)
-		     (h5tenum-insert tmp "Blue" val))))
+		     (h5tenum-insert tmp "Blue" val)
+		     tmp))
 
-		;; Create the array datatype.
-		(loctype
-		 (prog2
-		     (setf (cffi:mem-aref adims 'hsize-t 0) 3)
-		     (h5tarray-create2 +H5T-NATIVE-DOUBLE+ 1 adims)))
+		  ;; Create the array datatype.
+		  (loctype
+		   (prog2
+		       (setf (cffi:mem-aref adims 'hsize-t 0) 3)
+		       (h5tarray-create2 +H5T-NATIVE-DOUBLE+ 1 adims)))
 
-		;; Create the main compound datatype.
-		(vehicletype
-		 (let ((tmp (h5tcreate
-			     :H5T-COMPOUND
-			     (cffi:foreign-type-size '(:struct vehicle-t)))))
-		   (prog1 tmp
+		  ;; Create the main compound datatype.
+		  (vehicletype
+		   (let ((tmp (h5tcreate
+			       :H5T-COMPOUND
+			       (cffi:foreign-type-size '(:struct vehicle-t)))))
 		     (h5tinsert tmp "Sensors"
 				(cffi:foreign-slot-offset '(:struct vehicle-t)
 							  'sensors)
@@ -301,18 +288,19 @@
 		     (h5tinsert tmp "Surveyed areas"
 				(cffi:foreign-slot-offset '(:struct vehicle-t)
 							  'surveyed-areas)
-				+H5T-STD-REF-DSETREG+))))
-		     		
-		;; Create dataspace. Setting maximum size to NULL sets the
-		;; maximum size to be the current size.
-		(space
-		 (prog2
-		     (setf (cffi:mem-ref dims 'hsize-t) *DIM0*)
-		     (h5screate-simple 1 dims +NULL+)))		
-		
-		;; Create the dataset
-		(dset (h5dcreate2 file *DATASET* vehicletype space
-				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+				+H5T-STD-REF-DSETREG+)
+		     tmp))
+		  
+		  ;; Create dataspace. Setting maximum size to NULL sets the
+		  ;; maximum size to be the current size.
+		  (space
+		   (prog2
+		       (setf (cffi:mem-ref dims 'hsize-t) *DIM0*)
+		       (h5screate-simple 1 dims +NULL+)))		
+		  
+		  ;; Create the dataset
+		  (dset (h5dcreate2 file *DATASET* vehicletype space
+				    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
 
 	     ;; Finally, write the compound data to it.
 	     (h5dwrite dset vehicletype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
@@ -335,42 +323,38 @@
     ((ndims 'hsize-t 1)
      (dims 'hsize-t 1))
 
-  (let*
-      ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-       (file (prog2
-		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		 (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
+  (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
+	 (file (prog2
+		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+		   (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
 
     (unwind-protect
-
 	 (progn
-	   (let*
-	       ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
-		;; Create variable-length string datatype.
-		(strtype (let ((tmp (h5tcopy +H5T-C-S1+)))
-			   (prog1 tmp
-			     (h5tset-size tmp +H5T-VARIABLE+))))
-		;; Create the nested compound datatype for reading.
-		;; Even though it has only one field, it must still
-		;; be defined as a compound type so the library can
-		;; match the correct field in the file type. This matching
-		;; is done by name.  However, we do not need to define a
-		;; structure for the read buffer as we can simply treat it
-		;; as a char *.
-		(rsensortype
-		 (let ((tmp (h5tcreate
-			     :H5T-COMPOUND
-			     (cffi:foreign-type-size '(:pointer :char)))))
-		   (prog1 tmp
-		     (h5tinsert tmp "Location" 0 strtype))))
-		;; Create the variable-length datatype for reading.
-		(rsensorstype (h5tvlen-create rsensortype))
-		;; Create the main compound datatype for reading.
-		(rvehicletype
-		 (let ((tmp (h5tcreate
-			     :H5T-COMPOUND
-			     (cffi:foreign-type-size '(:struct rvehicle-t)))))
-		   (prog1 tmp
+	   (let* ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
+		  ;; Create variable-length string datatype.
+		  (strtype (let ((tmp (h5tcopy +H5T-C-S1+)))
+			     (h5tset-size tmp +H5T-VARIABLE+)
+			     tmp))
+		  ;; Create the nested compound datatype for reading.
+		  ;; Even though it has only one field, it must still
+		  ;; be defined as a compound type so the library can
+		  ;; match the correct field in the file type. This matching
+		  ;; is done by name.  However, we do not need to define a
+		  ;; structure for the read buffer as we can simply treat it
+		  ;; as a char *.
+		  (rsensortype
+		   (let ((tmp (h5tcreate
+			       :H5T-COMPOUND
+			       (cffi:foreign-type-size '(:pointer :char)))))
+		     (h5tinsert tmp "Location" 0 strtype)
+		     tmp))
+		  ;; Create the variable-length datatype for reading.
+		  (rsensorstype (h5tvlen-create rsensortype))
+		  ;; Create the main compound datatype for reading.
+		  (rvehicletype
+		   (let ((tmp (h5tcreate
+			       :H5T-COMPOUND
+			       (cffi:foreign-type-size '(:struct rvehicle-t)))))
 		     (h5tinsert tmp "Sensors"
 				(cffi:foreign-slot-offset '(:struct rvehicle-t)
 							  'sensors)
@@ -378,8 +362,9 @@
 		     (h5tinsert tmp "Name"
 				(cffi:foreign-slot-offset '(:struct rvehicle-t)
 							  'name)
-				strtype))))
-		(space (h5dget-space dset)))
+				strtype)
+		     tmp))
+		  (space (h5dget-space dset)))
 
 	     (setf (cffi:mem-ref ndims 'hsize-t 0)
 		   (h5sget-simple-extent-dims space dims +NULL+))
@@ -395,14 +380,13 @@
 
 	       ;; Output the data to the screen.
 	       (dotimes (i *DIM0*)
-		 (let*
-		     ((rdata-ptr
-		       (cffi:mem-aptr rdata '(:struct rvehicle-t) i))
-		      (rdata-sensors-ptr
-		       (cffi:foreign-slot-pointer
-			rdata-ptr '(:struct rvehicle-t) 'sensors)))
-		 
-		   (format t "~a[~a]:~%" *DATASET* i)
+		 (let* ((rdata-ptr
+			 (cffi:mem-aptr rdata '(:struct rvehicle-t) i))
+			(rdata-sensors-ptr
+			 (cffi:foreign-slot-pointer
+			  rdata-ptr '(:struct rvehicle-t) 'sensors)))
+		   
+		   (format t "~a[~d]:~%" *DATASET* i)
 		   (format t "   Vehicle name :~%      ~a~%"
 			   (cffi:foreign-slot-value
 			    rdata-ptr '(:struct rvehicle-t) 'name))
@@ -423,7 +407,7 @@
 	       ;; data (including strings).
 	       (h5dvlen-reclaim rvehicletype space +H5P-DEFAULT+ rdata)
 	       (cffi:foreign-free rdata))
-      
+	     
 	     (h5sclose space)
 	     (h5tclose rvehicletype)
 	     (h5tclose rsensorstype)
