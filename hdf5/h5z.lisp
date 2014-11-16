@@ -13,3 +13,8 @@
 (cffi:defcfun "H5Zfilter_avail" htri-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5Z.html#Compression-FilterAvail"
   (filter h5z-filter-t))
+
+(cffi:defcfun "H5Zget_filter_info" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5Z.html#Compression-GetFilterInfo"
+  (filter h5z-filter-t)
+  (filter-config (:pointer :unsigned-int)))

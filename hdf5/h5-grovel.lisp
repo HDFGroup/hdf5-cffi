@@ -8,7 +8,7 @@
 ;;;; If you do not have access to this file, you may request a copy from
 ;;;; help@hdfgroup.org.
 
-(include "H5public.h")
+(include "hdf5.h")
 
 (in-package :hdf5)
 
@@ -32,8 +32,6 @@
 
 (constant (+HADDR-UNDEF+ "HADDR_UNDEF"))
 (constant (+HADDR-MAX+   "HADDR_MAX"))
-
-(constant (+H5P-DEFAULT+ "H5P_DEFAULT"))
 
 (cenum h5-iter-order-t
        ((:H5-ITER-UNKNOWN "H5_ITER_UNKNOWN"))

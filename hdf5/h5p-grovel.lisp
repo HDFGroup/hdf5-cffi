@@ -8,11 +8,13 @@
 ;;;; If you do not have access to this file, you may request a copy from
 ;;;; help@hdfgroup.org.
 
-(include "H5Ppublic.h")
+(include "hdf5.h")
 
 (in-package :hdf5)
 
 (cc-flags "-lhdf5")
+
+(constant (+H5P-DEFAULT+ "H5P_DEFAULT"))
 
 (constant (+H5P-ROOT+             "H5P_ROOT"))
 (constant (+H5P-OBJECT-CREATE+    "H5P_OBJECT_CREATE"))

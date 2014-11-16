@@ -34,8 +34,6 @@
 	   +HADDR-UNDEF+
 	   +HADDR-MAX+
 	   
-	   +H5P-DEFAULT+
-
 	   h5-iter-order-t
 
 	   +H5-ITER-ERROR+
@@ -468,13 +466,16 @@
 	   +H5Z-SCALEOFFSET-USER-NPARMS+
 	   +H5Z-SO-INT-MINBITS-DEFAULT+
 	   +H5Z-CLASS-T-VERS+
-	   +H5Z-FILTER-CONFIG-ENCODE-ENABLED
-	   +H5Z-FILTER-CONFIG-DECODE-ENABLED
+	   +H5Z-FILTER-CONFIG-ENCODE-ENABLED+
+	   +H5Z-FILTER-CONFIG-DECODE-ENABLED+
 
 	   h5zfilter-avail
+	   h5zget-filter-info
    
 	   ;; == h5p ==========================================================
 
+	   +H5P-DEFAULT+
+	   
 	   +H5P-ROOT+
 	   +H5P-OBJECT-CREATE+
 	   +H5P-FILE-CREATE+
