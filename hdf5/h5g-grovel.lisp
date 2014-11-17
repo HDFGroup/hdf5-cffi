@@ -8,7 +8,7 @@
 ;;;; If you do not have access to this file, you may request a copy from
 ;;;; help@hdfgroup.org.
 
-(include "H5Gpublic.h")
+(include "hdf5.h")
 
 (in-package :hdf5)
 
