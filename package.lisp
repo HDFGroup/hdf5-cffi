@@ -239,6 +239,8 @@
 	   h5tis-variable-string
 	   h5topen2
 	   h5tset-cset
+	   h5tset-offset
+	   h5tset-precision
 	   h5tset-size
 	   h5tset-strpad
 	   h5tset-tag
@@ -546,6 +548,7 @@
 	   h5pset-link-creation-order
 	   h5pset-link-phase-change
 	   h5pset-libver-bounds
+	   h5pset-nbit
 	   h5pset-szip
 	   h5pset-shuffle
 	   h5pset-userblock))

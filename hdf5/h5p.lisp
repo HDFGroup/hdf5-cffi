@@ -218,6 +218,10 @@
   (max-compact :unsigned-int)
   (min-dense   :unsigned-int))
 
+(cffi:defcfun "H5Pset_nbit" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetNbit"
+  (plist-id hid-t))
+
 (cffi:defcfun "H5Pset_shuffle" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetShuffle"
   (plist-id hid-t))

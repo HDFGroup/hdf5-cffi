@@ -186,6 +186,16 @@
   (dtype-id hid-t)
   (cset     h5t-cset-t))
 
+(cffi:defcfun "H5Tset_offset" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-SetOffset"
+  (dtype-id hid-t)
+  (offset   size-t))
+
+(cffi:defcfun "H5Tset_precision" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-SetPrecision"
+  (dtype-id  hid-t)
+  (precision size-t))
+
 (cffi:defcfun "H5Tset_size" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-SetSize"
   (dtype-id hid-t)
