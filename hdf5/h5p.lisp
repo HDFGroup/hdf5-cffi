@@ -222,6 +222,12 @@
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetNbit"
   (plist-id hid-t))
 
+(cffi:defcfun "H5Pset_scaleoffset" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetScaleoffset"
+  (plist-id     hid-t)
+  (scale-type   h5z-so-scale-type-t)
+  (scale-factor :int))
+
 (cffi:defcfun "H5Pset_shuffle" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetShuffle"
   (plist-id hid-t))

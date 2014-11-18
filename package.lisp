@@ -549,6 +549,7 @@
 	   h5pset-link-phase-change
 	   h5pset-libver-bounds
 	   h5pset-nbit
-	   h5pset-szip
+	   h5pset-scaleoffset
 	   h5pset-shuffle
+	   h5pset-szip
 	   h5pset-userblock))
