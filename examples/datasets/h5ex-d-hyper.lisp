@@ -63,45 +63,41 @@
 		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
     (unwind-protect
-	 (progn
-	   (let* ((space (prog2
-			     (setf (cffi:mem-aref dims 'hsize-t 0) *DIM0*
-				   (cffi:mem-aref dims 'hsize-t 1) *DIM1*)
-			     ;; Create dataspace. Setting maximum size to NULL
-			     ;; sets the maximum size to be the current size.
-			     (h5screate-simple 2 dims +NULL+)))
-		  ;; Create the dataset. We will use all default properties for
-		  ;; this example.
-		  (dset (h5dcreate2 file *DATASET* +H5T-STD-I32BE+ space
-				    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+	 (let* ((space (prog2
+			   (setf (cffi:mem-aref dims 'hsize-t 0) *DIM0*
+				 (cffi:mem-aref dims 'hsize-t 1) *DIM1*)
+			   ;; Create dataspace. Setting maximum size to NULL
+			   ;; sets the maximum size to be the current size.
+			   (h5screate-simple 2 dims +NULL+)))
+		;; Create the dataset. We will use all default properties for
+		;; this example.
+		(dset (h5dcreate2 file *DATASET* +H5T-STD-I32BE+ space
+				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
 
-	     ;; Define and select the first part of the hyperslab selection.
-	     (setf (cffi:mem-aref start 'hsize-t 0) 0
-		   (cffi:mem-aref start 'hsize-t 1) 0
-		   (cffi:mem-aref stride 'hsize-t 0) 3
-		   (cffi:mem-aref stride 'hsize-t 1) 3
-		   (cffi:mem-aref count 'hsize-t 0) 2
-		   (cffi:mem-aref count 'hsize-t 1) 3
-		   (cffi:mem-aref block 'hsize-t 0) 2
-		   (cffi:mem-aref block 'hsize-t 1) 2)
+	   ;; Define and select the first part of the hyperslab selection.
+	   (setf (cffi:mem-aref start 'hsize-t 0) 0
+		 (cffi:mem-aref start 'hsize-t 1) 0
+		 (cffi:mem-aref stride 'hsize-t 0) 3
+		 (cffi:mem-aref stride 'hsize-t 1) 3
+		 (cffi:mem-aref count 'hsize-t 0) 2
+		 (cffi:mem-aref count 'hsize-t 1) 3
+		 (cffi:mem-aref block 'hsize-t 0) 2
+		 (cffi:mem-aref block 'hsize-t 1) 2)
+	   
+	   (h5sselect-hyperslab space :H5S-SELECT-SET start stride count block)
 
-	     (h5sselect-hyperslab space :H5S-SELECT-SET start stride count
-				  block)
-
-	     ;; Define and select the second part of the hyperslab selection,
-	     ;; which is subtracted from the first selection by the use of
-	     ;; H5S_SELECT_NOTB
-	     (setf (cffi:mem-aref block 'hsize-t 0) 1
-		   (cffi:mem-aref block 'hsize-t 1) 1)	     
-	     (h5sselect-hyperslab space :H5S-SELECT-NOTB start stride count
-				  block)
+	   ;; Define and select the second part of the hyperslab selection,
+	   ;; which is subtracted from the first selection by the use of
+	   ;; H5S_SELECT_NOTB
+	   (setf (cffi:mem-aref block 'hsize-t 0) 1
+		 (cffi:mem-aref block 'hsize-t 1) 1)	     
+	   (h5sselect-hyperslab space :H5S-SELECT-NOTB start stride count block)
 	     
-	     ;; Write the data to the dataset
-	     (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ space +H5P-DEFAULT+
-		       wdata)
-	     ;; Close and release resources.
-	     (h5dclose dset)
-	     (h5sclose space)))
+	   ;; Write the data to the dataset
+	   (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ space +H5P-DEFAULT+ wdata)
+	   ;; Close and release resources.
+	   (h5dclose dset)
+	   (h5sclose space))
       (h5fclose file)
       (h5pclose fapl)))
 
