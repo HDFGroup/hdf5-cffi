@@ -537,6 +537,7 @@
 	   h5pset-chunk
 	   h5pset-core-write-tracking
 	   h5pset-create-intermediate-group
+	   h5pset-data-transform
 	   h5pset-deflate
 	   h5pset-external
 	   h5pset-fapl-core

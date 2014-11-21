@@ -157,6 +157,11 @@
   (lcpl-d             hid-t)
   (crt-intermed-group :uint))
 
+(cffi:defcfun "H5Pset_data_transform" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetDataTransform"
+  (plist-id   hid-t)
+  (expression (:pointer :char)))
+
 (cffi:defcfun "H5Pset_deflate" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetDeflate"
   (plist-id hid-t)
