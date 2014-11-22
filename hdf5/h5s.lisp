@@ -64,6 +64,10 @@
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html#Dataspace-IsSimple"
   (space-id hid-t))
 
+(cffi:defcfun "H5Sselect_all" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html#Dataspace-SelectAll"
+  (dspace-id         hid-t))
+
 (cffi:defcfun "H5Sselect_elements" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5S.html#Dataspace-SelectElements"
   (space-id         hid-t)
