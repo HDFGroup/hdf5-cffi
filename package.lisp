@@ -326,17 +326,30 @@
 	   h5scopy
 	   h5screate
 	   h5screate-simple
+	   h5sdecode
+	   h5sencode
+	   h5sextent-copy
+	   h5sextent-equal
 	   h5sget-select-bounds
+	   h5sget-select-elem-npoints
+	   h5sget-select-elem-pointlist
+	   h5sget-select-hyper-blocklist
+	   h5sget-select-hyper-nblocks
+	   h5sget-select-npoints
 	   h5sget-select-type
 	   h5sget-simple-extent-dims
 	   h5sget-simple-extent-ndims
 	   h5sget-simple-extent-npoints
 	   h5sget-simple-extent-type
 	   h5sis-simple
+	   h5soffest-simple
 	   h5sselect-all
 	   h5sselect-elements
 	   h5sselect-hyperslab
+	   h5sselect-none
 	   h5sselect-valid
+	   h5sset-extent-none
+	   h5sset-extent-simple
 
 	   ;; == h5d ==========================================================
    
