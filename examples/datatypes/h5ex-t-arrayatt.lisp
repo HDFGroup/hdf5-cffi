@@ -28,10 +28,10 @@
 (defparameter *ADIM0* 3)
 (defparameter *ADIM1* 5)
 
+
 (defun pos (rows cols i j k)
+  "3D array position"
   (+ (* (+ (* i rows) j) cols) k))
-
-
 
 
 (cffi:with-foreign-objects
