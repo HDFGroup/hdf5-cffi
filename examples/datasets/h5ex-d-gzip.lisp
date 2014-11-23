@@ -115,10 +115,11 @@
 		;; Retrieve and print the filter type. Here we only retrieve
 		;; the first filter because we know that we only added one
 		;; filter.
-		(filter-type (h5pget-filter2 dcpl 0 flags nelmts +NULL+
-					     0 +NULL+ filter-info)))
-	   (format t "Filter type is: ")
-	   
+		(filter-type (prog2
+				 (setf (cffi:mem-aref nelmts 'size-t 0) 0)
+				 (h5pget-filter2 dcpl 0 flags nelmts +NULL+
+						 0 +NULL+ filter-info))))
+	   (format t "Filter type is: ")	   
 	   (cond ((eql filter-type +H5Z-FILTER-DEFLATE+)
 		  (format t "H5Z_FILTER_DEFLATE~%"))
 		 ((eql filter-type +H5Z-FILTER-SHUFFLE+)
