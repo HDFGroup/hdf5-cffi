@@ -18,6 +18,10 @@
   (super-ext-size hsize-t)
   (sohm           (:struct _sohm-t)))
 
+(cffi:defcfun "H5Fclear_elink_file_cache" herr-t
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-ClearELinkFileCache"
+  (file-id hid-t))
+
 (cffi:defcfun "H5Fclose" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-Close"
   (file-id hid-t))

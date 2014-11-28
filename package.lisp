@@ -106,7 +106,8 @@
 	   h5f-close-degree-t
 	   h5f-info-t
 	   h5f-libver-t
-	   
+
+	   h5fclear-elink-file-cache
 	   h5fclose
 	   h5fcreate
 	   h5fflush
@@ -115,11 +116,11 @@
 	   h5fget-file-image
 	   h5fget-filesize
 	   h5fget-freespace
-	   h5fget-obj-count
-	   h5fget-obj-ids
 	   h5fget-info
 	   h5fget-intent
 	   h5fget-name
+	   h5fget-obj-count
+	   h5fget-obj-ids
 	   h5fis-hdf5
 	   h5fmount
 	   h5fopen
@@ -222,6 +223,8 @@
 	   h5tcommit2
 	   h5tcommit-anon
 	   h5tcommitted
+	   h5tcompiler-conv
+	   h5tconvert
 	   h5tcopy
 	   h5tcreate
 	   h5tdecode
@@ -232,11 +235,16 @@
 	   h5tenum-nameof
 	   h5tenum-valueof
 	   h5tequal
+	   h5tfind
 	   h5tget-array-dims2
 	   h5tget-array-ndims
 	   h5tget-class
 	   h5tget-create-plist
 	   h5tget-cset
+	   h5tget-ebias
+	   h5tget-fields
+	   h5tget-inpad
+	   h5tget-member-class
 	   h5tget-member-index
 	   h5tget-member-name
 	   h5tget-member-offset
@@ -244,19 +252,36 @@
 	   h5tget-member-value
 	   h5tget-native-type
 	   h5tget-nmembers
+	   h5tget-norm
+	   h5tget-offset
+	   h5tget-order
+	   h5tget-pad
+	   h5tget-precision
+	   h5tget-sign
 	   h5tget-size
 	   h5tget-strpad
 	   h5tget-super
 	   h5tget-tag
 	   h5tinsert
 	   h5tis-variable-string
+	   h5tlock
 	   h5topen2
+	   h5tpack
+	   h5tregister
 	   h5tset-cset
+	   h5tset-ebias
+	   h5tset-fields
+	   h5tset-inpad
+	   h5tset-norm
 	   h5tset-offset
+	   h5tset-order
+	   h5tset-pad
 	   h5tset-precision
+	   h5tset-sign
 	   h5tset-size
 	   h5tset-strpad
 	   h5tset-tag
+	   h5tunregister
 	   h5tvlen-create
 
 	   ;; == h5l ==========================================================
