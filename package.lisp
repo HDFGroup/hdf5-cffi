@@ -355,12 +355,20 @@
    
 	   h5oclose
 	   h5ocopy
+	   h5odecr-refcount
 	   h5oexists-by-name
+	   h5oget-comment
+	   h5oget-comment-by-name
 	   h5oget-info
+	   h5oget-info-by-idx
 	   h5oget-info-by-name
+	   h5oincr-refcount
 	   h5olink
 	   h5oopen
+	   h5oopen_by_addr
+	   h5oopen_by_idx
 	   h5ovisit
+	   h5ovisit-by-name
    
 	   ;; == h5s ==========================================================
 
