@@ -61,11 +61,24 @@
 	   +H5-SIZEOF-HID-T+
 	   +H5I-INVALID-HID+
 
+	   h5iclear-type
+	   h5idec-ref
+	   h5idec-type-ref
+	   h5idestroy-type
 	   h5iget-file-id
 	   h5iget-name
+	   h5iget-ref
 	   h5iget-type
+	   h5iget-type-ref
+	   h5iinc-ref
+	   h5inc-type-ref
 	   h5iis-valid
 	   h5inmembers
+	   h5iobject-verify
+	   h5iregister
+	   h5iregister-type
+	   h5iremove-verify
+	   h5isearch
 	   h5itype-exists
 
 	   ;; == h5f ==========================================================
