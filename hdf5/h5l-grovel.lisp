@@ -25,5 +25,16 @@
        ((:H5L-TYPE-EXTERNAL "H5L_TYPE_EXTERNAL"))
        ((:H5L-TYPE-MAX      "H5L_TYPE_MAX")))
 
+(cstruct h5l-class-t "H5L_class_t"
+	 (version "version"         :type :int)
+	 (id "id"                   :type hdf5::h5l-type-t)
+	 (comment "comment"         :type (:pointer :char))
+	 (create-func "create_func" :type :pointer)
+	 (move-func "move_func"     :type :pointer)
+	 (copy-func "copy_func"     :type :pointer)
+	 (trav-func "trav_func"     :type :pointer)
+	 (del-func "del_func"       :type :pointer)
+	 (query-func "query_func"   :type :pointer))
+
 (constant (+H5L-TYPE-BUILTIN-MAX+ "H5L_TYPE_BUILTIN_MAX"))
 (constant (+H5L-TYPE-UD-MIN+ "H5L_TYPE_UD_MIN"))

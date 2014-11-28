@@ -297,14 +297,26 @@
 
 	   h5l-info-t
 
+	   h5lcopy
 	   h5lcreate-external
 	   h5lcreate-hard
 	   h5lcreate-soft
+	   h5lcreate-ud
 	   h5ldelete
+	   h5ldelete_by-idx
 	   h5lexists
+	   h5lget-info
+	   h5lget-info-by-idx
 	   h5lget-name-by-idx
+	   h5lget-val
+	   h5lget-val-by-index
+	   h5lis-registered
 	   h5literate
 	   h5literate-by-name
+	   h5lmove
+	   h5lregister
+	   h5lunpack-elink-val
+	   h5lunregister
 	   h5lvisit
 	   h5lvisit-by-name
 
