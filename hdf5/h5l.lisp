@@ -171,7 +171,7 @@
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Register"
   (link-class (:pointer (:struct h5l-class-t))))
 
-(cffi:defcfun "H5Lunpack-elink-val" herr-t
+(cffi:defcfun "H5Lunpack_elink_val" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-UnpackELinkVal"
   (ext-link-val (:pointer :char))
   (link-size    size-t)
