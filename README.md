@@ -8,4 +8,4 @@ Bindings for FORTRAN, arguably the oldest high-level programming language, were 
 ## References
 
 1. [Garry Hollis' cl-ana](https://github.com/ghollisjr/cl-ana)
-2. [Daniel Herring's dh-misc/hdf5](https://gitorious.org/dh-misc/hdf5.git)
+2. [Daniel Herring's dh-misc/hdf5](https://gitorious.org/dh-misc/hdf5)
