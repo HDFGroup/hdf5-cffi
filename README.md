@@ -7,7 +7,7 @@ Bindings for FORTRAN, arguably the oldest high-level programming language, were 
 
 ## Installation
 
-Install `hdf5-cffi` via (Quicklisp)[http://www.quicklisp.org/]. The installation might fail because the installer doesn't
+Install `hdf5-cffi` via [Quicklisp](http://www.quicklisp.org/). The installation might fail because the installer doesn't
 find the HDF5 header files (`hdf5.h` & Co.) and shared library (`libhdf5.so`). The former are necessary for the CFFI groveller and, yes, you also need a C compiler. If HDF5 is installed in a "standard" location such as `/usr/local`
 you should be fine. Otherwise, you might have to adjust your `CC` and `LD_LIBRARY_PATH` environment variables, e.g.,
 ```
