@@ -11,7 +11,7 @@
 (in-package :hdf5)
 
 (progn
-  (defconstant +NULL+ (cffi:null-pointer))
+  (defparameter +NULL+ (cffi:null-pointer))
   (pushnew :hdf5 *features*)
   (defvar *hdf5-header-file* "hdf5.h")
   (defun load-hdf5-foreign-libraries ()
