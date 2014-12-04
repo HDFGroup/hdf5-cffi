@@ -51,6 +51,7 @@
 	(h5tconvert *M-BASET* *F-BASET* 1 val +NULL+ +H5P-DEFAULT+)
 	(h5tenum-insert filetype
 			(cffi::mem-aref names :string i) val)))
+    ;; return TWO datatype handles
     (values filetype memtype)))
 
 
@@ -67,8 +68,7 @@
   (setf (cffi:mem-aref dims 'hsize-t 0) *DIM0*
 	(cffi:mem-aref dims 'hsize-t 1) *DIM1*)
 
-  ;; Initialize data. i is the element in the dataspace, j and k the
-  ;; elements within the array datatype.
+  ;; Initialize data.
   (dotimes (i *DIM0*)
     (dotimes (j *DIM1*)
       (setf (cffi:mem-aref wdata 'phase-t (pos *DIM1* i j))
@@ -77,34 +77,22 @@
   
   ;; Create a new file using the default properties.
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
     (unwind-protect
-	 ;; Create array datatypes for file and memory.
-	 (let* ((memtype nil)
-		;; Create dataspace. Setting maximum size to NULL sets the
-		;; maximum size to be the current size.
-		(space (h5screate-simple 2 dims +NULL+))
-		;; Create the dataset and write the array data to it.
-		(dset))
-	   (multiple-value-bind (ftype mtype)
-	       (create-enumtypes)
-	     (setq dset (h5dcreate2 file *DATASET* ftype space
-				    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+))
-	     (setq memtype mtype)
-	     (h5tclose ftype))
-	   
-	   (h5dwrite dset memtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
-
-	   ;; Close and release resources.
-	   (h5dclose dset)
-	   (h5sclose space)
-	   (h5tclose memtype))
-
+	 (multiple-value-bind (filetype memtype)
+	     (create-enumtypes)
+	   (let* ((space (h5screate-simple 2 dims +NULL+))
+		  (dset (h5dcreate2 file *DATASET* filetype space
+				    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+	     (h5dwrite dset memtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
+	     ;; Close and release resources.
+	     (h5dclose dset)
+	     (h5sclose space)
+	     (h5tclose memtype)
+	     (h5tclose filetype)))
       (h5fclose file)
       (h5pclose fapl)))
-
 
   ;; Now we begin the read section of this example.  Here we assume
   ;; the dataset and array have the same name and rank, but can
@@ -112,8 +100,7 @@
   ;; in data dynamically.
 
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
     (unwind-protect
 	 (let* ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
@@ -143,11 +130,8 @@
 		   (format t "]~%"))
 		 (h5tclose filetype)
 		 (h5tclose memtype))))
-
-	   ;; Close and release resources.
 	   (h5sclose space)
-	   (h5dclose dset))
-      
+	   (h5dclose dset))      
       (h5fclose file)
       (h5pclose fapl))))
 
