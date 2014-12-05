@@ -84,9 +84,9 @@
 
          (cffi:with-foreign-object (dims 'hsize-t 2)
            (h5sget-simple-extent-dims space dims +NULL+)
-	   ;; Allocate space for integer data.
 	   (let ((dims[0] (cffi:mem-aref dims 'hsize-t 0))
 		 (dims[1] (cffi:mem-aref dims 'hsize-t 1)))
+	     ;; Allocate space for integer data.
 	     (cffi:with-foreign-object (rdata :int (* dims[0] dims[1]))
 	       ;; Read the data.
 	       (h5dread dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+
