@@ -56,7 +56,6 @@
        (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
                  (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
   (unwind-protect
-       ;; Create array datatypes for file and memory.
        (let* ((wdata (create-wdata *DIM0* *DIM1*))
               (space (create-simple-dataspace (list *DIM0* *DIM1*)))
               ;; Create the dataset and write the array data to it.
@@ -85,7 +84,7 @@
 
          (cffi:with-foreign-object (dims 'hsize-t 2)
            (h5sget-simple-extent-dims space dims +NULL+)
-	   ;; Allocate space for floating-point data.
+	   ;; Allocate space for integer data.
 	   (let ((dims[0] (cffi:mem-aref dims 'hsize-t 0))
 		 (dims[1] (cffi:mem-aref dims 'hsize-t 1)))
 	     (cffi:with-foreign-object (rdata :int (* dims[0] dims[1]))
