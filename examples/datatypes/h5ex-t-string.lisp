@@ -94,7 +94,7 @@
          (cffi:with-foreign-object (dims 'hsize-t 1)
            (h5sget-simple-extent-dims space dims +NULL+)
 	   (let ((dims[0] (cffi:mem-aref dims 'hsize-t 0)))
-	     ;; Allocate space for integer data.
+	     ;; Allocate space for character data.
 	     (cffi:with-foreign-object (rdata :char (* dims[0] sdim))
 	       ;; Read the data.
 	       (h5dread dset memtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ rdata)
