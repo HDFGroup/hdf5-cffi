@@ -26,10 +26,6 @@
 (defparameter *DIM0* 4)
 (defparameter *SDIM* 8)
 
-(defun create-wdata ()
-  (let ((data "Parting is such sweet   sorrow. "))
-    (cffi::foreign-string-alloc data)))
-
 
 (defun create-simple-dataspace (dims-seq)
   (let* ((dims (cffi:foreign-alloc 'hsize-t :count (list-length dims-seq)
@@ -62,7 +58,8 @@
        (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
                  (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
   (unwind-protect
-       (let* ((wdata (create-wdata))
+       (let* ((wdata (cffi:foreign-string-alloc
+                      "Parting is such sweet   sorrow. "))
               (space (create-simple-dataspace (list *DIM0*)))
               (filetype (create-filetype))
               (memtype (create-memtype))
@@ -106,7 +103,6 @@
                  (format t "~a[~d]: ~a~%" *DATASET* i
                          (cffi:foreign-string-to-lisp
                           (cffi:mem-aptr rdata :char (* i sdim))))))))
-         
          ;; Close and release resources.
          (h5sclose space)
          (h5tclose memtype)
