@@ -18,6 +18,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -27,32 +28,6 @@
 (defparameter *SDIM* 8)
 
 
-(defun create-simple-dataspace (dims-seq)
-  (let* ((dims (cffi:foreign-alloc 'hsize-t :count (list-length dims-seq)
-                                   :initial-contents dims-seq))
-         ;; Create dataspace. Setting maximum size to NULL sets the
-         ;; maximum size to be the current size.
-         (space (h5screate-simple (list-length dims-seq) dims +NULL+)))
-    (cffi:foreign-free dims)
-    space))
-
-
-;;; Create file and memory datatypes.  For this example we will save
-;;; the strings as FORTRAN strings, therefore they do not need space
-;;; for the null terminator in the file.
-
-(defun create-filetype ()
-  (let ((result (h5tcopy +H5T-FORTRAN-S1+)))
-    (h5tset-size result (1- *SDIM*))
-    result))
-
-
-(defun create-memtype ()
-  (let ((result (h5tcopy +H5T-C-S1+)))
-    (h5tset-size result *SDIM*)
-    result))
-
-
 ;; Create a new file using the default properties.
 (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
        (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
@@ -60,21 +35,20 @@
   (unwind-protect
        (let* ((wdata (cffi:foreign-string-alloc
                       "Parting is such sweet   sorrow. "))
-              (space (create-simple-dataspace (list *DIM0*)))
-              (filetype (create-filetype))
-              (memtype (create-memtype))
+              (space (h5ex:create-simple-dataspace `(,*DIM0*)))
+              ;; Create file and memory datatypes.  For this example we will save
+              ;; the strings as FORTRAN strings, therefore they do not need space
+              ;; for the null terminator in the file.
+              (filetype (h5ex:create-f-string-type (1- *SDIM*)))
+              (memtype (h5ex:create-c-string-type *SDIM*))
               ;; Create the dataset and write the array data to it.
               (dset (h5dcreate2 file *DATASET* filetype space
                                 +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
          (h5dwrite dset memtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
          ;; Close and release resources.
-         (h5tclose memtype)
-         (h5tclose filetype)
-         (h5dclose dset)
-         (h5sclose space)
+         (h5ex:close-handles `(,memtype ,filetype ,dset ,space))
          (cffi:foreign-string-free wdata))
-    (h5fclose file)
-    (h5pclose fapl)))
+    (h5ex:close-handles `(,file ,fapl))))
 
 ;; Now we begin the read section of this example.  Here we assume
 ;; the dataset has the same name and rank, but can have any size.
@@ -88,9 +62,8 @@
               ;; Get the datatype and its size.
               (filetype (h5dget-type dset))
               (sdim (1+ (h5tget-size filetype)))
-              (memtype (create-memtype))
+              (memtype (h5ex:create-c-string-type sdim))
               (space (h5dget-space dset)))
-         
          (cffi:with-foreign-object (dims 'hsize-t 1)
            (h5sget-simple-extent-dims space dims +NULL+)
 	   (let ((dims[0] (cffi:mem-aref dims 'hsize-t 0)))
@@ -104,11 +77,7 @@
                          (cffi:foreign-string-to-lisp
                           (cffi:mem-aptr rdata :char (* i sdim))))))))
          ;; Close and release resources.
-         (h5sclose space)
-         (h5tclose memtype)
-         (h5tclose filetype)
-         (h5dclose dset))
-    (h5fclose file)
-    (h5pclose fapl)))
+         (h5ex:close-handles `(,space ,memtype ,filetype ,dset)))
+    (h5ex:close-handles `(,file ,fapl))))
 
 #+sbcl(sb-ext:quit)
