@@ -18,6 +18,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -25,6 +26,7 @@
 (defparameter *DATASET* "DS1")
 (defparameter *LEN0* 3)
 (defparameter *LEN1* 12)
+
 
 (defun create-wdata ()
   (let* ((wdata (cffi::foreign-alloc '(:struct hvl-t) :count 2))
@@ -51,16 +53,6 @@
     wdata))
 
 
-(defun create-simple-dataspace (dims-seq)
-  (let* ((dims (cffi:foreign-alloc 'hsize-t :count (list-length dims-seq)
-                                   :initial-contents dims-seq))
-         ;; Create dataspace. Setting maximum size to NULL sets the
-         ;; maximum size to be the current size.
-         (space (h5screate-simple (list-length dims-seq) dims +NULL+)))
-    (cffi:foreign-free dims)
-    space))
-
-
 ;; Create a new file using the default properties.
 (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
        (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
@@ -69,7 +61,7 @@
        (let* ((wdata (create-wdata))
               (filetype (h5tvlen-create +H5T-STD-I32LE+))
               (memtype (h5tvlen-create +H5T-NATIVE-INT+))
-              (space (create-simple-dataspace '(2)))
+              (space (h5ex:create-simple-dataspace '(2)))
               ;; Create the dataset and write the variable-length data to it.
               (dset (h5dcreate2 file *DATASET* filetype space
                                 +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
@@ -130,7 +122,5 @@
          (h5dclose dset))
     (h5fclose file)
     (h5pclose fapl)))
-
-
 
 #+sbcl(sb-ext:quit)
