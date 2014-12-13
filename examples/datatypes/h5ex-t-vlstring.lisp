@@ -41,13 +41,9 @@
                                 +H5P-DEFAULT+ +H5P-DEFAULT+)))
          (h5dwrite dset mtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
          ;; Close and release resources.
-         (h5dclose dset)
-         (h5sclose shape)
-         (h5tclose mtype)
-         (h5tclose ftype)
+         (h5ex:close-handles `(,dset ,shape ,mtype ,ftype))
          (cffi:foreign-free wdata))
-    (h5fclose file)
-    (h5pclose fapl)))
+    (h5ex:close-handles `(,file ,fapl))))
 
 ;; Now we begin the read section of this example.  Here we assume
 ;; the dataset has the same name and rank, but can have any size.
@@ -68,16 +64,14 @@
                (h5dread dset mtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ rdata)
                ;; Output the data to the screen.
                (dotimes (i dims[0])
-                 (format t "~a~%" (cffi:foreign-string-to-lisp
-                                   (cffi:mem-aref rdata '(:pointer :char) i))))
+                 (format t "~a[~d]: ~a~%" *DATASET* i
+                         (cffi:foreign-string-to-lisp
+                          (cffi:mem-aref rdata '(:pointer :char) i))))
                ;; Close and release resources.  Note that H5Dvlen_reclaim works
                ;; for variable-length strings as well as variable-length arrays.
                ;; H5Tvlen_reclaim only frees the data these point to.
                (h5dvlen-reclaim mtype shape +H5P-DEFAULT+ rdata))))
-         (h5tclose mtype)
-         (h5sclose shape)
-         (h5dclose dset))
-    (h5fclose file)
-    (h5pclose fapl)))
+         (h5ex:close-handles `(,mtype ,shape ,dset)))
+    (h5ex:close-handles `(,file ,fapl))))
 
 #+sbcl(sb-ext:quit)
