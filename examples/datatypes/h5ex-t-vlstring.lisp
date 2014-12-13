@@ -18,6 +18,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -25,75 +26,58 @@
 (defparameter *DATASET* "DS1")
 (defparameter *DIM0* 4)
 
-(cffi:with-foreign-objects ((dims 'hsize-t 1))
-  (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		   (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
-    
-    (unwind-protect
-	 (let* ((wdata (cffi:foreign-alloc
-			:string :initial-contents
-			'("Parting" "is such" "sweet" "sorrow")))
-		(ftype (h5tcopy +H5T-FORTRAN-S1+))
-		(mtype (h5tcopy +H5T-C-S1+))
-		(shape (prog2
-			   (setf (cffi:mem-aref dims 'hsize-t 0) *DIM0*)
-			   (h5screate-simple 1 dims +NULL+)))
-		(dset (prog2
-			(h5tset-size ftype +H5T-VARIABLE+)
-			(h5dcreate2 file *DATASET* ftype shape +H5P-DEFAULT+
-				    +H5P-DEFAULT+ +H5P-DEFAULT+))))
 
-	   (h5tset-size mtype +H5T-VARIABLE+)
-	   (h5dwrite dset mtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
-	   
-	   (h5dclose dset)
-	   (h5sclose shape)
-	   (h5tclose mtype)
-	   (h5tclose ftype)
-	   (cffi:foreign-free wdata))
+(let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
+       (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+                 (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
+  (unwind-protect
+       (let* ((wdata (cffi:foreign-alloc
+                      :string :initial-contents
+                      '("Parting" "is such" "sweet" "sorrow")))
+              (ftype (h5ex:create-f-string-type))
+              (mtype (h5ex:create-c-string-type))
+              (shape (h5ex:create-simple-dataspace `(,*DIM0*)))
+              (dset (h5dcreate2 file *DATASET* ftype shape +H5P-DEFAULT+
+                                +H5P-DEFAULT+ +H5P-DEFAULT+)))
+         (h5dwrite dset mtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
+         ;; Close and release resources.
+         (h5dclose dset)
+         (h5sclose shape)
+         (h5tclose mtype)
+         (h5tclose ftype)
+         (cffi:foreign-free wdata))
+    (h5fclose file)
+    (h5pclose fapl)))
 
-      (h5fclose file)
-      (h5pclose fapl)))
+;; Now we begin the read section of this example.  Here we assume
+;; the dataset has the same name and rank, but can have any size.
+;; Therefore we must allocate a new array to read dynamically.
 
-  (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		   (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
-    
-    (unwind-protect
-
-	 (let* ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
-		(shape (h5dget-space dset)) 
-		(mtype (h5tcopy +H5T-C-S1+))
-		(rdata (prog2
-			   (h5tset-size mtype +H5T-VARIABLE+)
-			   (cffi:foreign-alloc '(:pointer :char)
-					       :initial-element +NULL+
-					       :count *DIM0*))))
-
-	   (h5dread dset mtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ rdata)
-
-	   (dotimes (i *DIM0*)
-	     (format t "~a~%"
-		     (cffi:foreign-string-to-lisp
-		      ;; rdata is an array of pointers
-		      ;; mem-aref gives us a pointer to the i-th element
-		      ;; mem-ref de-references this element and
-		      ;; gives us the pointer which repesents the string
-		      (cffi:mem-ref (cffi:mem-aptr rdata '(:pointer :char) i)
-				    '(:pointer :char)))))
-
-	   ;;; reclaim the space allocated for individual strings
-	   (h5dvlen-reclaim mtype shape +H5P-DEFAULT+ rdata)
-	   ;;; still need to free the pointer array
-	   (cffi:foreign-free rdata)
-	   (h5tclose mtype)
-	   (h5sclose shape)
-	   (h5dclose dset))
-
-      (h5fclose file)
-      (h5pclose fapl))))
+(let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
+       (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+                 (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
+  (unwind-protect
+       (let* ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
+              (shape (h5dget-space dset)) 
+              (mtype (h5ex:create-c-string-type)))
+         (cffi:with-foreign-object (dims 'hsize-t 1)
+           (h5sget-simple-extent-dims shape dims +NULL+)
+	   (let ((dims[0] (cffi:mem-aref dims 'hsize-t 0)))
+             (cffi:with-foreign-object (rdata '(:pointer :char) dims[0])
+               ;; Read the data.
+               (h5dread dset mtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ rdata)
+               ;; Output the data to the screen.
+               (dotimes (i dims[0])
+                 (format t "~a~%" (cffi:foreign-string-to-lisp
+                                   (cffi:mem-aref rdata '(:pointer :char) i))))
+               ;; Close and release resources.  Note that H5Dvlen_reclaim works
+               ;; for variable-length strings as well as variable-length arrays.
+               ;; H5Tvlen_reclaim only frees the data these point to.
+               (h5dvlen-reclaim mtype shape +H5P-DEFAULT+ rdata))))
+         (h5tclose mtype)
+         (h5sclose shape)
+         (h5dclose dset))
+    (h5fclose file)
+    (h5pclose fapl)))
 
 #+sbcl(sb-ext:quit)
