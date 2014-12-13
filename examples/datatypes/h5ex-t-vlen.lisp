@@ -71,13 +71,9 @@
          ;; removes the need to manually free() the previously malloc'ed
          ;; data.
          (h5dvlen-reclaim memtype space +H5P-DEFAULT+ wdata)
-         (h5dclose dset)
-         (h5sclose space)
-         (h5tclose memtype)
-         (h5tclose filetype)
+         (h5ex:close-handles `(,dset ,space ,memtype ,filetype))
          (cffi:foreign-free wdata))
-    (h5fclose file)
-    (h5pclose fapl)))
+    (h5ex:close-handles `(,file ,fapl))))
 
 ;; Now we begin the read section of this example.  Here we assume
 ;; the dataset has the same name and rank, but can have any size.
@@ -117,10 +113,7 @@
                ;; themselves.
                (h5dvlen-reclaim memtype space +H5P-DEFAULT+ rdata))
              (h5tclose memtype)))
-
-         (h5sclose space)
-         (h5dclose dset))
-    (h5fclose file)
-    (h5pclose fapl)))
+         (h5ex:close-handles `(,space ,dset)))
+    (h5ex:close-handles `(,file ,fapl))))
 
 #+sbcl(sb-ext:quit)
