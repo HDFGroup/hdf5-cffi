@@ -48,15 +48,9 @@
                                 +H5P-DEFAULT+)))
          (h5awrite attr memtype wdata)
          ;; Close and release resources.
-         (h5aclose attr)
-         (h5dclose dset)
-         (h5sclose ashape)
-         (h5sclose dshape)
-         (h5tclose memtype)
-         (h5tclose filetype)
+         (h5ex:close-handles `(,attr ,dset ,ashape ,dshape ,memtype ,filetype))
          (cffi:foreign-free wdata))
-    (h5fclose file)
-    (h5pclose fapl)))
+    (h5ex:close-handles `(,file ,fapl))))
 
 ;; Now we begin the read section of this example.  Here we assume
 ;; the attribute has the same name and rank, but can have any size.
@@ -85,11 +79,7 @@
                ;; for variable-length strings as well as variable-length arrays.
                ;; H5Tvlen_reclaim only frees the data these point to.
                (h5dvlen-reclaim memtype shape +H5P-DEFAULT+ rdata))))
-         (h5tclose memtype)
-         (h5sclose shape)
-         (h5aclose attr)
-         (h5dclose dset))
-    (h5fclose file)
-    (h5pclose fapl)))
+         (h5ex:close-handles `(,memtype ,shape ,attr ,dset))
+    (h5ex:close-handles `(,file ,fapl)))))
 
 #+sbcl(sb-ext:quit)
