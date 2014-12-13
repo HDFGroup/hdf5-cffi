@@ -11,7 +11,8 @@
 (defpackage #:h5ex
   (:documentation "hdf5-examples: Common helpers for hdf5-cffi examples.")
   (:use #:cl)
-  (:export create-null-dataspace
+  (:export close-handles
+           create-null-dataspace
            create-scalar-dataspace
            create-simple-dataspace
            create-c-string-type
@@ -21,22 +22,43 @@
 
 (in-package :h5ex)
 
+;; handles
+
+(defun close-handle (hnd)
+  "Close an HDF5 handle"
+  (unless (< 0 (hdf5:h5iis-valid hnd))
+    (error "Invalid handle found."))
+  (let ((type (hdf5:h5iget-type hnd)))
+    (cond ((eql type :H5I-ATTR) (hdf5:h5aclose hnd))
+          ((eql type :H5I-DATASET) (hdf5:h5dclose hnd))
+          ((eql type :H5I-DATASPACE) (hdf5:h5sclose hnd))
+          ((eql type :H5I-DATATYPE) (hdf5:h5tclose hnd))
+          ((eql type :H5I-FILE) (hdf5:h5fclose hnd))
+          ((eql type :H5I-GENPROP-LST) (hdf5:h5pclose hnd))
+          ((eql type :H5I-GROUP) (hdf5:h5gclose hnd))
+          (t (error (format nil "Can't close handle. ~a~%" type))))))
+
+(defun close-handles (handles)
+  "Close a list of handles"
+  (unless (listp handles)
+    (error "List expected."))
+  (dolist (h handles)
+    (close-handle h)))
+
 ;; dataspaces
 
 (defun create-null-dataspace ()
   "Create a null dataspace"
   (hdf5:h5screate :H5S-NULL))
 
-
 (defun create-scalar-dataspace ()
   "Create a scalar dataspace"
   (hdf5:h5screate :H5S-SCALAR))
 
-
 (defun create-simple-dataspace (dims &optional maxdims)
   "Create a simple dataspace"
   ;; list arguments expected
-  (unless (and (consp dims) (or (null maxdims) (consp maxdims)))
+  (unless (and (consp dims) (listp maxdims))
     (error "List arguments expected."))
   ;; rank check
   (when (and maxdims
@@ -67,12 +89,10 @@
     (hdf5:h5tset-size result (if length length hdf5:+H5T-VARIABLE+))
     result))
 
-
 (defun create-c-string-type-utf8 (&optional length)
   (let ((result (create-c-string-type length)))
     (hdf5:h5tset-cset result :H5T-CSET-UTF8)
     result))
-
 
 (defun create-f-string-type (&optional length)
   "Create a FORTRAN-style string datatype"
@@ -83,7 +103,6 @@
   (let ((result (hdf5:h5tcopy hdf5:+H5T-FORTRAN-S1+)))
     (hdf5:h5tset-size result (if length length hdf5:+H5T-VARIABLE+))
     result))
-
 
 (defun create-f-string-type-utf8 (&optional length)
   (let ((result (create-f-string-type length)))
