@@ -48,6 +48,7 @@
                                 +H5P-DEFAULT+)))
          (h5awrite attr memtype wdata)
          ;; Close and release resources.
+         (h5aclose attr)
          (h5dclose dset)
          (h5sclose ashape)
          (h5sclose dshape)
@@ -86,6 +87,7 @@
                (h5dvlen-reclaim memtype shape +H5P-DEFAULT+ rdata))))
          (h5tclose memtype)
          (h5sclose shape)
+         (h5aclose attr)
          (h5dclose dset))
     (h5fclose file)
     (h5pclose fapl)))
