@@ -42,10 +42,8 @@
   (obj-id hid-t))
 
 (cffi:defcfun "H5Iget_type" h5i-type-t
-  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5I.html#Identify-GetName"
-  (obj-id hid-t)
-  (name   (:pointer :char))
-  (size   size-t))
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5I.html#Identify-GetType"
+  (obj-id hid-t))
 
 (cffi:defcfun "H5Iget_type_ref" :int
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5I.html#Identify-GetTypeRef"
