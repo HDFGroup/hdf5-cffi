@@ -57,9 +57,10 @@
                                              :initial-contents
                                              '(0 1 2 11 1 0 2 4))))
              (h5sselect-elements space :H5S-SELECT-SET 4 coords)
-             (h5rcreate (cffi:mem-aptr wdata '(:struct hdset-reg-ref-t) 0)
-                        file *DATASET2* :H5R-DATASET-REGION space)
              (cffi:foreign-free coords))
+           
+           (h5rcreate (cffi:mem-aptr wdata '(:struct hdset-reg-ref-t) 0)
+                      file *DATASET2* :H5R-DATASET-REGION space)
 
            ;; Create reference to a hyperslab in dset2.
            (cffi:with-foreign-objects ((start 'hsize-t 2)
@@ -76,6 +77,7 @@
                    (cffi:mem-aref block 'hsize-t 1) 3)
              (h5sselect-hyperslab space :H5S-SELECT-SET start stride count
                                   block))
+           
            (h5rcreate (cffi:mem-aptr wdata '(:struct hdset-reg-ref-t) 1)
                       file *DATASET2* :H5R-DATASET-REGION space)
            
