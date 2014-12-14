@@ -51,7 +51,7 @@
                    wdata2)
 
          (cffi:with-foreign-object (wdata '(:struct hdset-reg-ref-t) 2)
-             
+           
            ;; Create reference to a list of elements in dset2.
            (let ((coords (cffi:foreign-alloc 'hsize-t :count (* 4 2)
                                              :initial-contents
@@ -76,21 +76,21 @@
                    (cffi:mem-aref block 'hsize-t 1) 3)
              (h5sselect-hyperslab space :H5S-SELECT-SET start stride count
                                   block))
-             (h5rcreate (cffi:mem-aptr wdata '(:struct hdset-reg-ref-t) 1)
-                        file *DATASET2* :H5R-DATASET-REGION space)
-             
-             ;; Create the dataset and write the region references to it.
-             (let* ((space (h5ex:create-simple-dataspace `(,*DIM0*)))
-                    (dset (h5dcreate2 file *DATASET* +H5T-STD-REF-DSETREG+
-                                      space +H5P-DEFAULT+ +H5P-DEFAULT+
-                                      +H5P-DEFAULT+)))
-               (h5dwrite dset +H5T-STD-REF-DSETREG+ +H5S-ALL+ +H5S-ALL+
-                         +H5P-DEFAULT+ wdata)
-               (h5ex:close-handles (list dset space)))
-             
-             ;; Close and release resources.
-             (cffi:foreign-free wdata2)
-             (h5ex:close-handles (list dset2 space))))
+           (h5rcreate (cffi:mem-aptr wdata '(:struct hdset-reg-ref-t) 1)
+                      file *DATASET2* :H5R-DATASET-REGION space)
+           
+           ;; Create the dataset and write the region references to it.
+           (let* ((space (h5ex:create-simple-dataspace `(,*DIM0*)))
+                  (dset (h5dcreate2 file *DATASET* +H5T-STD-REF-DSETREG+
+                                    space +H5P-DEFAULT+ +H5P-DEFAULT+
+                                    +H5P-DEFAULT+)))
+             (h5dwrite dset +H5T-STD-REF-DSETREG+ +H5S-ALL+ +H5S-ALL+
+                       +H5P-DEFAULT+ wdata)
+             (h5ex:close-handles (list dset space)))
+           
+           ;; Close and release resources.
+           (cffi:foreign-free wdata2)
+           (h5ex:close-handles (list dset2 space))))
     
     (h5ex:close-handles (list file fapl))))
 
