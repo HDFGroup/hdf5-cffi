@@ -36,9 +36,9 @@
        (let* ((wdata (cffi:foreign-string-alloc
                       "Parting is such sweet   sorrow. "))
               (space (h5ex:create-simple-dataspace `(,*DIM0*)))
-              ;; Create file and memory datatypes.  For this example we will save
-              ;; the strings as FORTRAN strings, therefore they do not need space
-              ;; for the null terminator in the file.
+              ;; Create file and memory datatypes. For this example we will save
+              ;; the strings as FORTRAN strings, therefore they do not need
+              ;; space for the null terminator in the file.
               (filetype (h5ex:create-f-string-type (1- *SDIM*)))
               (memtype (h5ex:create-c-string-type *SDIM*))
               ;; Create the dataset and write the array data to it.
@@ -46,9 +46,9 @@
                                 +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
          (h5dwrite dset memtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
          ;; Close and release resources.
-         (h5ex:close-handles `(,memtype ,filetype ,dset ,space))
+         (h5ex:close-handles (list memtype filetype dset space))
          (cffi:foreign-string-free wdata))
-    (h5ex:close-handles `(,file ,fapl))))
+    (h5ex:close-handles (list file fapl))))
 
 ;; Now we begin the read section of this example.  Here we assume
 ;; the dataset has the same name and rank, but can have any size.
@@ -77,7 +77,7 @@
                          (cffi:foreign-string-to-lisp
                           (cffi:mem-aptr rdata :char (* i sdim))))))))
          ;; Close and release resources.
-         (h5ex:close-handles `(,space ,memtype ,filetype ,dset)))
-    (h5ex:close-handles `(,file ,fapl))))
+         (h5ex:close-handles (list space memtype filetype dset)))
+    (h5ex:close-handles (list file fapl))))
 
 #+sbcl(sb-ext:quit)

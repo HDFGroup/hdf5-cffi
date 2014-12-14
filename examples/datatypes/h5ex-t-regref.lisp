@@ -20,6 +20,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -35,70 +36,63 @@
        (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
                  (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
   (unwind-protect
-       (cffi:with-foreign-objects ((dims 'hsize-t 1)
-                                   (dims2 'hsize-t 2)
-                                   (start 'hsize-t 2)
-                                   (stride 'hsize-t 2)
-                                   (count 'hsize-t 2)
-                                   (block 'hsize-t 2))
-         (setf (cffi:mem-aref dims 'hsize-t 0) *DIM0*
-               (cffi:mem-aref dims2 'hsize-t 0) *DS2DIM0*
-               (cffi:mem-aref dims2 'hsize-t 1) *DS2DIM1*
-               (cffi:mem-aref start 'hsize-t 0) 0
-               (cffi:mem-aref start 'hsize-t 1) 0
-               (cffi:mem-aref stride 'hsize-t 0) 2
-               (cffi:mem-aref stride 'hsize-t 1) 11
-               (cffi:mem-aref count 'hsize-t 0) 2
-               (cffi:mem-aref count 'hsize-t 1) 2
-               (cffi:mem-aref block 'hsize-t 0) 1
-               (cffi:mem-aref block 'hsize-t 1) 3)
-         
-         ;; Create a dataset with character data.
-         (let* ((space (h5screate-simple 2 dims2 +NULL+))
-                (dset2 (h5dcreate2 file *DATASET2* +H5T-STD-I8LE+ space
-                                   +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+))
-                (data (concatenate 'string
-                                   "The quick brown\0"
-                                   "fox jumps over \0"
-                                   "the 5 lazy dogs\0"))
-                (wdata2 (cffi:foreign-string-alloc data
-                                                   :null-terminated-p nil)))
-           (h5dwrite dset2 +H5T-NATIVE-CHAR+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
-                     wdata2)
+       ;; Create a dataset with character data.
+       (let* ((space (h5ex:create-simple-dataspace (list *DS2DIM0*
+                                                         *DS2DIM1*)))
+              (dset2 (h5dcreate2 file *DATASET2* +H5T-STD-I8LE+ space
+                                 +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+))
+              (data (concatenate 'string
+                                 "The quick brown\0"
+                                 "fox jumps over \0"
+                                 "the 5 lazy dogs\0"))
+              (wdata2 (cffi:foreign-string-alloc data
+                                                 :null-terminated-p nil)))
+         (h5dwrite dset2 +H5T-NATIVE-CHAR+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
+                   wdata2)
 
-           (cffi:with-foreign-object (wdata '(:struct hdset-reg-ref-t) 2)
+         (cffi:with-foreign-object (wdata '(:struct hdset-reg-ref-t) 2)
              
-             ;; Create reference to a list of elements in dset2.
-             (let ((coords (cffi:foreign-alloc 'hsize-t :count (* 4 2)
-                                               :initial-contents
-                                               '(0 1 2 11 1 0 2 4))))
-               (h5sselect-elements space :H5S-SELECT-SET 4 coords)
-               (h5rcreate (cffi:mem-aptr wdata '(:struct hdset-reg-ref-t) 0)
-                          file *DATASET2* :H5R-DATASET-REGION space)
-               (cffi:foreign-free coords))
+           ;; Create reference to a list of elements in dset2.
+           (let ((coords (cffi:foreign-alloc 'hsize-t :count (* 4 2)
+                                             :initial-contents
+                                             '(0 1 2 11 1 0 2 4))))
+             (h5sselect-elements space :H5S-SELECT-SET 4 coords)
+             (h5rcreate (cffi:mem-aptr wdata '(:struct hdset-reg-ref-t) 0)
+                        file *DATASET2* :H5R-DATASET-REGION space)
+             (cffi:foreign-free coords))
 
-             ;; Create reference to a hyperslab in dset2.
+           ;; Create reference to a hyperslab in dset2.
+           (cffi:with-foreign-objects ((start 'hsize-t 2)
+                                       (stride 'hsize-t 2)
+                                       (count 'hsize-t 2)
+                                       (block 'hsize-t 2))
+             (setf (cffi:mem-aref start 'hsize-t 0) 0
+                   (cffi:mem-aref start 'hsize-t 1) 0
+                   (cffi:mem-aref stride 'hsize-t 0) 2
+                   (cffi:mem-aref stride 'hsize-t 1) 11
+                   (cffi:mem-aref count 'hsize-t 0) 2
+                   (cffi:mem-aref count 'hsize-t 1) 2
+                   (cffi:mem-aref block 'hsize-t 0) 1
+                   (cffi:mem-aref block 'hsize-t 1) 3)
              (h5sselect-hyperslab space :H5S-SELECT-SET start stride count
-                                  block)
+                                  block))
              (h5rcreate (cffi:mem-aptr wdata '(:struct hdset-reg-ref-t) 1)
                         file *DATASET2* :H5R-DATASET-REGION space)
              
              ;; Create the dataset and write the region references to it.
-             (let* ((space (h5screate-simple 1 dims +NULL+))
+             (let* ((space (h5ex:create-simple-dataspace `(,*DIM0*)))
                     (dset (h5dcreate2 file *DATASET* +H5T-STD-REF-DSETREG+
                                       space +H5P-DEFAULT+ +H5P-DEFAULT+
                                       +H5P-DEFAULT+)))
                (h5dwrite dset +H5T-STD-REF-DSETREG+ +H5S-ALL+ +H5S-ALL+
                          +H5P-DEFAULT+ wdata)
-               (h5dclose dset)
-               (h5sclose space)))
-
-           (cffi:foreign-free wdata2)
-           (h5dclose dset2)
-           (h5sclose space)))
-
-    (h5fclose file)
-    (h5pclose fapl)))
+               (h5ex:close-handles (list dset space)))
+             
+             ;; Close and release resources.
+             (cffi:foreign-free wdata2)
+             (h5ex:close-handles (list dset2 space))))
+    
+    (h5ex:close-handles (list file fapl))))
 
 ;;; Now we begin the read section of this example.  Here we assume
 ;;; the dataset has the same name and rank, but can have any size.
@@ -155,18 +149,15 @@
                              (cffi:foreign-string-to-lisp name)
                              (cffi:foreign-string-to-lisp rdata2))
                      (h5sclose memspace)))
-                 
+
+                 ;; Close and release resources.
                  (cffi:foreign-free rdata2)
                  (cffi:foreign-free name)
-                 (h5sclose space)
-                 (h5dclose dset2)))
+                 (h5ex:close-handles (list space dset2))))
              
-             (cffi:foreign-free rdata)))
-         
-         (h5sclose space)
-         (h5dclose dset))
+             (cffi:foreign-free rdata))
+           (h5ex:close-handles (list space dset))))
     
-    (h5fclose file)
-    (h5pclose fapl)))
+    (h5ex:close-handles (list file fapl))))
 
 #+sbcl(sb-ext:quit)

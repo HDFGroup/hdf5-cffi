@@ -41,9 +41,9 @@
                                 +H5P-DEFAULT+ +H5P-DEFAULT+)))
          (h5dwrite dset mtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
          ;; Close and release resources.
-         (h5ex:close-handles `(,dset ,shape ,mtype ,ftype))
+         (h5ex:close-handles (list dset shape mtype ftype))
          (cffi:foreign-free wdata))
-    (h5ex:close-handles `(,file ,fapl))))
+    (h5ex:close-handles (list file fapl))))
 
 ;; Now we begin the read section of this example.  Here we assume
 ;; the dataset has the same name and rank, but can have any size.
@@ -71,7 +71,7 @@
                ;; for variable-length strings as well as variable-length arrays.
                ;; H5Tvlen_reclaim only frees the data these point to.
                (h5dvlen-reclaim mtype shape +H5P-DEFAULT+ rdata))))
-         (h5ex:close-handles `(,mtype ,shape ,dset)))
-    (h5ex:close-handles `(,file ,fapl))))
+         (h5ex:close-handles (list mtype shape dset)))
+    (h5ex:close-handles (list file fapl))))
 
 #+sbcl(sb-ext:quit)

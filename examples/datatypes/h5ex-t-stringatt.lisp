@@ -51,9 +51,9 @@
                                 +H5P-DEFAULT+)))
          (h5awrite attr memtype wdata)
          ;; Close and release resources.
-         (h5ex:close-handles `(,filetype ,memtype ,dspace ,dset ,aspace ,attr))
+         (h5ex:close-handles (list filetype memtype dspace dset aspace attr))
          (cffi:foreign-string-free wdata))
-    (h5ex:close-handles `(,file ,fapl))))
+    (h5ex:close-handles (list file fapl))))
 
 ;; Now we begin the read section of this example.  Here we assume
 ;; the attribute has the same name and rank, but can have any size.
@@ -83,7 +83,7 @@
                          (cffi:foreign-string-to-lisp
                           (cffi:mem-aptr rdata :char (* i sdim))))))))
          ;; Close and release resources.
-         (h5ex:close-handles `(,space ,memtype ,filetype ,attr ,dset)))
-    (h5ex:close-handles `(,file ,fapl))))
+         (h5ex:close-handles (list space memtype filetype attr dset)))
+    (h5ex:close-handles (list file fapl))))
 
 #+sbcl(sb-ext:quit)

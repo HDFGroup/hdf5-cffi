@@ -76,9 +76,9 @@
          ;; removes the need to manually free() the previously malloc'ed
          ;; data.
          (h5dvlen-reclaim memtype aspace +H5P-DEFAULT+ wdata)
-         (h5ex:close-handles `(,attr ,dset ,dspace ,aspace ,memtype ,filetype))
+         (h5ex:close-handles (list attr dset dspace aspace memtype filetype))
          (cffi:foreign-free wdata))
-    (h5ex:close-handles `(,file ,fapl))))
+    (h5ex:close-handles (list file fapl))))
 
 ;; Now we begin the read section of this example.  Here we assume
 ;; the attribute has the same name and rank, but can have any size.
@@ -119,7 +119,7 @@
                ;; themselves.
                (h5dvlen-reclaim memtype space +H5P-DEFAULT+ rdata))
              (h5tclose memtype)))
-         (h5ex:close-handles `(,space ,attr ,dset)))
-    (h5ex:close-handles `(,file ,fapl))))
+         (h5ex:close-handles (list space attr dset)))
+    (h5ex:close-handles (list file fapl))))
 
 #+sbcl(sb-ext:quit)
