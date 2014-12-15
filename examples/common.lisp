@@ -56,15 +56,37 @@
   (hdf5:h5screate :H5S-SCALAR))
 
 (defun create-simple-dataspace (dims &optional maxdims)
-  "Create a simple dataspace"
+  "Creaxte a simple dataspace"
+  
   ;; list arguments expected
   (unless (and (consp dims) (listp maxdims))
     (error "List arguments expected."))
+
   ;; rank check
   (when (and maxdims
              (not (= (list-length dims) (list-length maxdims))))
     (error "Rank mismatch in simple dataspace definition."))
-  
+  (when (or (< (list-length dims) 1)
+            (> (list-length dims) 32))
+    (error "The dataspace rank must be between 1 and 32."))
+
+  ;; element checks
+  (when (some #'(lambda (x) (or (not (integerp x)) (< x 1))) dims)
+    (error "The dimensions must be positive integers."))
+  (when (and maxdims
+             (some #'(lambda (x) (or (not (integerp x))
+                                     (and (not (eql x hdf5:+H5S-UNLIMITED+))
+                                          (< x 1))))
+                   maxdims))
+    (error "The maximum dimensions must be positive integers."))
+  (when (and maxdims
+             (some #'null
+                   (mapcar #'(lambda (x y) (if (eql y hdf5:+H5S-UNLIMITED+)
+                                               T (<= x y)))
+                           dims maxdims)))
+    (error "A dimension must not exceed it's corresponding maximum."))
+
+  ;; go
   (let* ((rank (list-length dims))
          (dims-ptr (cffi:foreign-alloc 'hdf5:hsize-t :count rank
                                        :initial-contents dims))
