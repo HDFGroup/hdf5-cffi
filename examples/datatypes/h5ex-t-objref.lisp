@@ -19,6 +19,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -31,39 +32,33 @@
        (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
                  (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
   (unwind-protect
-       (let* ((space (h5screate :H5S-NULL)))
-         ;; Create a dataset with a null dataspace.
-         (h5dclose (h5dcreate2 file "DS2" +H5T-STD-I32LE+ space
-                               +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+))
-         (h5sclose space)
-         ;; Create a goup.
-         (h5gclose (h5gcreate2 file "G1" +H5P-DEFAULT+ +H5P-DEFAULT+
-                               +H5P-DEFAULT+))
+       (let ((space (h5ex:create-null-dataspace)))
+         (h5ex:close-handles
+          ;; Create a dataset with a null dataspace.
+          (list (h5dcreate2 file "DS2" +H5T-STD-I32LE+ space
+                            +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)
+                space
+                ;; Create a goup.
+                (h5gcreate2 file "G1" +H5P-DEFAULT+ +H5P-DEFAULT+
+                            +H5P-DEFAULT+)))
 
          ;; Create references to the previously created objects.  Passing -1
          ;; as space_id causes this parameter to be ignored.  Other values
          ;; besides valid dataspaces result in an error.
-         (cffi:with-foreign-objects ((wdata 'hobj-ref-t *DIM0*)
-                                     (dims 'hsize-t 1))
+         (cffi:with-foreign-object (wdata 'hobj-ref-t *DIM0*)
            (let ((wdata[0] (cffi:mem-aptr wdata 'hobj-ref-t 0))
                  (wdata[1] (cffi:mem-aptr wdata 'hobj-ref-t 1)))
              (h5rcreate wdata[0] file "G1" :H5R-OBJECT -1)
              (h5rcreate wdata[1] file "DS2" :H5R-OBJECT -1))
 
-           ;; Create dataspace.  Setting maximum size to NULL sets the maximum
-           ;; size to be the current size.
-           (setf (cffi:mem-aref dims 'hsize-t 0) *DIM0*)
-           (setq space (h5screate-simple 1 dims +NULL+))
-
            ;; Create the dataset and write the object references to it.
-           (let ((dset (h5dcreate2 file *DATASET* +H5T-STD-REF-OBJ+ space
-                                   +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+           (let* ((space (h5ex:create-simple-dataspace `(,*DIM0*)))
+                  (dset (h5dcreate2 file *DATASET* +H5T-STD-REF-OBJ+ space
+                                    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
              (h5dwrite dset +H5T-STD-REF-OBJ+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
                        wdata)
-             (h5dclose dset)))
-         (h5sclose space))
-    (h5fclose file)
-    (h5pclose fapl)))
+             (h5ex:close-handles (list dset space)))))
+    (h5ex:close-handles (list file fapl))))
 
 ;; Now we begin the read section of this example.  Here we assume
 ;; the dataset has the same name and rank, but can have any size.
@@ -112,9 +107,7 @@
                      (h5oclose obj))))))))
 
          ;; Close and release resources.
-         (h5sclose space)
-         (h5dclose dset))
-    (h5fclose file)
-    (h5pclose fapl)))
+         (h5ex:close-handles (list space dset)))
+    (h5ex:close-handles (list file fapl))))
 
 #+sbcl(sb-ext:quit)
