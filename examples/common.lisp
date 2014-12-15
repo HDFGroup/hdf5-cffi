@@ -11,7 +11,8 @@
 (defpackage #:h5ex
   (:documentation "hdf5-examples: Common helpers for hdf5-cffi examples.")
   (:use #:cl)
-  (:export close-handles
+  (:export close-handle
+           close-handles
            create-null-dataspace
            create-scalar-dataspace
            create-simple-dataspace
