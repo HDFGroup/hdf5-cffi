@@ -18,6 +18,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -53,24 +54,15 @@
                  (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
   (unwind-protect
        (let* ((wdata (create-wdata *DIM0*))
-              (dtype (create-opaque-type *LEN* "Character array")))
-
-         ;; Create dataspace. Setting maximum size to NULL sets the maximum
-         ;; size to be the current size.
-         (cffi:with-foreign-object (dims 'hsize-t 1)
-           (setf (cffi:mem-aref dims 'hsize-t 0) *DIM0*)
-           (let* ((space (h5screate-simple 1 dims +NULL+))
-                  ;; Create the dataset and write the opaque data to it.
-                  (dset (h5dcreate2 file *DATASET* dtype space
-                                    +H5P-DEFAULT+ +H5P-DEFAULT+
-                                    +H5P-DEFAULT+)))
-             (h5dwrite dset dtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
-             (h5dclose dset)
-             (h5sclose space)))
-         (h5tclose dtype)
+              (dtype (create-opaque-type *LEN* "Character array"))
+              (space (h5ex:create-simple-dataspace `(,*DIM0*)))
+              ;; Create the dataset and write the opaque data to it.
+              (dset (h5dcreate2 file *DATASET* dtype space
+                                +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+         (h5dwrite dset dtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
+         (h5ex:close-handles (list dset space dtype))
          (cffi:foreign-free wdata))
-    (h5fclose file)
-    (h5pclose fapl)))
+    (h5ex:close-handles (list file fapl))))
 
 ;; Now we begin the read section of this example.  Here we assume
 ;; the dataset has the same name and rank, but can have any size.
@@ -108,11 +100,7 @@
          
          ;; Close and release resources.
          (cffi:foreign-free tag)
-         (h5tclose dtype)
-         (h5sclose space)
-         (h5dclose dset))
-    (h5fclose file)
-    (h5pclose fapl)))
-
+         (h5ex:close-handles (list dtype space dset)))
+    (h5ex:close-handles (list file fapl))))
 
 #+sbcl(sb-ext:quit)
