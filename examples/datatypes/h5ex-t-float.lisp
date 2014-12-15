@@ -18,6 +18,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -41,34 +42,22 @@
     wdata))
 
 
-(defun create-simple-dataspace (dims-seq)
-  (let* ((dims (cffi:foreign-alloc 'hsize-t :count (list-length dims-seq)
-                                   :initial-contents dims-seq))
-         ;; Create dataspace. Setting maximum size to NULL sets the
-         ;; maximum size to be the current size.
-         (space (h5screate-simple (list-length dims-seq) dims +NULL+)))
-    (cffi:foreign-free dims)
-    space))
-
-
 ;; Create a new file using the default properties.
 (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
        (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
                  (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
   (unwind-protect
        (let* ((wdata (create-wdata *DIM0* *DIM1*))
-              (space (create-simple-dataspace (list *DIM0* *DIM1*)))
+              (space (h5ex:create-simple-dataspace (list *DIM0* *DIM1*)))
               ;; Create the dataset and write the array data to it.
               (dset (h5dcreate2 file *DATASET* +H5T-IEEE-F64LE+ space
                                 +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
          (h5dwrite dset +H5T-NATIVE-DOUBLE+ +H5S-ALL+ +H5S-ALL+
                    +H5P-DEFAULT+ wdata)
          ;; Close and release resources.
-         (h5dclose dset)
-         (h5sclose space)
+         (h5ex:close-handles (list dset space))
          (cffi:foreign-free wdata))
-    (h5fclose file)
-    (h5pclose fapl)))
+    (h5ex:close-handles (list file fapl))))
 
 
 ;; Now we begin the read section of this example.  Here we assume
@@ -101,10 +90,7 @@
                  (format t "]~%")))))
          
          ;; Close and release resources.
-         (h5sclose space)
-         (h5dclose dset))
-    
-    (h5fclose file)
-    (h5pclose fapl)))
+         (h5ex:close-handles (list space dset)))
+    (h5ex:close-handles (list file fapl))))
 
 #+sbcl(sb-ext:quit)
