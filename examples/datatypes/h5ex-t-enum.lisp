@@ -18,6 +18,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -60,13 +61,7 @@
   (+ (* i cols) j))
 
 
-(cffi:with-foreign-objects
-    ((dims 'hsize-t 2)
-     (wdata 'phase-t (* *DIM0* *DIM1*))
-     (name :char *NAME-BUF-SIZE*))
-
-  (setf (cffi:mem-aref dims 'hsize-t 0) *DIM0*
-	(cffi:mem-aref dims 'hsize-t 1) *DIM1*)
+(cffi:with-foreign-object (wdata 'phase-t (* *DIM0* *DIM1*))
 
   ;; Initialize data.
   (dotimes (i *DIM0*)
@@ -82,36 +77,33 @@
     (unwind-protect
 	 (multiple-value-bind (filetype memtype)
 	     (create-enumtypes)
-	   (let* ((space (h5screate-simple 2 dims +NULL+))
+	   (let* ((space (h5ex:create-simple-dataspace (list *DIM0* *DIM1*)))
 		  (dset (h5dcreate2 file *DATASET* filetype space
 				    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	     (h5dwrite dset memtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
 	     ;; Close and release resources.
-	     (h5dclose dset)
-	     (h5sclose space)
-	     (h5tclose memtype)
-	     (h5tclose filetype)))
-      (h5fclose file)
-      (h5pclose fapl)))
+             (h5ex:close-handles (list dset space memtype filetype))))
+      (h5ex:close-handles (list file fapl)))))
+  
+;; Now we begin the read section of this example.  Here we assume
+;; the dataset and array have the same name and rank, but can
+;; have any size.  Therefore we must allocate a new array to read
+;; in data dynamically.
 
-  ;; Now we begin the read section of this example.  Here we assume
-  ;; the dataset and array have the same name and rank, but can
-  ;; have any size.  Therefore we must allocate a new array to read
-  ;; in data dynamically.
-
-  (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		   (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
-    (unwind-protect
-	 (let* ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
-		(space (h5dget-space dset)))
+(let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
+       (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+                 (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
+  (unwind-protect
+       (let* ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
+              (space (h5dget-space dset)))
+         (cffi:with-foreign-object (dims 'hsize-t 2)
 	   (h5sget-simple-extent-dims space dims +NULL+)
-	   
 	   ;; Allocate space for integer data.
 	   (let ((dims[0] (cffi:mem-aref dims 'hsize-t 0))
 		 (dims[1] (cffi:mem-aref dims 'hsize-t 1)))
-
-	     (cffi:with-foreign-object (rdata 'phase-t (* dims[0] dims[1]))
+             
+	     (cffi:with-foreign-objects ((rdata 'phase-t (* dims[0] dims[1]))
+                                         (name :char *NAME-BUF-SIZE*))
 	       (multiple-value-bind (filetype memtype)
 		   (create-enumtypes)
 		 ;; Read the data.
@@ -128,11 +120,8 @@
 				     name *NAME-BUF-SIZE*)
 		     (format t " ~6a" (cffi:foreign-string-to-lisp name)))
 		   (format t "]~%"))
-		 (h5tclose filetype)
-		 (h5tclose memtype))))
-	   (h5sclose space)
-	   (h5dclose dset))      
-      (h5fclose file)
-      (h5pclose fapl))))
+		 (h5ex:close-handles (list filetype memtype))))))
+	   (h5ex:close-handles (list space dset)))
+      (h5ex:close-handles (list file fapl))))
 
 #+sbcl(sb-ext:quit)
