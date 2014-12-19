@@ -34,6 +34,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -42,13 +43,6 @@
 (defparameter *DIM0*    2)
 (defparameter *LENA*    4)
 (defparameter *LENB*    1)
-
-;; create a variable-length string type
-
-(defun create-stringtype ()
-  (let ((result (h5tcopy +H5T-C-S1+)))
-    (h5tset-size result +H5T-VARIABLE+)
-    result))
 
 
 (cffi:defcstruct sensor-t
@@ -62,7 +56,7 @@
 	   (let ((result (h5tcreate :H5T-COMPOUND
 				    (cffi:foreign-type-size
 				     '(:struct sensor-t))))
-		 (strtype (create-stringtype)))
+		 (strtype (h5ex:create-c-string-type)))
 	     (h5tinsert result "Serial number"
 			(cffi:foreign-slot-offset '(:struct sensor-t)
 						  'serial-no)
@@ -77,6 +71,7 @@
 	     (h5tinsert result "Pressure (inHg)"
 			(cffi:foreign-slot-offset '(:struct sensor-t) 'pressure)
 			+H5T-NATIVE-DOUBLE+)
+             (h5tclose strtype)
 	     result)))
     (let* ((sensortype (create-sensortype))
 	   (result (h5tvlen-create sensortype)))
@@ -114,7 +109,7 @@
   (let ((result (h5tcreate :H5T-COMPOUND
 			   (cffi:foreign-type-size '(:struct vehicle-t))))
 	(sensorstype (create-sensorstype))
-	(strtype (create-stringtype))
+	(strtype (h5ex:create-c-string-type))
 	(colortype (create-colortype))
 	(loctype (cffi:with-foreign-object (adims 'hsize-t 3)
 		   (setf (cffi:mem-aref adims 'hsize-t 0) 3)
@@ -137,17 +132,14 @@
     (h5tinsert result "Surveyed areas"
 	       (cffi:foreign-slot-offset '(:struct vehicle-t) 'surveyed-areas)
 	       +H5T-STD-REF-DSETREG+)
-    (h5tclose loctype)
-    (h5tclose colortype)
-    (h5tclose strtype)
-    (h5tclose sensorstype)
+    (h5ex:close-handles (list loctype colortype strtype sensorstype))
     result))
 
 (defun create-rsensorstype ()
   (flet ((create-rsensortype ()
 	   (let ((result (h5tcreate :H5T-COMPOUND
 				    (cffi:foreign-type-size '(:pointer :char))))
-		 (strtype (create-stringtype)))
+		 (strtype (h5ex:create-c-string-type)))
 	     (h5tinsert result "Location" 0 strtype)
 	     (h5tclose strtype)
 	     result)))
@@ -171,7 +163,7 @@
 (defun create-rvehicletype ()
   (let ((result (h5tcreate :H5T-COMPOUND
 			   (cffi:foreign-type-size '(:struct rvehicle-t))))
-	(strtype (create-stringtype))
+	(strtype (h5ex:create-c-string-type))
 	(rsensorstype (create-rsensorstype)))
     (h5tinsert result "Sensors"
 	       (cffi:foreign-slot-offset '(:struct rvehicle-t) 'sensors)
@@ -179,8 +171,7 @@
     (h5tinsert result "Name"
 	       (cffi:foreign-slot-offset '(:struct rvehicle-t) 'name)
 	       strtype)
-    (h5tclose rsensorstype)
-    (h5tclose strtype)
+    (h5ex:close-handles (list rsensorstype strtype))
     result))
 
 
@@ -216,13 +207,14 @@
 				    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	     (h5dwrite dset +H5T-NATIVE-DOUBLE+ +H5S-ALL+ +H5S-ALL+
 		       +H5P-DEFAULT+ wdata2)
-	     (h5dclose dset)
-	     (h5sclose shape))
+	     (h5ex:close-handles (list dset shape)))
 	   ;; create groups to use for object references
-	   (h5gclose (h5gcreate2 file "Land_Vehicles"
-				 +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+))
-	   (h5gclose (h5gcreate2 file "Air_Vehicles"
-				 +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+))
+	   (h5ex:close-handles (list (h5gcreate2 file "Land_Vehicles"
+                                                 +H5P-DEFAULT+ +H5P-DEFAULT+
+                                                 +H5P-DEFAULT+)
+                                     (h5gcreate2 file "Air_Vehicles"
+                                                 +H5P-DEFAULT+ +H5P-DEFAULT+
+                                                 +H5P-DEFAULT+)))
 	   (let ((sensors-ptr
 		  (cffi:foreign-slot-pointer
 		   (cffi:mem-aptr wdata '(:struct vehicle-t) 0)
@@ -320,13 +312,10 @@
 				    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	     ;; Finally, write the compound data to it.
 	     (h5dwrite dset vehicletype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
-	     (h5dclose dset)
-	     (h5sclose space)
-	     (h5tclose vehicletype)))
+	     (h5ex:close-handles (list dset space vehicletype))))
       (cffi:foreign-free ptrB)
       (cffi:foreign-free ptrA)
-      (h5fclose file)
-      (h5pclose fapl))))
+      (h5ex:close-handles (list file fapl)))))
 
 (cffi:with-foreign-objects
     ((ndims 'hsize-t 1)
@@ -375,11 +364,7 @@
 	     (h5dvlen-reclaim rvehicletype space +H5P-DEFAULT+ rdata)
 	     (cffi:foreign-free rdata))
 	     
-	   (h5sclose space)
-	   (h5tclose rvehicletype)
-	   (h5dclose dset))
+	   (h5ex:close-handles (list space rvehicletype dset)))
+      (h5ex:close-handles (list file fapl)))))
 
-      (h5fclose file)
-      (h5pclose fapl))))
-
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)
