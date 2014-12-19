@@ -9,11 +9,11 @@
 ;;;; help@hdfgroup.org.
 
 ;;; This example shows how to read and write a complex
-;;; compound datatype to a dataset.  The program first writes
-;;; complex compound structures to a dataset with a dataspace
-;;; of DIM0, then closes the file.  Next, it reopens the file,
-;;; reads back selected fields in the structure, and outputs
-;;; them to the screen.
+;;; compound datatype to an attribute.  The program first
+;;; writes complex compound structures to an attribute with a
+;;; dataspace of DIM0, then closes the file.  Next, it reopens
+;;; the file, reads back selected fields in the structure, and
+;;; outputs them to the screen.
 
 ;;; Unlike the other datatype examples, in this example we
 ;;; save to the file using native datatypes to simplify the
@@ -29,8 +29,7 @@
 ;;; compound type contains an int, variable-length string and
 ;;; two doubles.
 
-;;; http://www.hdfgroup.org/ftp/HDF5/examples/examples-by-api/hdf5-examples/1_8/C/H5T/h5ex_t_cpxcmpd.c
-
+;;; http://www.hdfgroup.org/ftp/HDF5/examples/examples-by-api/hdf5-examples/1_8/C/H5T/h5ex_t_cpxcmpdatt.c
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
@@ -38,8 +37,9 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE*    "h5ex_t_cpxcmpd.h5")
+(defparameter *FILE*    "h5ex_t_cpxcmpdatt.h5")
 (defparameter *DATASET* "DS1")
+(defparameter *ATTRIBUTE* "A1")
 (defparameter *DIM0*    2)
 (defparameter *LENA*    4)
 (defparameter *LENB*    1)
@@ -302,15 +302,17 @@
 			file "Ambient_Temperature" :H5R-DATASET-REGION shape)
 	     (h5sclose shape))
 	   (let* ((vehicletype (create-vehicletype))
-		  ;; Create dataspace. Setting maximum size to NULL sets the
-		  ;; maximum size to be the current size.
-		  (space (h5ex:create-simple-dataspace `(,*DIM0*)))
-		  ;; Create the dataset
-		  (dset (h5dcreate2 file *DATASET* vehicletype space
-				    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
-	     ;; Finally, write the compound data to it.
-	     (h5dwrite dset vehicletype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
-	     (h5ex:close-handles (list dset space vehicletype))))
+                  ;; Create dataset with a null dataspace. to serve as the
+                  ;; parent for the attribute.
+                  (dspace (h5ex:create-null-dataspace))
+                  (dset (h5dcreate2 file *DATASET* +H5T-STD-I32LE+ dspace
+                                    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+))
+		  (aspace (h5ex:create-simple-dataspace `(,*DIM0*)))
+                    ;; Create the attribute and write the compound data to it.
+		  (attr (h5acreate2 dset *ATTRIBUTE* vehicletype aspace
+				    +H5P-DEFAULT+ +H5P-DEFAULT+)))
+             (h5awrite attr vehicletype wdata)
+             (h5ex:close-handles (list attr aspace dset dspace vehicletype))))
       (cffi:foreign-free ptrB)
       (cffi:foreign-free ptrA)
       (h5ex:close-handles (list file fapl)))))
@@ -324,8 +326,9 @@
 		   (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
     (unwind-protect
 	 (let* ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
+                (attr (h5aopen dset *ATTRIBUTE* +H5P-DEFAULT+))
 		(rvehicletype (create-rvehicletype))
-		(space (h5dget-space dset)))
+		(space (h5aget-space attr)))
 	   (setf (cffi:mem-ref ndims 'hsize-t 0)
 		 (h5sget-simple-extent-dims space dims +NULL+))
 	   ;;	Allocate memory for read buffer.
@@ -333,8 +336,7 @@
 					    :count (cffi:mem-aref dims
 								  'hsize-t 0))))
 	     ;; Read the data.
-	     (h5dread dset rvehicletype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
-		      rdata)
+             (h5aread attr rvehicletype rdata)
 	     ;; Output the data to the screen.
 	     (dotimes (i *DIM0*)
 	       (let* ((rdata-ptr
@@ -342,7 +344,7 @@
 		      (rdata-sensors-ptr
 		       (cffi:foreign-slot-pointer
 			rdata-ptr '(:struct rvehicle-t) 'sensors)))
-		 (format t "~a[~d]:~%" *DATASET* i)
+		 (format t "~a[~d]:~%" *ATTRIBUTE* i)
 		 (format t "   Vehicle name :~%      ~a~%"
 			 (cffi:foreign-slot-value
 			  rdata-ptr '(:struct rvehicle-t) 'name))
@@ -362,7 +364,7 @@
 	     (h5dvlen-reclaim rvehicletype space +H5P-DEFAULT+ rdata)
 	     (cffi:foreign-free rdata))
 	     
-	   (h5ex:close-handles (list space rvehicletype dset)))
+	   (h5ex:close-handles (list space rvehicletype attr dset)))
       (h5ex:close-handles (list file fapl)))))
 
 #+sbcl(sb-ext:exit)
