@@ -40,9 +40,8 @@
           (t (error (format nil "Can't close handle. ~a~%" type))))))
 
 (defun close-handles (handles)
+  (declare (type list handles))
   "Close a list of handles"
-  (unless (listp handles)
-    (error "List expected."))
   (dolist (h handles)
     (close-handle h)))
 

@@ -160,7 +160,7 @@
   (dtype-id   hid-t)
   (field-name :string))
 
-(cffi:defcfun "H5Tget_member_name" :string
+(cffi:defcfun "H5Tget_member_name" (:pointer :char)
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-GetMemberName"
   (dtype-id  hid-t)
   (field-idx :uint))
