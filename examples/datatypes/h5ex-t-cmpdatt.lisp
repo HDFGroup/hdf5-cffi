@@ -18,6 +18,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -33,13 +34,9 @@
   (temperature :double)
   (pressure    :double))
 
-(defun create-stringtype ()
-  (let ((result (h5tcopy +H5T-C-S1+)))
-    (h5tset-size result +H5T-VARIABLE+)
-    result))
 
 (defun create-memtype ()
-  (let ((strtype (create-stringtype))
+  (let ((strtype (h5ex:create-c-string-type))
 	(result (h5tcreate :H5T-COMPOUND
 			   (cffi:foreign-type-size '(:struct sensor-t)))))
     (h5tinsert result "Serial number"
@@ -57,6 +54,7 @@
     (h5tclose strtype)
     result))
 
+
 (defun create-filetype ()
 
   ;; Create the compound datatype for the file. Because the
@@ -64,7 +62,7 @@
   ;; sizes than the corresponding native types, we must manually
   ;; calculate the offset of each member.
 	
-  (let ((strtype (create-stringtype))
+  (let ((strtype (h5ex:create-c-string-type))
 	(result (h5tcreate :H5T-COMPOUND
 			   (+ 8 (cffi:foreign-type-size '(:struct hvl-t)) 8
 			      8))))
@@ -81,11 +79,8 @@
     result))
 
 
-(cffi:with-foreign-objects ((dims  'hsize-t 1)
-			    (wdata '(:struct sensor-t) *DIM0*))
+(cffi:with-foreign-object (wdata '(:struct sensor-t) *DIM0*)
   
-  (setf (cffi:mem-aref dims 'hsize-t 0) *DIM0*)
-
   ;; Initialize data.
   (let ((wdata[0] (cffi:mem-aptr wdata '(:struct sensor-t) 0))
 	(wdata[1] (cffi:mem-aptr wdata '(:struct sensor-t) 1))
@@ -113,26 +108,19 @@
 	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
     (unwind-protect
-	 (let* ((space (h5screate :H5S-NULL))
-		(dset (h5dcreate2 file *DATASET* +H5T-STD-I32LE+ space
+	 (let* ((dspace (h5ex:create-null-dataspace))
+		(dset (h5dcreate2 file *DATASET* +H5T-STD-I32LE+ dspace
 				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+))
 		(filetype (create-filetype))
-		(attr (progn (h5sclose space)
-			     (setq space (h5screate-simple 1 dims +NULL+))
-			     (h5acreate2 dset *ATTRIBUTE* filetype space
-					 +H5P-DEFAULT+ +H5P-DEFAULT+)))
+                (aspace (h5ex:create-simple-dataspace `(,*DIM0*)))
+		(attr (h5acreate2 dset *ATTRIBUTE* filetype aspace
+                                  +H5P-DEFAULT+ +H5P-DEFAULT+))
 		(memtype (create-memtype)))
 	   (h5awrite attr memtype wdata)
 
 	   ;; Close and release resources.
-	   (h5tclose memtype)
-	   (h5aclose attr)
-	   (h5tclose filetype)
-	   (h5dclose dset)
-	   (h5sclose space))
-
-      (h5fclose file)
-      (h5pclose fapl))))
+	   (h5ex:close-handles (list memtype attr aspace filetype dset dspace)))
+      (h5ex:close-handles (list file fapl)))))
 
 ;; Now we begin the read section of this example. Here we assume
 ;; the attribute has the same name and rank, but can have any size.
@@ -171,12 +159,7 @@
 	     (h5dvlen-reclaim memtype space +H5P-DEFAULT+ rdata)
 	     (cffi:foreign-free rdata))
 	   
-	   (h5tclose memtype)
-	   (h5sclose space)
-	   (h5aclose attr)
-	   (h5dclose dset))
-      
-      (h5fclose file)
-      (h5pclose fapl))))
+	   (h5ex:close-handles (list memtype space attr dset)))
+      (h5ex:close-handles (list file fapl)))))
 
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)
