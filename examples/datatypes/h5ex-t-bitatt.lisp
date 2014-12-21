@@ -18,6 +18,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -63,26 +64,17 @@
 		   (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
     (unwind-protect
 	 ;; Create dataset with null dataspace.
-	 (let* ((space (h5screate :H5S-NULL))
-		(dset (h5dcreate2 file *DATASET* +H5T-STD-I32LE+ space
-				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
-	   (h5sclose space)
-	   ;; Create dataspace. Setting maximum size to NULL sets the maximum
-	   ;; size to be the current size.
-	   (setq space (h5screate-simple 2 dims +NULL+))
-	   
-	   ;; Create the attribute and write the bitfield data to it.
-	   (let ((attr (h5acreate2 dset *ATTRIBUTE* +H5T-STD-B8BE+ space
-				   +H5P-DEFAULT+ +H5P-DEFAULT+)))
-	     (h5awrite attr +H5T-NATIVE-B8+ wdata)
-	     (h5aclose attr))
-
+	 (let* ((dspace (h5ex:create-null-dataspace))
+		(dset (h5dcreate2 file *DATASET* +H5T-STD-I32LE+ dspace
+				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+))
+                (aspace (h5ex:create-simple-dataspace `(,*DIM0* ,*DIM1*)))
+                ;; Create the attribute and write the bitfield data to it.
+                (attr (h5acreate2 dset *ATTRIBUTE* +H5T-STD-B8BE+ aspace
+                                  +H5P-DEFAULT+ +H5P-DEFAULT+)))
+           (h5awrite attr +H5T-NATIVE-B8+ wdata)
 	   ;; Close and release resources.
-	   (h5dclose dset)
-	   (h5sclose space))
-
-      (h5fclose file)
-      (h5pclose fapl)))
+           (h5ex:close-handles (list attr aspace dset dspace)))
+      (h5ex:close-handles (list file fapl))))
 
   ;; Now we begin the read section of this example.  Here we assume
   ;; the dataset and array have the same name and rank, but can
@@ -124,11 +116,7 @@
 		   (format t " ]~%")))))
 	       
 	   ;; Close and release resources.
-	   (h5sclose space)
-	   (h5aclose attr)
-	   (h5dclose dset))
-      
-      (h5fclose file)
-      (h5pclose fapl))))
+	   (h5ex:close-handles (list space attr dset)))
+      (h5ex:close-handles (list file fapl)))))
 		
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)
