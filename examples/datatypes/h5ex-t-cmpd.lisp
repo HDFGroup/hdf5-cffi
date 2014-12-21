@@ -18,6 +18,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -33,9 +34,7 @@
 
 
 (defun create-memtype ()
-  (let ((strtype (let ((tmp (h5tcopy +H5T-C-S1+)))
-		   (h5tset-size tmp +H5T-VARIABLE+)
-		   tmp))
+  (let ((strtype (h5ex:create-c-string-type))
 	(result (h5tcreate :H5T-COMPOUND
 			   (cffi:foreign-type-size '(:struct sensor-t)))))
     (h5tinsert result "Serial number"
@@ -61,9 +60,7 @@
   ;; sizes than the corresponding native types, we must manually
   ;; calculate the offset of each member.
 	
-  (let ((strtype (let ((tmp (h5tcopy +H5T-C-S1+)))
-		   (h5tset-size tmp +H5T-VARIABLE+)
-		   tmp))
+  (let ((strtype (h5ex:create-c-string-type))
 	(result (h5tcreate :H5T-COMPOUND
 			   (+ 8 (cffi:foreign-type-size '(:struct hvl-t)) 8
 			      8))))
@@ -116,20 +113,15 @@
 		(filetype (create-filetype))
 		;; Create dataspace. Setting maximum size to NULL sets the
 		;; maximum size to be the current size.
-		(space (h5screate-simple 1 dims +NULL+))
+		(space (h5ex:create-simple-dataspace `(,*DIM0*)))
 		;; Create the dataset and write the compound data to it.
 		(dset (h5dcreate2 file *DATASET* filetype space +H5P-DEFAULT+
 				  +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	   (h5dwrite dset memtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
 
 	   ;; Close and release resources.
-	   (h5dclose dset)
-	   (h5sclose space)
-	   (h5tclose filetype)
-	   (h5tclose memtype))
-
-      (h5fclose file)
-      (h5pclose fapl))))
+	   (h5ex:close-handles (list dset space filetype memtype)))
+      (h5ex:close-handles (list file fapl)))))
 
 ;; Now we begin the read section of this example. Here we assume
 ;; the dataset has the same name and rank, but can have any size.
@@ -167,10 +159,7 @@
 	     (h5dvlen-reclaim memtype space +H5P-DEFAULT+ rdata)
 	     (cffi:foreign-free rdata))
 	   
-	   (h5tclose memtype)
-	   (h5sclose space)
-	   (h5dclose dset))
-      (h5fclose file)
-      (h5pclose fapl))))
+	   (h5ex:close-handles (list memtype space dset)))
+      (h5ex:close-handles (list file fapl)))))
 
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)
