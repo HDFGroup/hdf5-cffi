@@ -18,6 +18,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -53,36 +54,23 @@
   
   ;; Create a new file using the default properties.
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
     (unwind-protect
 	 ;; Create array datatypes for file and memory.
 	 (let* ((filetype (h5tarray-create2 +H5T-STD-I64LE+ 2 adims))
 		(memtype (h5tarray-create2 +H5T-NATIVE-INT+ 2 adims))
 		;; Create dataset with a null dataspace.
-		(space (h5screate :H5S-NULL))
-		(dset (h5dcreate2 file *DATASET* +H5T-STD-I32LE+ space
-				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
-	   (h5sclose space)
-
-	   ;; Create dataspace. Setting maximum size to NULL sets the maximum
-	   ;; size to be the current size.
-	   (setq space (h5screate-simple 1 dims +NULL+))
-	   
-	   ;; Create the attribute and write the array data to it.
-	   (let ((attr (h5acreate2 dset *ATTRIBUTE* filetype space
-				   +H5P-DEFAULT+ +H5P-DEFAULT+)))
-	     (h5awrite attr memtype wdata)
-	     (h5aclose attr))
-	     
-	   (h5dclose dset)
-	   (h5sclose space)
-	   (h5tclose memtype)
-	   (h5tclose filetype))
-
-      (h5fclose file)
-      (h5pclose fapl)))
+		(dspace (h5ex:create-null-dataspace))
+		(dset (h5dcreate2 file *DATASET* +H5T-STD-I32LE+ dspace
+				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+))
+                (aspace (h5ex:create-simple-dataspace `(,*DIM0*)))
+                ;; Create the attribute and write the array data to it.
+                (attr (h5acreate2 dset *ATTRIBUTE* filetype aspace
+                                  +H5P-DEFAULT+ +H5P-DEFAULT+)))
+           (h5awrite attr memtype wdata)
+           (h5ex:close-handles (list attr aspace dset dspace memtype filetype)))
+      (h5ex:close-handles (list file fapl))))
 
   ;; Now we begin the read section of this example.  Here we assume
   ;; the attribute and array have the same name and rank, but can
@@ -90,8 +78,7 @@
   ;; in data dynamically.
 
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
     (unwind-protect
 	 (let* ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
@@ -130,12 +117,7 @@
 	       (h5tclose memtype)))
 
 	   ;; Close and release resources.
-	   (h5sclose space)
-	   (h5tclose filetype)
-	   (h5aclose attr)
-	   (h5dclose dset))
-      
-      (h5fclose file)
-      (h5pclose fapl))))
+	   (h5ex:close-handles (list space filetype attr dset)))
+      (h5ex:close-handles (list file fapl)))))
 		
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)
