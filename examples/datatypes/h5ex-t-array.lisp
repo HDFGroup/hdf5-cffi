@@ -18,6 +18,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -52,8 +53,7 @@
   
   ;; Create a new file using the default properties.
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
     (unwind-protect
 	 ;; Create array datatypes for file and memory.
@@ -61,20 +61,15 @@
 		(memtype (h5tarray-create2 +H5T-NATIVE-INT+ 2 adims))
 		;; Create dataspace. Setting maximum size to NULL sets the
 		;; maximum size to be the current size.
-		(space (h5screate-simple 1 dims +NULL+))
+		(space (h5ex:create-simple-dataspace `(,*DIM0*)))
 		;; Create the dataset and write the array data to it.
 		(dset (h5dcreate2 file *DATASET* filetype space +H5P-DEFAULT+
 				  +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	   (h5dwrite dset memtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
 
 	   ;; Close and release resources.
-	   (h5dclose dset)
-	   (h5sclose space)
-	   (h5tclose memtype)
-	   (h5tclose filetype))
-
-      (h5fclose file)
-      (h5pclose fapl)))
+	   (h5ex:close-handles (list dset space memtype filetype)))
+      (h5ex:close-handles (list file fapl))))
 
   ;; Now we begin the read section of this example.  Here we assume
   ;; the dataset and array have the same name and rank, but can
@@ -82,15 +77,13 @@
   ;; in data dynamically.
 
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
     (unwind-protect
 	 (let* ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
 		(filetype (h5dget-type dset))
-		(space (h5dget-space dset))
-		(ndims (h5sget-simple-extent-dims space dims +NULL+)))
-
+		(space (h5dget-space dset)))
+           
 	   ;; Get the array datatype dimensions.
 	   (h5tget-array-dims2 filetype adims)
 	   
@@ -123,11 +116,7 @@
 	       (h5tclose memtype)))
 
 	   ;; Close and release resources.
-	   (h5sclose space)
-	   (h5tclose filetype)
-	   (h5dclose dset))
-      
-      (h5fclose file)
-      (h5pclose fapl))))
+	   (h5ex:close-handles (list space filetype dset)))
+      (h5ex:close-handles (list file fapl)))))
 		
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)
