@@ -20,6 +20,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -31,27 +32,7 @@
 (defparameter *CHUNK1* 8)
 
 
-(defun pos (cols i j)
-  "2D array access function"
-  (+ (* cols i) j))
-
-
-(defun min-max (data)
-  "Returns the minimum and maximum values of a double array."
-  (let ((min (cffi:mem-aref data :double 0))
-	(max (cffi:mem-aref data :double 0)))
-    (dotimes (i *DIM0*)
-      (dotimes (j *DIM1*)
-	(let ((value (cffi:mem-aref data :double (pos *DIM1* i j))))
-	  (if (< max value)
-	      (setq max value))
-	  (if (> min value)
-	      (setq min value)))))
-    (values min max)))
-
-
-(cffi:with-foreign-objects ((dims 'hsize-t 2)
-			    (chunk 'hsize-t 2)
+(cffi:with-foreign-objects ((chunk 'hsize-t 2)
 			    (filter-info :unsigned-int 1)
 			    (flags :unsigned-int 1)
 			    (nelmts 'size-t 1)
@@ -77,60 +58,53 @@
   ;; Initialize data.
   (dotimes (i *DIM0*)
     (dotimes (j *DIM1*)
-      (setf (cffi:mem-aref wdata :double (pos *DIM1* i j))
+      (setf (cffi:mem-aref wdata :double (h5ex:pos2D *DIM1* i j))
 	    (+ (/ (1+ i) (+ j 0.3d0)) j))))
 
   ;; Print the minimum and maximum values.
-  (multiple-value-bind (min max)
-      (min-max wdata)
-    (format t "Minimum value in write buffer is: ~a~%" min)
-    (format t "Maximum value in write buffer is: ~a~%" max))
+  (format t "Maximum value in write buffer is: ~a~%"
+          (reduce #'max
+                  (mapcar #'(lambda (i) (cffi:mem-aref wdata :double i))
+                          (loop for i from 0 to (1- (* *DIM0* *DIM1*))
+                             collect i))))
+  (format t "Minimum value in write buffer is: ~a~%"
+          (reduce #'min
+                  (mapcar #'(lambda (i) (cffi:mem-aref wdata :double i))
+                          (loop for i from 0 to (1- (* *DIM0* *DIM1*))
+                             collect i))))
 
   ;; Create a new file using the default properties.
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
     (unwind-protect
-	 (let* ((space
-		 (prog2
-		     (setf (cffi:mem-aref dims 'hsize-t 0) *DIM0*
-			   (cffi:mem-aref dims 'hsize-t 1) *DIM1*)
-		     ;; Create dataspace. Setting maximum size to NULL
-		     ;;sets the maximum size to be the current size.
-		     (h5screate-simple 2 dims +NULL+)))
+	 (let* ((space (h5ex:create-simple-dataspace `(,*DIM0* ,*DIM1*)))
 		(dcpl (h5pcreate +H5P-DATASET-CREATE+))
 		;; Create the dataset using the dataset creation property
 		;; list.
-		(dset
-		 (progn
-		   ;; Create the dataset creation property list, add the
-		   ;; Scale-Offset filter and set the chunk size.
-		   (h5pset-scaleoffset dcpl :H5Z-SO-FLOAT-DSCALE 2)
-		   (setf (cffi:mem-aref chunk 'hsize-t 0) *CHUNK0*
-			 (cffi:mem-aref chunk 'hsize-t 1) *CHUNK1*)
-		   (h5pset-chunk dcpl 2 chunk)
-		   ;; Create the chunked dataset.
-		   (h5dcreate2 file *DATASET* +H5T-IEEE-F64LE+ space
-			       +H5P-DEFAULT+ dcpl +H5P-DEFAULT+))))
+		(dset (progn
+                        ;; Create the dataset creation property list, add the
+                        ;; Scale-Offset filter and set the chunk size.
+                        (h5pset-scaleoffset dcpl :H5Z-SO-FLOAT-DSCALE 2)
+                        (setf (cffi:mem-aref chunk 'hsize-t 0) *CHUNK0*
+                              (cffi:mem-aref chunk 'hsize-t 1) *CHUNK1*)
+                        (h5pset-chunk dcpl 2 chunk)
+                        ;; Create the chunked dataset.
+                        (h5dcreate2 file *DATASET* +H5T-IEEE-F64LE+ space
+                                    +H5P-DEFAULT+ dcpl +H5P-DEFAULT+))))
 	   
 	   ;; Write the data to the dataset.
 	   (h5dwrite dset +H5T-NATIVE-DOUBLE+ +H5S-ALL+ space +H5P-DEFAULT+
 		     wdata)
 
 	   ;; Close and release resources.
-	   (h5dclose dset)
-	   (h5pclose dcpl)
-	   (h5sclose space))
-      
-      (h5fclose file)
-      (h5pclose fapl)))
+	   (h5ex:close-handles (list dset dcpl space)))
+      (h5ex:close-handles (list file fapl))))
 
   ;; Now we begin the read section of this example.
 
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
     (unwind-protect
 	 (let* ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
@@ -138,10 +112,9 @@
 		;; Retrieve and print the filter type. Here we only retrieve
 		;; the first filter because we know that we only added one
 		;; filter.
-		(filter-type (prog2
-				 (setf (cffi:mem-ref nelmts 'size-t) 0)
+		(filter-type (prog2 (setf (cffi:mem-ref nelmts 'size-t) 0)
 				 (h5pget-filter2 dcpl 0 flags nelmts +NULL+
-					     0 +NULL+ filter-info))))
+                                                 0 +NULL+ filter-info))))
 	   (format t "Filter type is: ")
 	   (cond ((eql filter-type +H5Z-FILTER-DEFLATE+)
 		  (format t "H5Z_FILTER_DEFLATE~%"))
@@ -157,21 +130,26 @@
 		  (format t "H5Z_FILTER_SCALEOFFSET~%")))
 
 	   ;; Read the data using the default properties.
-	   (h5dread dset +H5T-NATIVE-DOUBLE+ +H5S-ALL+ +H5S-ALL+
-		    +H5P-DEFAULT+ rdata)
+           (h5dread dset +H5T-NATIVE-DOUBLE+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
+                    rdata)
 
 	   ;; Find the minimum and maximum values in the dataset, to verify
 	   ;; that it was read correctly.
-	   (multiple-value-bind (min max)
-	       (min-max wdata)
-	     (format t "Minimum value in write buffer is: ~a~%" min)
-	     (format t "Maximum value in write buffer is: ~a~%" max))
-	
+           (format t "Maximum value in ~a is: ~a~%" *DATASET*
+                   (reduce #'max
+                           (mapcar #'(lambda (i)
+                                       (cffi:mem-aref wdata :double i))
+                                   (loop for i from 0 to (1- (* *DIM0* *DIM1*))
+                                      collect i))))
+           (format t "Minimum value in ~a is: ~a~%" *DATASET*
+                   (reduce #'min
+                           (mapcar #'(lambda (i)
+                                       (cffi:mem-aref wdata :double i))
+                                   (loop for i from 0 to (1- (* *DIM0* *DIM1*))
+                                      collect i))))
+           
 	   ;; Close and release resources.
-	   (h5pclose dcpl)
-	   (h5dclose dset))
+	   (h5ex:close-handles (list dcpl dset)))
+      (h5ex:close-handles (list file fapl)))))
       
-      (h5fclose file)
-      (h5pclose fapl))))
-      
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)
