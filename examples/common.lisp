@@ -19,7 +19,8 @@
            create-c-string-type
            create-c-string-type-utf8
            create-f-string-type
-           create-f-string-type-utf8))
+           create-f-string-type-utf8
+           pos2D))
 
 (in-package :h5ex)
 
@@ -130,3 +131,11 @@
   (let ((result (create-f-string-type length)))
     (hdf5:h5tset-cset result :H5T-CSET-UTF8)
     result))
+
+;; array access
+
+(defun pos2D (cols i j)
+  (declare (optimize (speed 3) (safety 0)))
+  (declare (fixnum cols i j))
+  "2D array access function"
+  (the fixnum (+ (the fixnum (* cols i)) j)))

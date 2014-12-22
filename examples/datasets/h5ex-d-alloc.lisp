@@ -31,11 +31,6 @@
 (defparameter *DIM1* 7)
 
 
-(defun pos (cols i j)
-  "2D array access function"
-  (+ (* cols i) j))
-
-
 (defun print-space-status-et-storage-size (dset name)
   (cffi:with-foreign-object (space-status 'h5d-space-status-t 1)
     (h5dget-space-status dset space-status)
@@ -53,7 +48,7 @@
   ;; initialize data
   (dotimes (i *DIM0*)
     (dotimes (j *DIM1*)
-      (setf (cffi:mem-aref wdata :int (pos *DIM1* i j)) (- (* i j) j))))
+      (setf (cffi:mem-aref wdata :int (h5ex:pos2D *DIM1* i j)) (- (* i j) j))))
 
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
 	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
