@@ -1,4 +1,4 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -14,6 +14,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -22,10 +23,8 @@
 ;;; Create a new file using the default properties.
 
 (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-       (file (prog2
-		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+       (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		 (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
-  
   (unwind-protect
        (progn
 	 ;; Create a group named "G1" in the file.
@@ -34,8 +33,6 @@
 	 ;; Re-open the group, obtaining a new handle.
 	 (let ((group (h5gopen2 file "/G1" +H5P-DEFAULT+)))
 	   (h5gclose group)))
-	
-	(h5fclose file)
-	(h5pclose fapl)))
+    (h5ex:close-handles (list file fapl))))
 
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)

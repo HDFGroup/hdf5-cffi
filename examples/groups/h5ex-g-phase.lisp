@@ -1,4 +1,4 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -16,6 +16,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -41,66 +42,61 @@
 
   ;; Set file access property list to allow the latest file format.
   ;; This will allow the library to create new format groups.
-  
+
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
 	 (file (progn
 		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		 (h5pset-libver-bounds fapl :H5F-LIBVER-LATEST
 				       :H5F-LIBVER-LATEST)
 		 (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
-  
+
     (unwind-protect
-	 (progn
-	   ;; Create group access property list and set the phase change
-	   ;; conditions.  In this example we lowered the conversion
-	   ;; threshold to simplify the output, though this may not be
-	   ;; optimal.
+	 ;; Create group access property list and set the phase change
+	 ;; conditions.  In this example we lowered the conversion
+	 ;; threshold to simplify the output, though this may not be
+	 ;; optimal.
 
-	   (let* ((gcpl (h5pcreate +H5P-GROUP-CREATE+))
-		  (group (prog2
-			     (h5pset-link-phase-change
-			      gcpl *MAX-COMPACT* *MIN-DENSE*)
-			     (h5gcreate2 file "G0" +H5P-DEFAULT+
-					 gcpl +H5P-DEFAULT+))))
-	       
-	     ;; Add subgroups to "group" one at a time, print the storage
-	     ;; type for "group" after each subgroup is created.
-	     (dotimes (i *MAX-GROUPS*)
+	 (let* ((gcpl (h5pcreate +H5P-GROUP-CREATE+))
+		(group (prog2 (h5pset-link-phase-change
+			       gcpl *MAX-COMPACT* *MIN-DENSE*)
+			   (h5gcreate2 file "G0" +H5P-DEFAULT+ gcpl
+				       +H5P-DEFAULT+))))
 
-	       ;; Define the subgroup name and create the subgroup.
-	       (cffi:with-foreign-string (name (format nil "G~a" (1+ i)))
-		 (h5gclose (h5gcreate2 group name +H5P-DEFAULT+
-				       +H5P-DEFAULT+ +H5P-DEFAULT+)))
+	   ;; Add subgroups to "group" one at a time, print the storage
+	   ;; type for "group" after each subgroup is created.
+	   (dotimes (i *MAX-GROUPS*)
 
-	       ;; Obtain the group info and print the group storage type
-	       (h5gget-info group ginfo)
+	     ;; Define the subgroup name and create the subgroup.
+	     (cffi:with-foreign-string (name (format nil "G~a" (1+ i)))
+	       (h5gclose (h5gcreate2 group name +H5P-DEFAULT+
+				     +H5P-DEFAULT+ +H5P-DEFAULT+)))
 
-	       (cffi:with-foreign-slots ((nlinks storage-type)
-					 ginfo (:struct h5g-info-t))
-		 (print-groups-storage-type nlinks storage-type)))
+	     ;; Obtain the group info and print the group storage type
+	     (h5gget-info group ginfo)
 
-	     (format t "~%")
+	     (cffi:with-foreign-slots ((nlinks storage-type)
+				       ginfo (:struct h5g-info-t))
+	       (print-groups-storage-type nlinks storage-type)))
 
-	     ;; Delete subgroups one at a time, print the storage type for
-	     ;; "group" after each subgroup is deleted.
-	     (dotimes (i *MAX-GROUPS*)
+	   (format t "~%")
 
-	       ;; Define the subgroup name and delete the subgroup.
-	       (cffi:with-foreign-string (name (format nil "G~a"
-						       (- *MAX-GROUPS* i)))
-		 (h5ldelete group name +H5P-DEFAULT+))
+	   ;; Delete subgroups one at a time, print the storage type for
+	   ;; "group" after each subgroup is deleted.
+	   (dotimes (i *MAX-GROUPS*)
 
-	       ;; Obtain the group info and print the group storage type
-	       (h5gget-info group ginfo)
+	     ;; Define the subgroup name and delete the subgroup.
+	     (cffi:with-foreign-string (name (format nil "G~a"
+						     (- *MAX-GROUPS* i)))
+	       (h5ldelete group name +H5P-DEFAULT+))
 
-	       (cffi:with-foreign-slots ((nlinks storage-type)
-					 ginfo (:struct h5g-info-t))
-		 (print-groups-storage-type nlinks storage-type)))
+	     ;; Obtain the group info and print the group storage type
+	     (h5gget-info group ginfo)
 
-	     (h5gclose group)
-	     (h5pclose gcpl)))
-      
-      (h5fclose file)
-      (h5pclose fapl))))
+	     (cffi:with-foreign-slots ((nlinks storage-type)
+				       ginfo (:struct h5g-info-t))
+	       (print-groups-storage-type nlinks storage-type)))
 
-#+sbcl(sb-ext:quit)
+	   (h5ex:close-handles (list group gcpl)))
+      (h5ex:close-handles (list file fapl)))))
+
+#+sbcl(sb-ext:exit)

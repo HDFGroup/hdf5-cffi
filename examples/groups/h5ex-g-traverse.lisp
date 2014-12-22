@@ -1,4 +1,4 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -13,12 +13,13 @@
 ;;; the recursion will not enter an infinite loop, but does
 ;;; not prevent objects from being visited more than once.
 ;;; The program prints the directory structure of the file
-;;; specified in FILE.  
+;;; specified in FILE.
 
 ;;; http://www.hdfgroup.org/ftp/HDF5/examples/examples-by-api/hdf5-examples/1_8/C/H5G/h5ex_g_traverse.c
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -73,7 +74,7 @@
 	;; Get type of the object and display its name and type.
 	;; The name of the object is passed to this function by
 	;; the Library.
-	  
+
 	(h5oget-info-by-name loc-id name infobuf +H5P-DEFAULT+)
 	(format t "~VA" spaces #\Space)
 
@@ -109,12 +110,10 @@
 			    (od '(:struct opdata) 1))
 
   ;; Open file and initialize the operator data structure.
-    
+
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
-  
     (unwind-protect
 	 (progn
 	   (h5oget-info file infobuf)
@@ -123,14 +122,10 @@
 		   prev +NULL+
 		   addr (cffi:foreign-slot-value
 			 infobuf '(:struct h5o-info-t) 'addr)))
-	     
 	   (format t "/ {~%")
 	   (h5literate file :H5-INDEX-NAME :H5-ITER-NATIVE
 		       +NULL+ (cffi:callback op-func) od)
 	   (format t "}~%"))
+      (h5ex:close-handles (list file fapl)))))
 
-      (h5fclose file)
-      (h5pclose fapl))))
-
-
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)

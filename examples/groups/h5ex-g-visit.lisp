@@ -1,4 +1,4 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -17,6 +17,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -38,7 +39,7 @@
 	  ((eql type :H5O-TYPE-NAMED-DATATYPE)
 	   (format t "~a  (Datatype)~%" name))
 	  (t (format t "~a  (Unknown)~%" name))))))
-  
+
 ;;; the callback function for H5Ovisit
 
 (cffi:defcallback op-func herr-t
@@ -65,10 +66,8 @@
 
 (let*
     ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-     (file (prog2
-	       (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+     (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 	       (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
-
   (unwind-protect
        (progn
 	 (format t "Objects in the file:~%")
@@ -77,8 +76,6 @@
 	 (format t "~%Links in the file:~%")
 	 (h5lvisit file :H5-INDEX-NAME :H5-ITER-NATIVE
 		   (cffi:callback op-func-l) +NULL+)))
-    
-    (h5fclose file)
-    (h5pclose fapl))
+  (h5ex:close-handles (list file fapl)))
 
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)

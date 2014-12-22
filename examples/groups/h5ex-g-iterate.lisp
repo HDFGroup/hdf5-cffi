@@ -1,4 +1,4 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -14,6 +14,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -26,12 +27,12 @@
      (name          :string)
      (info          (:pointer (:struct h5l-info-t)))
      (operator-data :pointer))
-    
+
     (cffi:with-foreign-object (infobuf '(:struct h5o-info-t) 1)
       (h5oget-info-by-name loc-id name
 			   (cffi:mem-aptr infobuf '(:struct h5o-info-t) 0)
 			   +H5P-DEFAULT+)
-      
+
       ;; retrieve the object type and display the link name
       (cffi:with-foreign-slots ((type) infobuf (:struct h5o-info-t))
 	(cond
@@ -48,18 +49,14 @@
 
 (let*
     ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-     (file (prog2
-	       (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+     (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 	       (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
-  
   (unwind-protect
        (progn
 	 ;; iterate over the links and invoke the callback
 	 (format t "Objects in root group:~%")
 	 (h5literate file :H5-INDEX-NAME :H5-ITER-NATIVE
 		     +NULL+ (cffi:callback op-func) +NULL+))
+    (h5ex:close-handles (list file fapl))))
 
-    (h5fclose file)
-    (h5pclose fapl)))
-
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)

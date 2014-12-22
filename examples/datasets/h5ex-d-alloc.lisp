@@ -71,7 +71,7 @@
                 (dset2 (prog2 (h5pset-alloc-time dcpl :H5D-ALLOC-TIME-EARLY)
                            (h5dcreate2 file *DATASET2* +H5T-STD-I32LE+ space
                                        +H5P-DEFAULT+ dcpl +H5P-DEFAULT+))))
-           
+
            ;; Retrieve and print space status and storage size for dset1.
            (print-space-status-et-storage-size dset1 *DATASET1*)
            ;; Retrieve and print space status and storage size for dset2.
