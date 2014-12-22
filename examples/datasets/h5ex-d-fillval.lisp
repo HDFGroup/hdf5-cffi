@@ -21,6 +21,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -34,13 +35,8 @@
 (defparameter *CHUNK1* 4)
 (defparameter *FILLVAL* 99)
 
-(defun pos (cols i j)
-  "2D array access function"
-  (+ (* cols i) j))
 
-(cffi:with-foreign-objects ((dims 'hsize-t 2)
-			    (extdims 'hsize-t 2)
-			    (maxdims 'hsize-t 2)
+(cffi:with-foreign-objects ((extdims 'hsize-t 2)
 			    (chunk 'hsize-t 2)
 			    (wdata :int (* *DIM0* *DIM1*))
 			    (rdata :int (* *DIM0* *DIM1*))
@@ -49,87 +45,77 @@
   ;; initialize the data to be written
   (dotimes (i *DIM0*)
     (dotimes (j *DIM1*)
-      (setf (cffi:mem-aref wdata :int (pos *DIM1* i j)) (- (* i j) j))))
+      (setf (cffi:mem-aref wdata :int (h5ex:pos2D *DIM1* i j)) (- (* i j) j))))
 
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
     (unwind-protect
-	 (progn
-	   (let* ((space
-		   (prog2
-		       (setf (cffi:mem-aref dims 'hsize-t 0) *DIM0*
-			     (cffi:mem-aref dims 'hsize-t 1) *DIM1*
-			     (cffi:mem-aref maxdims 'hsize-t 0) +H5S-UNLIMITED+
-			     (cffi:mem-aref maxdims 'hsize-t 1) +H5S-UNLIMITED+)
-			     ;; Create dataspace with unlimited dimensions.
-		       (h5screate-simple 2 dims maxdims)))
-		  (dcpl (h5pcreate +H5P-DATASET-CREATE+))
-		  ;; Create the dataset using the dataset creation property
-		  ;; list.
-		  (dset
-		   (progn
-		     (setf (cffi:mem-aref chunk 'hsize-t 0) *CHUNK0*
-			   (cffi:mem-aref chunk 'hsize-t 1) *CHUNK1*)
-		     ;; Set the chunk size
-		     (h5pset-chunk dcpl 2 chunk)
-		     (setf (cffi:mem-aref fillval :int 0) 99)
-		     (h5pset-fill-value dcpl +H5T-NATIVE-INT+ fillval)
-		     ;; Set the allocation time to "early". This way we
-		     ;; can be sure that reading from the dataset
-		     ;; immediately after creation will return the fill value.
-		     (h5pset-alloc-time dcpl :H5D-ALLOC-TIME-EARLY)
-		     (h5dcreate2 file *DATASET* +H5T-STD-I32LE+ space
-				 +H5P-DEFAULT+ dcpl +H5P-DEFAULT+))))
+         (let* ((space (h5ex:create-simple-dataspace `(,*DIM0* ,*DIM1*)
+                                                     `(,+H5S-UNLIMITED+
+                                                       ,+H5S-UNLIMITED+)))
+                (dcpl (h5pcreate +H5P-DATASET-CREATE+))
+                ;; Create the dataset using the dataset creation property
+                ;; list.
+                (dset (progn
+                        (setf (cffi:mem-aref chunk 'hsize-t 0) *CHUNK0*
+                              (cffi:mem-aref chunk 'hsize-t 1) *CHUNK1*)
+                        ;; Set the chunk size
+                        (h5pset-chunk dcpl 2 chunk)
+                        (setf (cffi:mem-aref fillval :int 0) 99)
+                        (h5pset-fill-value dcpl +H5T-NATIVE-INT+ fillval)
+                        ;; Set the allocation time to "early". This way we
+                        ;; can be sure that reading from the dataset immediately
+                        ;; after creation will return the fill value.
+                        (h5pset-alloc-time dcpl :H5D-ALLOC-TIME-EARLY)
+                        (h5dcreate2 file *DATASET* +H5T-STD-I32LE+ space
+                                    +H5P-DEFAULT+ dcpl +H5P-DEFAULT+))))
 
-	     ;; Read values from the dataset, which has not been written to yet.
-	     (h5dread  dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
-		       rdata)
-	     ;; Output the data to the screen.
-	     (format t "Dataset before being written to:~%")
-	     (dotimes (i *DIM0*)
-	       (format t " [")
-	       (dotimes (j *DIM1*)
-		 (format t " ~3d" (cffi:mem-aref rdata :int (pos *DIM1* i j))))
-	       (format t "]~%"))
-	     ;; Write the data to the dataset
-	     (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
-		       wdata)
-	     
-	     ;; Read the data back
-	     (h5dread  dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
-		       rdata)
-	     ;; Output the data to the screen.
-	     (format t "~%Dataset after being written:~%")
-	     (dotimes (i *DIM0*)
-	       (format t " [")
-	       (dotimes (j *DIM1*)
-		 (format t " ~3d" (cffi:mem-aref rdata :int (pos *DIM1* i j))))
-	       (format t "]~%"))
+           ;; Read values from the dataset, which has not been written to yet.
+           (h5dread  dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
+                     rdata)
+           ;; Output the data to the screen.
+           (format t "Dataset before being written to:~%")
+           (dotimes (i *DIM0*)
+             (format t " [")
+             (dotimes (j *DIM1*)
+               (format t " ~3d" (cffi:mem-aref rdata :int
+                                               (h5ex:pos2D *DIM1* i j))))
+             (format t "]~%"))
+           ;; Write the data to the dataset
+           (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
+                     wdata)
+           
+           ;; Read the data back
+           (h5dread  dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
+                     rdata)
+           ;; Output the data to the screen.
+           (format t "~%Dataset after being written:~%")
+           (dotimes (i *DIM0*)
+             (format t " [")
+             (dotimes (j *DIM1*)
+               (format t " ~3d" (cffi:mem-aref rdata :int
+                                               (h5ex:pos2D *DIM1* i j))))
+             (format t "]~%"))
 
-	     ;; Extend the dataset.
-	     (setf (cffi:mem-aref extdims 'hsize-t 0) *EDIM0*
-		   (cffi:mem-aref extdims 'hsize-t 1) *EDIM1*)
-	     (h5dset-extent dset extdims)
-	     ;; Read from the extended dataset.
-	     (h5dread  dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
-		       rdata2)
-	     ;; Output the data to the screen.
-	     (format t "~%Dataset after extension:~%")
-	     (dotimes (i *EDIM0*)
-	       (format t " [")
-	       (dotimes (j *EDIM1*)
-		 (format t " ~3d" (cffi:mem-aref rdata2 :int
-						 (pos *EDIM1* i j))))
-	       (format t "]~%"))
-	     
-	     ;; Close and release resources.
-	     (h5dclose dset)
-	     (h5pclose dcpl)
-	     (h5sclose space)))
-      
-      (h5fclose file)
-      (h5pclose fapl))))
+           ;; Extend the dataset.
+           (setf (cffi:mem-aref extdims 'hsize-t 0) *EDIM0*
+                 (cffi:mem-aref extdims 'hsize-t 1) *EDIM1*)
+           (h5dset-extent dset extdims)
+           ;; Read from the extended dataset.
+           (h5dread  dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
+                     rdata2)
+           ;; Output the data to the screen.
+           (format t "~%Dataset after extension:~%")
+           (dotimes (i *EDIM0*)
+             (format t " [")
+             (dotimes (j *EDIM1*)
+               (format t " ~3d" (cffi:mem-aref rdata2 :int
+                                               (h5ex:pos2D *EDIM1* i j))))
+             (format t "]~%"))
+           
+           ;; Close and release resources.
+           (h5ex:close-handles (list dset dcpl space)))
+      (h5ex:close-handles (list file fapl)))))
 
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)
