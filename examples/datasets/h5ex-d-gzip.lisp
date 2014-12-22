@@ -124,7 +124,7 @@
            (format t "Maximum value in ~a is: ~a~%" *DATASET*
                    (reduce #'max
                            (mapcar #'(lambda (i) (cffi:mem-aref rdata :int i))
-                                   (loop for i from 0 to (* *DIM0* *DIM1*)
+                                   (loop for i from 0 to (1- (* *DIM0* *DIM1*))
                                       collect i))))
 
 	   ;; Close and release resources.
