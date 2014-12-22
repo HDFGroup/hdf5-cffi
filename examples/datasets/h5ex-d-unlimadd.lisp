@@ -91,8 +91,9 @@
 		   (h5fopen *FILE* +H5F-ACC-RDWR+ fapl))))
     (unwind-protect
 	 (let* ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
-		(space (h5dget-space dset))
-		(ndims (h5sget-simple-extent-dims space dims +NULL+))
+		(space (let ((tmp (h5dget-space dset)))
+                         (h5sget-simple-extent-dims tmp dims +NULL+)
+                         tmp))
 		(dims[0] (cffi:mem-aref dims 'hsize-t 0))
 		(dims[1] (cffi:mem-aref dims 'hsize-t 1)))
 	   
@@ -149,8 +150,9 @@
 		   (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
     (unwind-protect
 	 (let* ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
-		(space (h5dget-space dset))
-		(ndims (h5sget-simple-extent-dims space dims +NULL+))
+                (space (let ((tmp (h5dget-space dset)))
+                         (h5sget-simple-extent-dims tmp dims +NULL+)
+                         tmp))
 		(dims[0] (cffi:mem-aref dims 'hsize-t 0))
 		(dims[1] (cffi:mem-aref dims 'hsize-t 1)))
 
