@@ -19,6 +19,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -27,64 +28,49 @@
 (defparameter *DIM0* 4)
 (defparameter *DIM1* 7)
 
-(defun pos (cols i j)
-  "2D array access function"
-  (+ (* cols i) j))
 
-(cffi:with-foreign-objects ((dims 'hsize-t 2)
-			    (wdata :int (* *DIM0* *DIM1*))
+(cffi:with-foreign-objects ((wdata :int (* *DIM0* *DIM1*))
 			    (rdata :int (* *DIM0* *DIM1*)))
   ;; initialize the data to be written
   (dotimes (i *DIM0*)
     (dotimes (j *DIM1*)
-      (setf (cffi:mem-aref wdata :int (pos *DIM1* i j)) (- (* i j) j))))
+      (setf (cffi:mem-aref wdata :int (h5ex:pos2D *DIM1* i j)) (- (* i j) j))))
 
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
     (unwind-protect
-	 (progn
-	   (let* ((space (prog2
-			     (setf (cffi:mem-aref dims 'hsize-t 0) *DIM0*
-				   (cffi:mem-aref dims 'hsize-t 1) *DIM1*)
-			     ;; Create dataspace. Setting maximum size to NULL
-			     ;; sets the maximum size to be the current size.
-			     (h5screate-simple 2 dims +NULL+)))
-		  ;; Create the dataset. We will use all default properties for
-		  ;; this example.
-		  (dset (h5dcreate2 file *DATASET* +H5T-STD-I32BE+ space
-				    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
-	     ;; Write the data to the dataset
-	     (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
-		       wdata)
-	     ;; Close and release resources.
-	     (h5dclose dset)
-	     (h5sclose space)))
-      (h5fclose file)
-      (h5pclose fapl)))
+         (let* ((space (h5ex:create-simple-dataspace `(,*DIM0* ,*DIM1*)))
+                ;; Create the dataset. We will use all default properties for
+                ;; this example.
+                (dset (h5dcreate2 file *DATASET* +H5T-STD-I32BE+ space
+                                  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+           ;; Write the data to the dataset
+           (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
+                     wdata)
+           ;; Close and release resources.
+           (h5ex:close-handles (list dset space)))
+      (h5ex:close-handles (list file fapl))))
 
   ;; Open file and dataset using the default properties.
 
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
     (unwind-protect
-	 (progn
-	   (let ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+)))
-	     ;; Read the data using the default properties
-	     (h5dread  dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
-		       rdata)
-	     ;; Output the data to the screen.
-	     (format t "~a:~%" *DATASET*)
-	     (dotimes (i *DIM0*)
-	       (format t " [")
-	       (dotimes (j *DIM1*)
-		 (format t " ~3d" (cffi:mem-aref rdata :int (pos *DIM1* i j))))
-	       (format t "]~%"))
-	     (h5dclose dset)))
-      (h5fclose file)
-      (h5pclose fapl))))
+         (let ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+)))
+           ;; Read the data using the default properties
+           (h5dread  dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
+                     rdata)
+           ;; Output the data to the screen.
+           (format t "~a:~%" *DATASET*)
+           (dotimes (i *DIM0*)
+             (format t " [")
+             (dotimes (j *DIM1*)
+               (format t " ~3d" (cffi:mem-aref rdata :int
+                                               (h5ex:pos2D *DIM1* i j))))
+             (format t "]~%"))
+           (h5dclose dset))
+      (h5ex:close-handles (list file fapl)))))
 
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)
