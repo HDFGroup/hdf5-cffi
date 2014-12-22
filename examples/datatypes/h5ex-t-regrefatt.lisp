@@ -166,4 +166,4 @@
     
     (h5ex:close-handles (list file fapl))))
 
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)
