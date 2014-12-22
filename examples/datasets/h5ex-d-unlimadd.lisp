@@ -21,6 +21,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -34,22 +35,16 @@
 (defparameter *CHUNK1* 4)
 
 
-(defun pos (cols i j)
-  "2D array access function"
-  (+ (* cols i) j))
-
-
 (defun print-data (data rows cols)
   (dotimes (i rows)
     (format t " [")
     (dotimes (j cols)
-      (format t " ~3d" (cffi:mem-aref data :int (pos cols i j))))
+      (format t " ~3d" (cffi:mem-aref data :int (h5ex:pos2D cols i j))))
     (format t "]~%")))
 
 
 (cffi:with-foreign-objects ((dims 'hsize-t 2)
 			    (extdims 'hsize-t 2)
-			    (maxdims 'hsize-t 2)
 			    (chunk 'hsize-t 2)
 			    (start 'hsize-t 2)
 			    (count 'hsize-t 2)
@@ -58,23 +53,16 @@
   ;; initialize data
   (dotimes (i *DIM0*)
     (dotimes (j *DIM1*)
-      (setf (cffi:mem-aref wdata :int (pos *DIM1* i j)) (- (* i j) j))))
+      (setf (cffi:mem-aref wdata :int (h5ex:pos2D *DIM1* i j)) (- (* i j) j))))
 
   ;; Create a new file using the default properties.
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
     (unwind-protect
-	 (let* ((space (prog2
-			 (setf (cffi:mem-aref dims 'hsize-t 0) *DIM0*
-			       (cffi:mem-aref dims 'hsize-t 1) *DIM1*
-			       (cffi:mem-aref maxdims 'hsize-t 0)
-			       +H5S-UNLIMITED+
-			       (cffi:mem-aref maxdims 'hsize-t 1)
-			       +H5S-UNLIMITED+)
-			   ;; Create dataspace with unlimited dimensions.
-			   (h5screate-simple 2 dims maxdims)))
+	 (let* ((space (h5ex:create-simple-dataspace `(,*DIM0* ,*DIM1*)
+                                                     `(,+H5S-UNLIMITED+
+                                                       ,+H5S-UNLIMITED+)))
 		;; Create the dataset creation property list, and set the chunk
 		;; size.
 		(dcpl (let ((tmp (h5pcreate +H5P-DATASET-CREATE+)))
@@ -90,11 +78,8 @@
 		     wdata)
 	   
 	   ;; Close and release resources.
-	   (h5pclose dcpl)
-	   (h5dclose dset)
-	   (h5sclose space))
-      (h5fclose file)
-      (h5pclose fapl)))
+	   (h5ex:close-handles (list dcpl dset space)))
+      (h5ex:close-handles (list file fapl))))
 
   ;; In this next section we read back the data, extend the dataset,
   ;; and write new data to the extended portions.
@@ -102,8 +87,7 @@
   ;; Open file and dataset using the default properties.
 
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fopen *FILE* +H5F-ACC-RDWR+ fapl))))
     (unwind-protect
 	 (let* ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
@@ -134,7 +118,7 @@
 	   ;; Initialize data for writing to the extended dataset.
 	   (dotimes (i *EDIM0*)
 	     (dotimes (j *EDIM1*)
-	       (setf (cffi:mem-aref wdata2 :int (pos *EDIM1* i j)) j)))
+	       (setf (cffi:mem-aref wdata2 :int (h5ex:pos2D *EDIM1* i j)) j)))
 
 	   ;; Select the entire dataspace.
 	   (h5sselect-all space)
@@ -149,23 +133,19 @@
 		 (cffi:mem-aref count 'hsize-t 1)
 		 (cffi:mem-aref dims 'hsize-t 1))
 	   (h5sselect-hyperslab space :H5S-SELECT-NOTB start +NULL+ count
-				+NULL+)
+                                +NULL+)
 
 	   ;; Write the data to the selected portion of the dataset.
-	   (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ space +H5P-DEFAULT+
-		     wdata2)
+	   (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ space +H5P-DEFAULT+ wdata2)
 
 	   ;; Close and release resources.
-	   (h5sclose space)
-	   (h5dclose dset))
-      (h5fclose file)
-      (h5pclose fapl)))
+	   (h5ex:close-handles (list space dset)))
+      (h5ex:close-handles (list file fapl))))
 
   ;; Now we simply read back the data and output it to the screen.
   
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-	 (file (prog2
-		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
     (unwind-protect
 	 (let* ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
@@ -184,9 +164,7 @@
 	     (print-data rdata *EDIM0* *EDIM1*))
 
 	   ;; Close and release resources.
-	   (h5sclose space)
-	   (h5dclose dset))
-      (h5fclose file)
-      (h5pclose fapl))))
+	   (h5ex:close-handles (list space dset)))
+      (h5ex:close-handles (list file fapl)))))
 
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)
