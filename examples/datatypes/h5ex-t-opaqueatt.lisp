@@ -109,4 +109,4 @@
          (h5ex:close-handles (list dtype space attr dset)))
     (h5ex:close-handles (list file fapl))))
 
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)
