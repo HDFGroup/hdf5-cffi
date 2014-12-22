@@ -82,4 +82,4 @@
          (h5ex:close-handles (list memtype shape attr dset))
     (h5ex:close-handles (list file fapl)))))
 
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)
