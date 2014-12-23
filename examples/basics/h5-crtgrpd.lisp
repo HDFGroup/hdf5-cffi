@@ -1,4 +1,4 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -14,66 +14,49 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
 (defparameter *FILE* "groups.h5")
 
 (cffi:with-foreign-objects
-    ((dims 'hsize-t 2)
-     (dset1-data :int (* 3 3))
+    ((dset1-data :int (* 3 3))
      (dset2-data :int (* 2 10)))
-  
+
   ;; initialize the data of the first dataset
   (dotimes (i 3)
     (dotimes (j 3)
-      (setf (cffi:mem-aref dset1-data :int (+ (* i 3) j)) (1+ j))))
-  
+      (setf (cffi:mem-aref dset1-data :int (h5ex:pos2D 3 i j)) (1+ j))))
+
   ;; initialize the data of the second dataset
   (dotimes (i 2)
     (dotimes (j 10)
-      (setf (cffi:mem-aref dset2-data :int (+ (* i 10) j)) (1+ j))))
+      (setf (cffi:mem-aref dset2-data :int (h5ex:pos2D 10 i j)) (1+ j))))
 
-  (let*
-      ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-       (file (prog2
-		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		 (h5fopen *FILE* +H5F-ACC-RDWR+ fapl))))
-    
+  (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+		   (h5fopen *FILE* +H5F-ACC-RDWR+ fapl))))
     (unwind-protect
-	 
 	 (progn
 	   ;; create a first dataset in group '/MyGroup' 
-	   (let*
-	       ((shape (prog2
-			   (setf (cffi:mem-aref dims 'hsize-t 0) 3
-				 (cffi:mem-aref dims 'hsize-t 1) 3)
-			   (h5screate-simple 2 dims (cffi:null-pointer))))
-		(dset (h5dcreate2 file "/MyGroup/dset1" +H5T-STD-I32BE+ shape
-				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+	   (let* ((shape (h5ex:create-simple-dataspace '(3 3)))
+		  (dset (h5dcreate2 file "/MyGroup/dset1" +H5T-STD-I32BE+ shape
+				    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	     ;; write to the first dataset
 	     (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
 		       dset1-data)
-	     (h5dclose dset)
-	     (h5sclose shape))
+	     (h5ex:close-handles (list dset shape)))
 
 	   ;; create a second dataset in '/MyGroup/Group_A'
-	   (let*
-	       ((grp (h5gopen2 file "/MyGroup/Group_A" +H5P-DEFAULT+))
-		(shape (prog2
-			   (setf (cffi:mem-aref dims 'hsize-t 0) 2
-				 (cffi:mem-aref dims 'hsize-t 1) 10)
-			   (h5screate-simple 2 dims (cffi:null-pointer))))
-		(dset (h5dcreate2 grp "dset2" +H5T-STD-I32BE+ shape
-				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+	   (let* ((grp (h5gopen2 file "/MyGroup/Group_A" +H5P-DEFAULT+))
+		  (shape (h5ex:create-simple-dataspace '(2 10)))
+		  (dset (h5dcreate2 grp "dset2" +H5T-STD-I32BE+ shape
+				    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	     ;; write to the second dataset
 	     (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
 		       dset2-data)
-	     (h5dclose dset)
-	     (h5sclose shape)
-	     (h5gclose grp)))
+	     (h5ex:close-handles (list dset shape grp))))
+      (h5ex:close-handles (list file fapl)))))
 
-      (h5fclose file)
-      (h5pclose fapl))))
-
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)

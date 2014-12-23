@@ -1,4 +1,4 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -14,40 +14,30 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
 (defparameter *FILE* "dset.h5")
 
-(cffi:with-foreign-objects
-    ((dims 'hsize-t 1)
-     (attr-data :int 2))
+(cffi:with-foreign-object (attr-data :int 2)
 
   ;; initialize the attribute data
   (setf (cffi:mem-aref attr-data :int 0) 100
-	(cffi:mem-aref attr-data :int 1) 200
-        (cffi:mem-aref dims 'hsize-t 0) 2)
+	(cffi:mem-aref attr-data :int 1) 200)
 
-  (let*
-      ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-       (file (prog2
-		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		 (h5fopen *FILE* +H5F-ACC-RDWR+ fapl))))
-    
+  (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
+	 (file (prog2
+		   (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+		   (h5fopen *FILE* +H5F-ACC-RDWR+ fapl))))
     (unwind-protect
-	 
-	 (let*
-	     ((dset (h5dopen2 file "/dset" +H5P-DEFAULT+))
-	      (shape (h5screate-simple 1 dims (cffi:null-pointer)))
-	      (att (h5acreate2 dset "Units" +H5T-STD-I32BE+ shape
-			       +H5P-DEFAULT+ +H5P-DEFAULT+)))
-	   
+	 (let* ((dset (h5dopen2 file "/dset" +H5P-DEFAULT+))
+		(shape (h5ex:create-simple-dataspace '(2)))
+		(att (h5acreate2 dset "Units" +H5T-STD-I32BE+ shape
+				 +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	   (h5awrite att +H5T-NATIVE-INT+ attr-data)
-	   (h5aclose att)
-	   (h5sclose shape)
-	   (h5dclose dset))
 
-      (h5fclose file)
-      (h5pclose fapl))))
+	   (h5ex:close-handles (list att shape dset)))
+      (h5ex:close-handles (list file fapl)))))
 
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)

@@ -1,4 +1,4 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -14,6 +14,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -22,22 +23,16 @@
 (cffi:with-foreign-object (dset-data :int (* 4 6))
 
   ;; initialize the data to be written
-  (flet ((pos (cols i j) (+ (* cols i) j))) ; 2D array access function
-    (dotimes (i 4)
-      (dotimes (j 6)
-	(let ((pos (pos 6 i j)))
-	  (setf (cffi:mem-aref dset-data :int pos) (1+ pos))))))
+  (dotimes (i 4)
+    (dotimes (j 6)
+      (let ((pos (h5ex:pos2D 6 i j)))
+	(setf (cffi:mem-aref dset-data :int pos) (1+ pos)))))
 
-  (let*
-      ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-       (file (prog2
-		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		 (h5fopen *FILE* +H5F-ACC-RDWR+ fapl))))
-    
+  (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+		   (h5fopen *FILE* +H5F-ACC-RDWR+ fapl))))
     (unwind-protect
-	 
-	 (let
-	     ((dset (h5dopen2 file "/dset" +H5P-DEFAULT+))) ; open the dataset
+	 (let ((dset (h5dopen2 file "/dset" +H5P-DEFAULT+))) ; open the dataset
 	   ;; write the dataset
 	   (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
 		     dset-data)
@@ -45,8 +40,6 @@
 	   (h5dread  dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
 		     dset-data)
 	   (h5dclose dset))
+      (h5ex:close-handles (list file fapl)))))
 
-      (h5fclose file)
-      (h5pclose fapl))))
-
-#+sbcl(sb-ext:quit)
+#+sbcl(sb-ext:exit)

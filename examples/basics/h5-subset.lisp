@@ -1,4 +1,4 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -14,6 +14,7 @@
 
 #+sbcl(require 'asdf)
 (asdf:operate 'asdf:load-op 'hdf5-cffi)
+(asdf:operate 'asdf:load-op 'hdf5-examples)
 
 (in-package :hdf5)
 
@@ -28,9 +29,7 @@
 (defparameter *DIM1* 10)
 
 (cffi:with-foreign-objects
-    ((dims 'hsize-t 2)
-     (dimsm 'hsize-t 2)
-     (data :int (* *DIM0* *DIM1*))
+    ((data :int (* *DIM0* *DIM1*))
      (sdata :int (* *DIM0-SUB* *DIM1-SUB*))
      (rdata :int (* *DIM0* *DIM1*))
      (count 'hsize-t 2)
@@ -38,75 +37,58 @@
      (stride 'hsize-t 2)
      (block 'hsize-t 2))
 
-  (let*
-      ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-       (file (prog2
-		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+  (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
+       (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		 (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
-    
     (unwind-protect
-	 
-	 (let*
-	     ((shape (prog2
-			 (setf (cffi:mem-aref dims 'hsize-t 0) *DIM0*
-			       (cffi:mem-aref dims 'hsize-t 1) *DIM1*)
-			 (h5screate-simple 2 dims (cffi:null-pointer))))
-	      (dset (h5dcreate2 file *DATASETNAME* +H5T-STD-I32BE+ shape
-				+H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
-
-	   (flet ((pos (cols i j) (+ (* cols i) j))) ; 2D array position access
-	     (dotimes (i *DIM0*)
+	 (let* ((shape  (h5ex:create-simple-dataspace `(,*DIM0* ,*DIM1*)))
+		(dset (h5dcreate2 file *DATASETNAME* +H5T-STD-I32BE+ shape
+				  +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
+	   (dotimes (i *DIM0*)
 	       (dotimes (j *DIM1*)
-		 (let ((pos (pos *DIM1* i j)))
+		 (let ((pos (h5ex:pos2D *DIM1* i j)))
 		   (if (< j (/ *DIM1* 2))
 		       (setf (cffi:mem-aref data :int pos) 1)
-		       (setf (cffi:mem-aref data :int pos) 2))))))
+		       (setf (cffi:mem-aref data :int pos) 2)))))
 	   (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
 		     data)
-	   
-	   ;; TODO: print the dataset
- 
-	   (h5dclose dset)
-	   (h5sclose shape))
 
-      (h5fclose file)
-      (h5pclose fapl)))
+	   (format t "~%Data written to file:~%")
+	   (dotimes (i *DIM0*)
+	     (dotimes (j *DIM1*)
+	       (format t " ~d" (cffi:mem-aref data :int
+					      (h5ex:pos2D *DIM1* i j))))
+	     (format t "~%"))
 
-  (let*
-      ((fapl (h5pcreate +H5P-FILE-ACCESS+))
-       (file (prog2
-		 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-		 (h5fopen *FILE* +H5F-ACC-RDWR+ fapl))))
-    
+	   (h5ex:close-handles (list dset shape)))
+      (h5ex:close-handles (list file fapl))))
+
+  (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
+	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
+		   (h5fopen *FILE* +H5F-ACC-RDWR+ fapl))))
     (unwind-protect
-
 	 (progn
 	   ;; initialize the hyperslab parameters
 	   (setf (cffi:mem-aref offset 'hsize-t 0) 1
-		 (cffi:mem-aref offset 'hsize-t 1) 2)
-	   (setf (cffi:mem-aref count 'hsize-t 0) *DIM0-SUB*
-		 (cffi:mem-aref count 'hsize-t 1) *DIM1-SUB*)
-	   (setf (cffi:mem-aref stride 'hsize-t 0) 1
-		 (cffi:mem-aref stride 'hsize-t 1) 1)
-	   (setf (cffi:mem-aref block 'hsize-t 0) 1
+		 (cffi:mem-aref offset 'hsize-t 1) 2
+		 (cffi:mem-aref count 'hsize-t 0) *DIM0-SUB*
+		 (cffi:mem-aref count 'hsize-t 1) *DIM1-SUB*
+		 (cffi:mem-aref stride 'hsize-t 0) 1
+		 (cffi:mem-aref stride 'hsize-t 1) 1
+		 (cffi:mem-aref block 'hsize-t 0) 1
 		 (cffi:mem-aref block 'hsize-t 1) 1)
-      
-	   ;; memory space extent
-	   (setf (cffi:mem-aref dimsm 'hsize-t 0) *DIM0-SUB* 
-		 (cffi:mem-aref dimsm 'hsize-t 1) *DIM1-SUB*)
 
-	   (let*
-	       ((dset (h5dopen2 file *DATASETNAME* +H5P-DEFAULT+))
-		(fshape (h5dget-space dset))
-		(mshape (h5screate-simple 2 dimsm (cffi:null-pointer))))
-
+	   (let* ((dset (h5dopen2 file *DATASETNAME* +H5P-DEFAULT+))
+		  (fshape (h5dget-space dset))
+		  (mshape (h5ex:create-simple-dataspace
+			   `(,*DIM0-SUB* ,*DIM1-SUB*))))
 	     ;; select the hyperslab to be written
 	     (h5sselect-hyperslab fshape :H5S-SELECT-SET
 				  offset stride count block)
-
 	     (dotimes (i *DIM0-SUB*)
 	       (dotimes (j *DIM1-SUB*)
-		 (setf (cffi:mem-aref sdata :int (+ (* i *DIM1-SUB*) j)) 5)))
+		 (setf (cffi:mem-aref sdata :int (h5ex:pos2D *DIM1-SUB* i j))
+		       5)))
 
 	     ;; write to hyperslab selection
 	     (h5dwrite dset +H5T-NATIVE-INT+ mshape fshape +H5P-DEFAULT+ sdata)
@@ -114,13 +96,14 @@
 	     (h5dread dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
 		      rdata)
 
-	     ;; TODO: print the dataset
-      
-	     (h5sclose mshape)
-	     (h5sclose fshape)
-	     (h5dclose dset)))
-    
-      (h5fclose file)
-      (h5pclose fapl))))
+	     (format t "~%Data in file after subset was written:~%")
+	     (dotimes (i *DIM0*)
+	       (dotimes (j *DIM1*)
+		 (format t " ~d" (cffi:mem-aref rdata :int
+						(h5ex:pos2D *DIM1* i j))))
+	       (format t "~%"))
 
-#+sbcl(sb-ext:quit)
+	     (h5ex:close-handles (list mshape fshape dset))))
+      (h5ex:close-handles (list file fapl)))))
+
+#+sbcl(sb-ext:exit)
