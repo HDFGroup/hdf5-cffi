@@ -138,18 +138,18 @@
            (format t "Maximum value in ~a is: ~a~%" *DATASET*
                    (reduce #'max
                            (mapcar #'(lambda (i)
-                                       (cffi:mem-aref wdata :double i))
+                                       (cffi:mem-aref rdata :double i))
                                    (loop for i from 0 to (1- (* *DIM0* *DIM1*))
                                       collect i))))
            (format t "Minimum value in ~a is: ~a~%" *DATASET*
                    (reduce #'min
                            (mapcar #'(lambda (i)
-                                       (cffi:mem-aref wdata :double i))
+                                       (cffi:mem-aref rdata :double i))
                                    (loop for i from 0 to (1- (* *DIM0* *DIM1*))
                                       collect i))))
-           
+
 	   ;; Close and release resources.
 	   (h5ex:close-handles (list dcpl dset)))
       (h5ex:close-handles (list file fapl)))))
-      
+
 #+sbcl(sb-ext:exit)
