@@ -14,5 +14,8 @@
   (defparameter +NULL+ (cffi:null-pointer))
   (pushnew :hdf5 *features*)
   (defvar *hdf5-header-file* "hdf5.h")
+  (cffi:define-foreign-library libhdf5
+			       (:darwin (:default "libhdf5"))
+			       (t (:default "libhdf5")))
   (defun load-hdf5-foreign-libraries ()
-    (cffi:use-foreign-library "libhdf5.so")))
+    (cffi:use-foreign-library libhdf5)))
