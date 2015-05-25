@@ -93,5 +93,3 @@
            ;; Close and release resources.
            (h5ex:close-handles (list dset2 dset1 dcpl space)))
       (h5ex:close-handles (list file fapl)))))
-
-#+sbcl(sb-ext:exit)

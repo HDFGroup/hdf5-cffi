@@ -40,6 +40,8 @@
 			    (wdata :int (* *DIM0* *DIM1*))
 			    (rdata :int (* *DIM0* *DIM1*)))
 
+  (setf (cffi:mem-aref nelmts 'size-t 0) 0)
+
   ;; Check if the Fletcher32 filter is available and can be used for
   ;; both encoding and decoding.  Normally we do not perform error
   ;; checking in these examples for the sake of clarity, but in this
@@ -101,7 +103,7 @@
 		(filter-type (h5pget-filter2 dcpl 0 flags nelmts +NULL+
 					     0 +NULL+ filter-info)))
 	   (format t "Filter type is: ")
-	   
+
 	   (cond ((eql filter-type +H5Z-FILTER-DEFLATE+)
 		  (format t "H5Z_FILTER_DEFLATE~%"))
 		 ((eql filter-type +H5Z-FILTER-SHUFFLE+)
@@ -133,9 +135,7 @@
                            (mapcar #'(lambda (i) (cffi:mem-aref rdata :int i))
                                    (loop for i from 0 to (1- (* *DIM0* *DIM1*))
                                       collect i))))
-	
+
 	   ;; Close and release resources.
 	   (h5ex:close-handles (list dcpl dset)))
       (h5ex:close-handles (list file fapl)))))
-      
-#+sbcl(sb-ext:exit)

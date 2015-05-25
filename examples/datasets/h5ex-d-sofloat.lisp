@@ -39,6 +39,8 @@
 			    (wdata :double (* *DIM0* *DIM1*))
 			    (rdata :double (* *DIM0* *DIM1*)))
 
+  (setf (cffi:mem-aref nelmts 'size-t 0) 0)
+
   ;; Check if Scale-Offset compression is available and can be used for both
   ;; compression and decompression.  Normally we do not perform error
   ;; checking in these examples for the sake of clarity, but in this
@@ -151,5 +153,3 @@
 	   ;; Close and release resources.
 	   (h5ex:close-handles (list dcpl dset)))
       (h5ex:close-handles (list file fapl)))))
-
-#+sbcl(sb-ext:exit)

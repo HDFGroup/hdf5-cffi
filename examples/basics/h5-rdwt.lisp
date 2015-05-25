@@ -41,5 +41,3 @@
 		     dset-data)
 	   (h5dclose dset))
       (h5ex:close-handles (list file fapl)))))
-
-#+sbcl(sb-ext:exit)

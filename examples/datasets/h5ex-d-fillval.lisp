@@ -85,7 +85,7 @@
            ;; Write the data to the dataset
            (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
                      wdata)
-           
+
            ;; Read the data back
            (h5dread  dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
                      rdata)
@@ -113,9 +113,7 @@
                (format t " ~3d" (cffi:mem-aref rdata2 :int
                                                (h5ex:pos2D *EDIM1* i j))))
              (format t "]~%"))
-           
+
            ;; Close and release resources.
            (h5ex:close-handles (list dset dcpl space)))
       (h5ex:close-handles (list file fapl)))))
-
-#+sbcl(sb-ext:exit)

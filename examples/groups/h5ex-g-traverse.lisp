@@ -127,5 +127,3 @@
 		       +NULL+ (cffi:callback op-func) od)
 	   (format t "}~%"))
       (h5ex:close-handles (list file fapl)))))
-
-#+sbcl(sb-ext:exit)

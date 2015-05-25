@@ -27,5 +27,3 @@
 			    +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	 (h5gclose g))
     (h5ex:close-handles (list file fapl))))
-
-#+sbcl(sb-ext:exit)

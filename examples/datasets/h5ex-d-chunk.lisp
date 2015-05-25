@@ -71,7 +71,7 @@
                         ;; Create the chunked dataset.
                         (h5dcreate2 file *DATASET* +H5T-STD-I32LE+ space
                                     +H5P-DEFAULT+ dcpl +H5P-DEFAULT+))))
-	   
+
 	   ;; Define and select the first part of the hyperslab selection.
 	   (setf (cffi:mem-aref start 'hsize-t 0) 0
 		 (cffi:mem-aref start 'hsize-t 1) 0
@@ -89,7 +89,7 @@
 	   (setf (cffi:mem-aref block 'hsize-t 0) 1
 		 (cffi:mem-aref block 'hsize-t 1) 1)
 	   (h5sselect-hyperslab space :H5S-SELECT-NOTB start stride count block)
-	   
+
 	   ;; Write the data to the dataset.
 	   (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ space +H5P-DEFAULT+
 		     wdata)
@@ -147,7 +147,7 @@
 	   ;; Read the data using the previously defined hyperslab.
 	   (h5dread  dset +H5T-NATIVE-INT+ +H5S-ALL+ space +H5P-DEFAULT+
 		     rdata)
-	   
+
 	   ;; Output the data to the screen.
 	   (format t "~%Data as read from disk by hyperslab:~%")
 	   (dotimes (i *DIM0*)
@@ -160,5 +160,3 @@
 	   ;; Close and release resources.
 	   (h5ex:close-handles (list space dcpl dset)))
       (h5ex:close-handles (list file fapl)))))
-      
-#+sbcl(sb-ext:exit)

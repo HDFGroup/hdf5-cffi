@@ -28,5 +28,3 @@
 				+H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
 	 (h5ex:close-handles (list dset shape)))
     (h5ex:close-handles (list file fapl))))
-
-#+sbcl(sb-ext:exit)

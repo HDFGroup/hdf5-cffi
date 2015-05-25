@@ -71,16 +71,16 @@
 		 (cffi:mem-aref count 'hsize-t 1) 3
 		 (cffi:mem-aref block 'hsize-t 0) 2
 		 (cffi:mem-aref block 'hsize-t 1) 2)
-	   
+
 	   (h5sselect-hyperslab space :H5S-SELECT-SET start stride count block)
 
 	   ;; Define and select the second part of the hyperslab selection,
 	   ;; which is subtracted from the first selection by the use of
 	   ;; H5S_SELECT_NOTB
 	   (setf (cffi:mem-aref block 'hsize-t 0) 1
-		 (cffi:mem-aref block 'hsize-t 1) 1)	     
+		 (cffi:mem-aref block 'hsize-t 1) 1)
 	   (h5sselect-hyperslab space :H5S-SELECT-NOTB start stride count block)
-	     
+
 	   ;; Write the data to the dataset
 	   (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ space +H5P-DEFAULT+ wdata)
 	   ;; Close and release resources.
@@ -95,7 +95,7 @@
     (unwind-protect
 	 (let* ((dset (h5dopen2 file *DATASET* +H5P-DEFAULT+))
 		(space (h5dget-space dset)))
-	   
+
 	   ;; Read the data using the default properties
 	   (h5dread  dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
 		     rdata)
@@ -125,8 +125,6 @@
 	   ;; Output the data to the screen.
 	   (format t "~%Data as read from disk by hyperslab:~%")
 	   (print-data rdata)
-	   
+
 	   (h5ex:close-handles (list space dset)))
       (h5ex:close-handles (list file fapl)))))
-
-#+sbcl(sb-ext:exit)

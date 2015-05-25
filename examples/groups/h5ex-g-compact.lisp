@@ -104,5 +104,3 @@
 	     (format t "File size for ~a is: ~a bytes~%~%" *FILE2*
 		     (cffi:mem-aref size 'hsize-t 0)))
 	(h5ex:close-handles (list file fapl))))))
-
-#+sbcl(sb-ext:exit)

@@ -58,5 +58,3 @@
 	 (h5literate file :H5-INDEX-NAME :H5-ITER-NATIVE
 		     +NULL+ (cffi:callback op-func) +NULL+))
     (h5ex:close-handles (list file fapl))))
-
-#+sbcl(sb-ext:exit)

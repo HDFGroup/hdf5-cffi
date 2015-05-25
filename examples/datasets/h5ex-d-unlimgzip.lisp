@@ -55,6 +55,8 @@
 			    (wdata :int (* *DIM0* *DIM1*))
 			    (wdata2 :int (* *EDIM0* *EDIM1*)))
 
+  (setf (cffi:mem-aref nelmts 'size-t 0) 0)
+
   ;; Check if gzip compression is available and can be used for both
   ;; compression and decompression.  Normally we do not perform error
   ;; checking in these examples for the sake of clarity, but in this
@@ -185,7 +187,7 @@
 		(dims[0] (cffi:mem-aref dims 'hsize-t 0))
 		(dims[1] (cffi:mem-aref dims 'hsize-t 1)))
 
-	   (format t "~%Filter type is: ")	   
+	   (format t "~%Filter type is: ")
 	   (cond ((eql filter-type +H5Z-FILTER-DEFLATE+)
 		  (format t "H5Z_FILTER_DEFLATE~%"))
 		 ((eql filter-type +H5Z-FILTER-SHUFFLE+)
@@ -198,7 +200,7 @@
 		  (format t "H5Z_FILTER_NBIT~%"))
 		 ((eql filter-type +H5Z-FILTER-SCALEOFFSET+)
 		  (format t "H5Z_FILTER_SCALEOFFSET~%")))
-   
+
 	   ;; Get dataspace and allocate memory for the read buffer as before.
 	   (cffi:with-foreign-object (rdata :int (* dims[0] dims[1]))
 	     ;; Read the data using the default properties
@@ -211,5 +213,3 @@
 	   ;; Close and release resources.
 	   (h5ex:close-handles (list space dset)))
       (h5ex:close-handles (list file fapl)))))
-
-#+sbcl(sb-ext:exit)

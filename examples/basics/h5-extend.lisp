@@ -115,5 +115,3 @@
 	     (h5sclose mshape))
 	   (h5ex:close-handles (list plist fshape dset)))
       (h5ex:close-handles (list file fapl)))))
-
-#+sbcl(sb-ext:exit)

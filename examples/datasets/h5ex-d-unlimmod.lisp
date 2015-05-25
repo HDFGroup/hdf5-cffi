@@ -74,7 +74,7 @@
 	   ;; Write the data to the dataset.
 	   (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+
 		     wdata)
-	   
+
 	   ;; Close and release resources.
 	   (h5ex:close-handles (list dcpl dset space)))
       (h5ex:close-handles (list file fapl))))
@@ -95,7 +95,7 @@
                          tmp))
 		(dims[0] (cffi:mem-aref dims 'hsize-t 0))
 		(dims[1] (cffi:mem-aref dims 'hsize-t 1)))
-	   
+
 	   ;; Allocate space for integer data.
 	   (cffi:with-foreign-object (rdata :int (* dims[0] dims[1]))
 
@@ -105,7 +105,7 @@
 	     ;; Output the data to the screen.
 	     (format t "Dataset before extension:~%")
 	     (print-data rdata dims[0] dims[1]))
-	   
+
 	   ;; Extend the dataset.
 	   (setf (cffi:mem-aref extdims 'hsize-t 0) *EDIM0*
 		 (cffi:mem-aref extdims 'hsize-t 1) *EDIM1*)
@@ -149,5 +149,3 @@
 	   ;; Close and release resources.
 	   (h5ex:close-handles (list space dset)))
       (h5ex:close-handles (list file fapl)))))
-
-#+sbcl(sb-ext:exit)

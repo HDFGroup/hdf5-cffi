@@ -34,5 +34,3 @@
 	 (let ((group (h5gopen2 file "/G1" +H5P-DEFAULT+)))
 	   (h5gclose group)))
     (h5ex:close-handles (list file fapl))))
-
-#+sbcl(sb-ext:exit)

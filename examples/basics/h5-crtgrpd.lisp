@@ -58,5 +58,3 @@
 		       dset2-data)
 	     (h5ex:close-handles (list dset shape grp))))
       (h5ex:close-handles (list file fapl)))))
-
-#+sbcl(sb-ext:exit)

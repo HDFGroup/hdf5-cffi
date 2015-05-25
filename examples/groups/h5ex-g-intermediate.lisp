@@ -64,5 +64,3 @@
 		   (cffi:callback op-func) +NULL+)
 	 (h5ex:close-handles (list group gcpl)))
     (h5ex:close-handles (list file fapl))))
-
-#+sbcl(sb-ext:exit)

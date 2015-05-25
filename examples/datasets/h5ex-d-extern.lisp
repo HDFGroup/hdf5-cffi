@@ -54,7 +54,7 @@
                           ;; Create the external dataset
                           (h5dcreate2 file *DATASET* +H5T-STD-I32LE+ space
                                       +H5P-DEFAULT+ dcpl +H5P-DEFAULT+))))
-	   
+
 	   ;; Write the data to the dataset.
            (h5dwrite dset +H5T-NATIVE-INT+ +H5S-ALL+ space +H5P-DEFAULT+ wdata)
 
@@ -95,5 +95,3 @@
 	   ;; Close and release resources.
 	   (h5ex:close-handles (list dcpl dset)))
       (h5ex:close-handles (list file fapl)))))
-      
-#+sbcl(sb-ext:exit)

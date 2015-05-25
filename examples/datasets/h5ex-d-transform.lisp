@@ -107,5 +107,3 @@
 
 (cffi:foreign-string-free *RTRANSFORM*)
 (cffi:foreign-string-free *TRANSFORM*)
-
-#+sbcl(sb-ext:exit)
