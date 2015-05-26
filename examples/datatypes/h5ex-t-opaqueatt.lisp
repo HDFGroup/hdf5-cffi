@@ -103,10 +103,9 @@
                          (cffi:foreign-string-to-lisp rdata :offset (* i len)
                                                       :max-chars len))
                  (format t "~%")))))
-         
+
          ;; Close and release resources.
          (cffi:foreign-free tag)
          (h5ex:close-handles (list dtype space attr dset)))
     (h5ex:close-handles (list file fapl))))
 
-#+sbcl(sb-ext:exit)

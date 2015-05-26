@@ -103,11 +103,9 @@
                          ;; Print the name and deallocate space for the name.
                          (format t ": ~a~%" (cffi:foreign-string-to-lisp name))
                          (cffi:foreign-free name))
-                     
+
                      (h5oclose obj))))))))
 
          ;; Close and release resources.
          (h5ex:close-handles (list space dset)))
     (h5ex:close-handles (list file fapl))))
-
-#+sbcl(sb-ext:exit)

@@ -81,5 +81,3 @@
                (h5dvlen-reclaim memtype shape +H5P-DEFAULT+ rdata))))
          (h5ex:close-handles (list memtype shape attr dset))
     (h5ex:close-handles (list file fapl)))))
-
-#+sbcl(sb-ext:exit)

@@ -363,8 +363,6 @@
 	     ;; data (including strings).
 	     (h5dvlen-reclaim rvehicletype space +H5P-DEFAULT+ rdata)
 	     (cffi:foreign-free rdata))
-	     
+
 	   (h5ex:close-handles (list space rvehicletype attr dset)))
       (h5ex:close-handles (list file fapl)))))
-
-#+sbcl(sb-ext:exit)

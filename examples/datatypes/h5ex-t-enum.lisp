@@ -84,7 +84,7 @@
 	     ;; Close and release resources.
              (h5ex:close-handles (list dset space memtype filetype))))
       (h5ex:close-handles (list file fapl)))))
-  
+
 ;; Now we begin the read section of this example.  Here we assume
 ;; the dataset and array have the same name and rank, but can
 ;; have any size.  Therefore we must allocate a new array to read
@@ -101,7 +101,7 @@
 	   ;; Allocate space for integer data.
 	   (let ((dims[0] (cffi:mem-aref dims 'hsize-t 0))
 		 (dims[1] (cffi:mem-aref dims 'hsize-t 1)))
-             
+
 	     (cffi:with-foreign-objects ((rdata 'phase-t (* dims[0] dims[1]))
                                          (name :char *NAME-BUF-SIZE*))
 	       (multiple-value-bind (filetype memtype)
@@ -123,5 +123,3 @@
 		 (h5ex:close-handles (list filetype memtype))))))
 	   (h5ex:close-handles (list space dset)))
       (h5ex:close-handles (list file fapl))))
-
-#+sbcl(sb-ext:exit)

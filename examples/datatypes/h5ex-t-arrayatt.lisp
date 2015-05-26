@@ -51,7 +51,7 @@
       (dotimes (k *ADIM1*)
 	(setf (cffi:mem-aref wdata :int (pos *ADIM0* *ADIM1* i j k))
 	      (+ (* i j) (- (* j k)) (* i k))))))
-  
+
   ;; Create a new file using the default properties.
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
 	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
@@ -87,7 +87,7 @@
 		(space (h5aget-space attr)))
 
 	   ;; Get dataspace and allocate memory for read buffer.
-	   
+
 	   (h5tget-array-dims2 filetype adims)
 	   (h5sget-simple-extent-dims space dims +NULL+)
 
@@ -101,7 +101,7 @@
 						      adims[1]))
 	       ;; Read the data.
 	       (h5aread attr memtype rdata)
-	       
+
 	       ;; Output the data to the screen.
 	       (dotimes (i *DIM0*)
 		   (format t "~a[~a]:~%" *ATTRIBUTE* i)
@@ -113,11 +113,9 @@
 							    i j k))))
 		     (format t "]~%"))
 		   (format t "~%"))
-	       
+
 	       (h5tclose memtype)))
 
 	   ;; Close and release resources.
 	   (h5ex:close-handles (list space filetype attr dset)))
       (h5ex:close-handles (list file fapl)))))
-		
-#+sbcl(sb-ext:exit)

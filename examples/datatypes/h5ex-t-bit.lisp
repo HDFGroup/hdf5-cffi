@@ -108,9 +108,7 @@
 						  (pos *DIM1* i j)))
 		       (format t " {~a, ~a, ~a, ~a}" A B C D)))
 		   (format t " ]~%")))))
-	       
+
 	   ;; Close and release resources.
 	   (h5ex:close-handles (list space dset)))
       (h5ex:close-handles (list file fapl)))))
-		
-#+sbcl(sb-ext:exit)

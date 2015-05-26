@@ -86,5 +86,3 @@
                      (cffi:foreign-free name))))))
          (h5tclose filetype))
     (h5ex:close-handles (list file fapl))))
-
-#+sbcl(sb-ext:exit)

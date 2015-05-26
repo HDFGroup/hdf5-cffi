@@ -155,11 +155,9 @@
 		 (format t "Location        : ~a~%" location)
 		 (format t "Temperature (F) : ~6$~%" temperature)
 		 (format t "Pressure (inHg) : ~6$~%~%" pressure)))
-	     
+
 	     (h5dvlen-reclaim memtype space +H5P-DEFAULT+ rdata)
 	     (cffi:foreign-free rdata))
-	   
+
 	   (h5ex:close-handles (list memtype space dset)))
       (h5ex:close-handles (list file fapl)))))
-
-#+sbcl(sb-ext:exit)

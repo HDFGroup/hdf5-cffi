@@ -116,7 +116,7 @@
 
   (let ((sourcetype (create-reading-memtype))
         (desttype (create-sensor-memtype)))
-    
+
     ;; Convert the buffer in reading from sourcetype to desttype.
     ;; After this conversion we will use sensor to access the buffer,
     ;; as the buffer now matches its type.
@@ -134,8 +134,5 @@
           (format t "Location        : ~a~%" location)
           (format t "Temperature (F) : ~6$~%" temperature)
           (format t "Pressure (inHg) : ~6$~%~%" pressure))))
-    
+
     (h5ex:close-handles (list desttype sourcetype))))
-
-
-#+sbcl(sb-ext:exit)

@@ -108,7 +108,7 @@
 	   ;; Allocate space for integer data.
 	   (let ((dims[0] (cffi:mem-aref dims 'hsize-t 0))
 		 (dims[1] (cffi:mem-aref dims 'hsize-t 1)))
-             
+
 	     (cffi:with-foreign-objects ((rdata 'phase-t (* dims[0] dims[1]))
                                          (name :char *NAME-BUF-SIZE*))
 	       (multiple-value-bind (filetype memtype)
@@ -130,5 +130,3 @@
 		 (h5ex:close-handles (list filetype memtype))))))
 	   (h5ex:close-handles (list space attr dset)))
       (h5ex:close-handles (list file fapl))))
-
-#+sbcl(sb-ext:exit)

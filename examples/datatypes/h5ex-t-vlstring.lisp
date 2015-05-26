@@ -73,5 +73,3 @@
                (h5dvlen-reclaim mtype shape +H5P-DEFAULT+ rdata))))
          (h5ex:close-handles (list mtype shape dset)))
     (h5ex:close-handles (list file fapl))))
-
-#+sbcl(sb-ext:exit)

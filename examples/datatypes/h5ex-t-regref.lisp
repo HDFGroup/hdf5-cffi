@@ -156,10 +156,8 @@
                  (cffi:foreign-free rdata2)
                  (cffi:foreign-free name)
                  (h5ex:close-handles (list space dset2))))
-             
+
              (cffi:foreign-free rdata))
            (h5ex:close-handles (list space dset))))
-    
-    (h5ex:close-handles (list file fapl))))
 
-#+sbcl(sb-ext:exit)
+    (h5ex:close-handles (list file fapl))))

@@ -90,9 +90,7 @@
                    (format t " ~3d"
                            (cffi:mem-aref rdata :int (pos dims[1] i j))))
                  (format t "]~%")))))
-         
+
          ;; Close and release resources.
          (h5ex:close-handles (list space attr dset)))
     (h5ex:close-handles (list file fapl))))
-
-#+sbcl(sb-ext:exit)

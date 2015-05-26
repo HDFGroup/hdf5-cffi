@@ -66,7 +66,7 @@
               (dset (h5dcreate2 file *DATASET* filetype space
                                 +H5P-DEFAULT+ +H5P-DEFAULT+ +H5P-DEFAULT+)))
          (h5dwrite dset memtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ wdata)
-         
+
          ;; Close and release resources. Note the use of H5Dvlen_reclaim
          ;; removes the need to manually free() the previously malloc'ed
          ;; data.
@@ -96,7 +96,7 @@
 	     (cffi:with-foreign-object (rdata '(:struct hvl-t) dims[0])
                ;; Read the data.
 	       (h5dread dset memtype +H5S-ALL+ +H5S-ALL+ +H5P-DEFAULT+ rdata)
-               
+
 	       ;; Output the variable-length data to the screen.
                (dotimes (i dims[0])
                  (format t "~a[~d]:~%  {" *DATASET* i)
@@ -106,7 +106,7 @@
                        (format t " ~d" (cffi:mem-aref p :int j))
                        (when (< (1+ j) len) (format t ",")))
                      (format t " }~%"))))
-               
+
                ;; Close and release resources.  Note we must still free the
                ;; top-level pointer "rdata", as H5Dvlen_reclaim only frees the
                ;; actual variable-length data, and not the structures
@@ -115,5 +115,3 @@
              (h5tclose memtype)))
          (h5ex:close-handles (list space dset)))
     (h5ex:close-handles (list file fapl))))
-
-#+sbcl(sb-ext:exit)
