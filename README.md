@@ -1,3 +1,5 @@
+[![Quicklisp](http://quickdocs.org/badge/hdf5-cffi.svg)](http://quickdocs.org/hdf5-cffi/)
+
 hdf5-cffi
 =========
 
