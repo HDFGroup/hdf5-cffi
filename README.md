@@ -35,3 +35,4 @@ Enjoy!
 
 1. [Garry Hollis' cl-ana](https://github.com/ghollisjr/cl-ana)
 2. [Daniel Herring's dh-misc/hdf5](https://gitorious.org/dh-misc/hdf5)
+3. CFFI [![Quicklisp](http://quickdocs.org/badge/cffi.svg)](http://quickdocs.org/cffi/)
