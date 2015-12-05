@@ -14,7 +14,7 @@
 (asdf:defsystem hdf5-cffi
   :serial t
   :description "hdf5-cffi is a CFFI wrapper for the HDF5 library."
-  :version "0.0.3"
+  :version "0.0.4"
   :author "Gerd Heber <gheber@hdfgroup.org>"
   :license "BSD"
   :depends-on (:cffi :cffi-grovel)
@@ -43,6 +43,8 @@
 			 (:file "h5g")
 			 (cffi-grovel:grovel-file "h5a-grovel")
 			 (:file "h5a")
+			 (cffi-grovel:grovel-file "h5pl-grovel")
+			 (:file "h5pl")
 			 (cffi-grovel:grovel-file "h5r-grovel")
 			 (:file "h5r")
 			 (cffi-grovel:grovel-file "h5z-grovel")
