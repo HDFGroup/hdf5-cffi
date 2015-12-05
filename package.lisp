@@ -43,13 +43,16 @@
 	   h5-index-t
 	   h5-ih-info-t
 
+	   h5allocate-memory
 	   h5check-version
 	   h5close
 	   h5dont-atexit
 	   h5free-memory
 	   h5garbage-collect
 	   h5get-libversion
+	   h5is-library-threadsafe
 	   h5open
+	   h5resize-memory
 	   h5set-free-list-limits
 
 	   ;; == h5i ==========================================================
