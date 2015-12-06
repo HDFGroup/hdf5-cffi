@@ -1,4 +1,4 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -10,10 +10,10 @@
 
 (in-package #:hdf5)
 
-(cffi:defcfun "H5PL_get_loading_state" herr-t
+(cffi:defcfun "H5PLget_loading_state" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5PL.html#Plugin-GetLoadingState"
   (plugin-flags (:pointer :int)))
 
-(cffi:defcfun "H5PL_set_loading_state" herr-t
+(cffi:defcfun "H5PLset_loading_state" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5PL.html#Plugin-SetLoadingState"
   (plugin-type :unsigned-int))
