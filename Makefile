@@ -1,3 +1,12 @@
+###############################################################################
+# Set this to match your local HDF5 installation!
+
+H5CC = $(shell which h5cc)
+
+###############################################################################
+
+CC = $(H5CC)
+LD_LIBRARY_PATH=$(shell echo $(H5CC) | sed -e 's/bin\/h5cc/lib/g')
 SBCL = /usr/local/bin/sbcl
 
 hdf5-cffi-sbcl:
@@ -11,3 +20,5 @@ test-sbcl: hdf5-cffi-sbcl
 
 clean:
 	rm -f *.data *.h5 *.o
+
+all: hdf5-cffi-sbcl clean
