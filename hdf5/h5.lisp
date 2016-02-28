@@ -1,3 +1,5 @@
+;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
+;;;;
 ;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
@@ -22,11 +24,13 @@
       (size  size-t)
       (clear hbool-t)))
 
+#|
 (cffi:defcfun "H5check_version" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-VersCheck"
   (majnum :unsigned-int)
   (minnum :unsigned-int)
   (relnum :unsigned-int))
+|#
 
 (cffi:defcfun "H5close" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-Close")
