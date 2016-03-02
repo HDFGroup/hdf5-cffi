@@ -1,3 +1,5 @@
+;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
+;;;;
 ;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
@@ -10,7 +12,7 @@
 
 (include "hdf5.h")
 
-(in-package :hdf5)
+(in-package #:hdf5)
 
 (cenum h5pl-type-t
   ((:H5PL-TYPE-ERROR  "H5PL_TYPE_ERROR"))

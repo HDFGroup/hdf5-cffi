@@ -1,4 +1,6 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
+;;;;
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -10,7 +12,7 @@
 
 (include "hdf5.h")
 
-(in-package :hdf5)
+(in-package #:hdf5)
 
 (cenum h5g-storage-type-t
        ((:H5G-STORAGE-TYPE-UNKNOWN      "H5G_STORAGE_TYPE_UNKNOWN"))
@@ -21,5 +23,5 @@
 (cstruct h5g-info-t "H5G_info_t"
          (storage-type "storage_type" :type hdf5::h5g-storage-type-t)
          (nlinks       "nlinks"       :type hdf5::hsize-t)
-	 (max-corder   "max_corder"   :type :int64)
-	 (mounted      "mounted"      :type hdf5::hbool-t))
+         (max-corder   "max_corder"   :type :int64)
+         (mounted      "mounted"      :type hdf5::hbool-t))

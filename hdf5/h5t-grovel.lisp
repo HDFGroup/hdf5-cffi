@@ -1,4 +1,6 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
+;;;;
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -10,7 +12,7 @@
 
 (include "hdf5.h")
 
-(in-package :hdf5)
+(in-package #:hdf5)
 
 (cc-flags "-lhdf5")
 
@@ -111,8 +113,8 @@
 (cstruct h5t-cdata-t "H5T_cdata_t"
          (command  "command"  :type hdf5::H5T-cmd-t)
          (need-bkg "need_bkg" :type hdf5::H5T-bkg-t)
-	 (recalc   "recalc"   :type hdf5::hbool-t)
-	 (priv     "priv"     :type :pointer))
+         (recalc   "recalc"   :type hdf5::hbool-t)
+         (priv     "priv"     :type :pointer))
 
 (cenum h5t-pers-t
        ((:H5T-PERS-DONTCARE "H5T_PERS_DONTCARE"))
@@ -140,7 +142,7 @@
 
 (cstruct hvl-t "hvl_t"
          (len "len" :type hdf5::size-t)
-	 (p   "p"   :type :pointer))
+         (p   "p"   :type :pointer))
 
 (constant (+H5T-VARIABLE+ "H5T_VARIABLE"))
 

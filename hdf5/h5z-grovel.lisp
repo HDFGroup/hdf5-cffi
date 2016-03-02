@@ -1,4 +1,6 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
+;;;;
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -10,7 +12,7 @@
 
 (include "hdf5.h")
 
-(in-package :hdf5)
+(in-package #:hdf5)
 
 (ctype h5z-filter-t "H5Z_filter_t")
 
@@ -60,17 +62,17 @@
 (constant (+H5Z-SO-INT-MINBITS-DEFAULT+ "H5Z_SO_INT_MINBITS_DEFAULT"))
 
 (cenum h5z-so-scale-type-t
-    ((:H5Z-SO-FLOAT-DSCALE "H5Z_SO_FLOAT_DSCALE"))
-    ((:H5Z-SO-FLOAT-ESCALE "H5Z_SO_FLOAT_ESCALE"))
-    ((:H5Z-SO-INT          "H5Z_SO_INT")))
+       ((:H5Z-SO-FLOAT-DSCALE "H5Z_SO_FLOAT_DSCALE"))
+       ((:H5Z-SO-FLOAT-ESCALE "H5Z_SO_FLOAT_ESCALE"))
+       ((:H5Z-SO-INT          "H5Z_SO_INT")))
 
 (constant (+H5Z-CLASS-T-VERS+ "H5Z_CLASS_T_VERS"))
 
 (cenum h5z-edc-t
-  ((:H5Z-ERROR-EDC   "H5Z_ERROR_EDC"))
-  ((:H5Z-DISABLE-EDC "H5Z_DISABLE_EDC"))
-  ((:H5Z-ENABLE-EDC  "H5Z_ENABLE_EDC"))
-  ((:H5Z-NO-EDC      "H5Z_NO_EDC")))
+       ((:H5Z-ERROR-EDC   "H5Z_ERROR_EDC"))
+       ((:H5Z-DISABLE-EDC "H5Z_DISABLE_EDC"))
+       ((:H5Z-ENABLE-EDC  "H5Z_ENABLE_EDC"))
+       ((:H5Z-NO-EDC      "H5Z_NO_EDC")))
 
 (constant (+H5Z-FILTER-CONFIG-ENCODE-ENABLED+ "H5Z_FILTER_CONFIG_ENCODE_ENABLED"))
 (constant (+H5Z-FILTER-CONFIG-DECODE-ENABLED+ "H5Z_FILTER_CONFIG_DECODE_ENABLED"))

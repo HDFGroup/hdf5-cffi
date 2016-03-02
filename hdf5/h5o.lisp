@@ -1,4 +1,6 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
+;;;;
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -11,17 +13,17 @@
 (in-package #:hdf5)
 
 (cffi:defcstruct _space-t
-  (total hsize-t)
+    (total hsize-t)
   (meta  hsize-t)
   (mesg  hsize-t)
   (free  hsize-t))
 
 (cffi:defcstruct _mesg-t
-  (present :uint64)
+    (present :uint64)
   (shared  :uint64))
 
 (cffi:defcstruct h5o-hdr-info-t
-  (version :unsigned-int)
+    (version :unsigned-int)
   (nmesgs  :unsigned-int)
   (nchunks :unsigned-int)
   (flags   :unsigned-int)
@@ -29,11 +31,11 @@
   (mesg    (:struct _mesg-t)))
 
 (cffi:defcstruct _meta-t
-  (obj  (:struct h5-ih-info-t))
+    (obj  (:struct h5-ih-info-t))
   (attr (:struct h5-ih-info-t)))
 
 (cffi:defcstruct h5o-info-t
-  (fileno    :unsigned-long)
+    (fileno    :unsigned-long)
   (addr      haddr-t)
   (type      h5o-type-t)
   (rc        :unsigned-int)

@@ -1,4 +1,6 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
+;;;;
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -10,7 +12,7 @@
 
 (include "hdf5.h")
 
-(in-package :hdf5)
+(in-package #:hdf5)
 
 (constant (+H5O-COPY-SHALLOW-HIERARCHY-FLAG+     "H5O_COPY_SHALLOW_HIERARCHY_FLAG"))
 (constant (+H5O-COPY-EXPAND-SOFT-LINK-FLAG+      "H5O_COPY_EXPAND_SOFT_LINK_FLAG"))

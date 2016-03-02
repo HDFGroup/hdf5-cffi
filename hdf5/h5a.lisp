@@ -1,4 +1,6 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
+;;;;
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -141,7 +143,7 @@
   (op-data  :pointer))
 
 (cffi:defcfun "H5Aiterate_by_name" herr-t
-    "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-IterateByName"
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-IterateByName"
   (loc-id   hid-t)
   (obj-name :string)
   (idx-type h5-index-t)
@@ -158,7 +160,7 @@
   (aapl-id   hid-t))
 
 (cffi:defcfun "H5Aopen_by_idx" hid-t
-    "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-OpenByIdx"
+  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5A.html#Annot-OpenByIdx"
   (loc-id   hid-t)
   (obj-name :string)
   (idx-type h5-index-t)

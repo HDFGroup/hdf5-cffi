@@ -1,4 +1,6 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
+;;;;
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -11,7 +13,7 @@
 (in-package #:hdf5)
 
 (cffi:defcunion _u-t
-  (address  haddr-t)
+    (address  haddr-t)
   (val-size size-t))
 
 (cffi:defcstruct h5l-info-t "H5L_info_t"

@@ -1,3 +1,5 @@
+;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
+;;;;
 ;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;

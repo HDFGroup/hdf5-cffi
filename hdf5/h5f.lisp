@@ -1,4 +1,6 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
+;;;;
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -11,11 +13,11 @@
 (in-package #:hdf5)
 
 (cffi:defcstruct _sohm-t
-  (hdr-size  hsize-t)
+    (hdr-size  hsize-t)
   (msgs-info (:struct H5-ih-info-t)))
 
 (cffi:defcstruct h5f-info-t
-  (super-ext-size hsize-t)
+    (super-ext-size hsize-t)
   (sohm           (:struct _sohm-t)))
 
 (cffi:defcfun "H5Fclear_elink_file_cache" herr-t

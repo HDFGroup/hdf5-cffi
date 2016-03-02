@@ -1,4 +1,6 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
+;;;;
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -10,7 +12,7 @@
 
 (include "hdf5.h")
 
-(in-package :hdf5)
+(in-package #:hdf5)
 
 (constant (+H5L-MAX-LINK-NAME-LEN+ "H5L_MAX_LINK_NAME_LEN"))
 
@@ -26,15 +28,15 @@
        ((:H5L-TYPE-MAX      "H5L_TYPE_MAX")))
 
 (cstruct h5l-class-t "H5L_class_t"
-	 (version "version"         :type :int)
-	 (id "id"                   :type hdf5::h5l-type-t)
-	 (comment "comment"         :type (:pointer :char))
-	 (create-func "create_func" :type :pointer)
-	 (move-func "move_func"     :type :pointer)
-	 (copy-func "copy_func"     :type :pointer)
-	 (trav-func "trav_func"     :type :pointer)
-	 (del-func "del_func"       :type :pointer)
-	 (query-func "query_func"   :type :pointer))
+         (version "version"         :type :int)
+         (id "id"                   :type hdf5::h5l-type-t)
+         (comment "comment"         :type (:pointer :char))
+         (create-func "create_func" :type :pointer)
+         (move-func "move_func"     :type :pointer)
+         (copy-func "copy_func"     :type :pointer)
+         (trav-func "trav_func"     :type :pointer)
+         (del-func "del_func"       :type :pointer)
+         (query-func "query_func"   :type :pointer))
 
 (constant (+H5L-TYPE-BUILTIN-MAX+ "H5L_TYPE_BUILTIN_MAX"))
 (constant (+H5L-TYPE-UD-MIN+ "H5L_TYPE_UD_MIN"))

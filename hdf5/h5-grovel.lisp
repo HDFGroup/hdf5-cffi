@@ -12,7 +12,7 @@
 
 (include "hdf5.h")
 
-(in-package :hdf5)
+(in-package #:hdf5)
 
 (constant (+H5-VERS-MAJOR+   "H5_VERS_MAJOR"))
 (constant (+H5-VERS-MINOR+   "H5_VERS_MINOR"))

@@ -1,4 +1,6 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; -*- Mode: lisp; indent-tabs-mode: nil -*-
+;;;;
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -10,7 +12,7 @@
 
 (include "hdf5.h")
 
-(in-package :hdf5)
+(in-package #:hdf5)
 
 (constant (+H5S-ALL+ "H5S_ALL"))
 (constant (+H5S-UNLIMITED+ "H5S_UNLIMITED"))
@@ -42,5 +44,3 @@
        ((:H5S-SEL-HYPERSLABS "H5S_SEL_HYPERSLABS"))
        ((:H5S-SEL-ALL        "H5S_SEL_ALL"))
        ((:H5S-SEL-N          "H5S_SEL_N")))
-
-
