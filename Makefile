@@ -1,24 +1,21 @@
 ###############################################################################
-# Set this to match your local HDF5 installation!
+#
+#
+# look for HDF5 installation; generate specialized version of grovel file
+#
+# set CC = h5cc so that cffi-grovel can compile h5-grovel correctly
 
-H5CC = $(shell which h5cc)
+#CL = $(shell which ccl)
+CL = $(shell which sbcl)
 
-###############################################################################
+hdf5-cffi:
+	CC=h5cc $(CL) --load "make-hdf5.lisp"
 
-CC = $(H5CC)
-LD_LIBRARY_PATH=$(shell echo $(H5CC) | sed -e 's/bin\/h5cc/lib/g')
-SBCL = /usr/local/bin/sbcl
-
-hdf5-cffi-sbcl:
-	$(SBCL) --load "make-hdf5.lisp"
-
-test-sbcl: hdf5-cffi-sbcl
+test: hdf5-cffi
 	ln -s examples/groups/h5ex_g_iterate.h5 h5ex_g_iterate.h5
 	ln -s examples/groups/h5ex_g_traverse.h5 h5ex_g_traverse.h5
 	ln -s examples/groups/h5ex_g_visit.h5 h5ex_g_visit.h5
-	$(SBCL) --load "run-hdf5-test.lisp"
+	$(CL) --load "run-hdf5-test.lisp"
 
 clean:
 	rm -f *.data *.h5 *.o
-
-all: hdf5-cffi-sbcl clean
