@@ -1,5 +1,3 @@
-[![Quicklisp](http://quickdocs.org/badge/hdf5-cffi.svg)](http://quickdocs.org/hdf5-cffi/)
-
 hdf5-cffi
 =========
 
@@ -9,13 +7,28 @@ Bindings for FORTRAN, arguably the oldest high-level programming language, were 
 
 ## Installation
 
-Install `hdf5-cffi` via [Quicklisp](http://www.quicklisp.org/). The installation might fail because the installer doesn't
-find the HDF5 header files (`hdf5.h` & Co.) or the shared library (`libhdf5.so`). The former are necessary for the CFFI groveller and, yes, you also need a C compiler. If HDF5 is installed in a "standard" location such as `/usr/local`
-you should be fine. Otherwise, you might have to adjust your `CC` and `LD_LIBRARY_PATH` environment variables, e.g.,
-```
-export CC=~/bin/h5cc
-export LD_LIBRARY_PATH=~/lib:$LD_LIBRARY_PATH
-```
+There many different ways to install `hdf5-cffi`. Here's the maybe least painful way to get you started.
+
+### Prerequisites
+
+0. A Common Lisp compiler such as SBCL or CCL
+1. [Quicklisp](http://www.quicklisp.org/)
+2. An installation of HDF5 that includes:
+   - The header files
+   - A shared HDF5 library (`libhdf5.so` or `libhdf5.dylib`)
+   - The `h5cc` compilation script (part of the standard installation)
+   - The shared Szip compression library (`libsz.so` or `libsz.dylib`)
+3. Make sure that the directories containing the shared libraries are in your `LD_LIBRARY_PATH`
+
+### Build
+
+1. Clone the `hdf5-cffi` repo into the `local-projects` subdirectory of your Quicklisp installation.
+   (Alternatively, create a symbolic link called `hdf5-cffi` in that directory.)
+2. In the `hdf5-cffi` top-level directory:
+   - Edit the `Makefile` and set the `CL` variable for your Lisp compiler
+   - `make hdf5-cffi`
+3. If the build was successful run `make test`.
+
 Check out the examples in the `examples` directory. For example, to run `examples/datasets/h5ex-d-checksum.lisp` with SBCL,
 open a shell and run `sbcl --load examples/datasets/h5ex-d-checksum.lisp`. The output should look like this:
 ```
