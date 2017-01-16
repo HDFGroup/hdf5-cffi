@@ -7,7 +7,7 @@ Bindings for FORTRAN, arguably the oldest high-level programming language, were 
 
 ## Installation
 
-There many different ways to install `hdf5-cffi`. Here's the maybe least painful way to get you started.
+There many different ways to install `hdf5-cffi`. Here's the maybe least painful way to get started.
 
 ### Prerequisites
 
@@ -15,10 +15,11 @@ There many different ways to install `hdf5-cffi`. Here's the maybe least painful
 1. [Quicklisp](http://www.quicklisp.org/)
 2. An installation of HDF5 that includes:
    - The header files
-   - A shared HDF5 library (`libhdf5.so` or `libhdf5.dylib`)
+   - A shared version of the HDF5 library (`libhdf5.so` or `libhdf5.dylib`)
    - The `h5cc` compilation script (part of the standard installation)
-   - The shared Szip compression library (`libsz.so` or `libsz.dylib`)
-3. Make sure that the directories containing the shared libraries are in your `LD_LIBRARY_PATH`
+   - A shared version of the Szip compression library (`libsz.so` or `libsz.dylib`)
+3. Make sure that the directories containing the shared libraries are in your `LD_LIBRARY_PATH`.
+4. GNU `make` and a C-compiler such as GCC
 
 ### Build
 
@@ -47,4 +48,3 @@ Enjoy!
 ## References
 
 1. [Garry Hollis' cl-ana](https://github.com/ghollisjr/cl-ana)
-2. [Daniel Herring's dh-misc/hdf5](https://gitorious.org/dh-misc/hdf5)
