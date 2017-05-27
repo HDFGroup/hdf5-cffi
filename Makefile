@@ -1,15 +1,16 @@
 ###############################################################################
 #
 #
-# look for HDF5 installation; generate specialized version of grovel file
+# look for an HDF5 installation; generate specialized version of grovel file
 #
+# set CL = sbcl
 # set CC = h5cc so that cffi-grovel can compile h5-grovel correctly
 
-#CL = $(shell which ccl)
 CL = $(shell which sbcl)
+CC = $(shell which h5cc)
 
 hdf5-cffi:
-	CC=h5cc $(CL) --load "make-hdf5.lisp"
+	$(CL) --load "make-hdf5.lisp"
 
 test: hdf5-cffi
 	ln -s examples/groups/h5ex_g_iterate.h5 h5ex_g_iterate.h5

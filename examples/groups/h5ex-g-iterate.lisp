@@ -23,38 +23,38 @@
 ;;; the callback function
 
 (cffi:defcallback op-func herr-t
-    ((loc-id        hid-t)
-     (name          :string)
-     (info          (:pointer (:struct h5l-info-t)))
-     (operator-data :pointer))
+  ((loc-id        hid-t)
+   (name          :string)
+   (info          (:pointer (:struct h5l-info-t)))
+   (operator-data :pointer))
+  (declare (ignore info operator-data))
+  (cffi:with-foreign-object (infobuf '(:struct h5o-info-t) 1)
+    (h5oget-info-by-name loc-id name
+                         (cffi:mem-aptr infobuf '(:struct h5o-info-t) 0)
+                         +H5P-DEFAULT+)
 
-    (cffi:with-foreign-object (infobuf '(:struct h5o-info-t) 1)
-      (h5oget-info-by-name loc-id name
-			   (cffi:mem-aptr infobuf '(:struct h5o-info-t) 0)
-			   +H5P-DEFAULT+)
-
-      ;; retrieve the object type and display the link name
-      (cffi:with-foreign-slots ((type) infobuf (:struct h5o-info-t))
-	(cond
-	  ((eql type :H5O-TYPE-GROUP)
-	   (format t "  Group: ~a~%" name))
-	  ((eql type :H5O-TYPE-DATASET)
-	   (format t "  Dataset: ~a~%" name))
-	  ((eql type :H5O-TYPE-NAMED-DATATYPE)
-	   (format t "  Datatype: ~a~%" name))
-	  (t (format t "  Unknown: ~a~%" name))))
-      0))
+    ;; retrieve the object type and display the link name
+    (cffi:with-foreign-slots ((type) infobuf (:struct h5o-info-t))
+      (cond
+        ((eql type :H5O-TYPE-GROUP)
+         (format t "  Group: ~a~%" name))
+        ((eql type :H5O-TYPE-DATASET)
+         (format t "  Dataset: ~a~%" name))
+        ((eql type :H5O-TYPE-NAMED-DATATYPE)
+         (format t "  Datatype: ~a~%" name))
+        (t (format t "  Unknown: ~a~%" name))))
+    0))
 
 ;;; Showtime
 
 (let*
     ((fapl (h5pcreate +H5P-FILE-ACCESS+))
      (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
-	       (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
+               (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
   (unwind-protect
        (progn
-	 ;; iterate over the links and invoke the callback
-	 (format t "Objects in root group:~%")
-	 (h5literate file :H5-INDEX-NAME :H5-ITER-NATIVE
-		     +NULL+ (cffi:callback op-func) +NULL+))
+         ;; iterate over the links and invoke the callback
+         (format t "Objects in root group:~%")
+         (h5literate file :H5-INDEX-NAME :H5-ITER-NATIVE
+                     +NULL+ (cffi:callback op-func) +NULL+))
     (h5ex:close-handles (list file fapl))))
