@@ -7,10 +7,9 @@
 # set CC = h5cc so that cffi-grovel can compile h5-grovel correctly
 
 CL = $(shell which sbcl)
-CC = $(shell which h5cc)
 
 hdf5-cffi:
-	$(CL) --load "make-hdf5.lisp"
+	CC=$(shell which h5cc) $(CL) --load "make-hdf5.lisp"
 
 test: hdf5-cffi
 	ln -s examples/groups/h5ex_g_iterate.h5 h5ex_g_iterate.h5

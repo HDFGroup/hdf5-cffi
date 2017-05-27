@@ -20,11 +20,24 @@
   (ref-type h5r-type-t)
   (space-id hid-t))
 
-(cffi:defcfun "H5Rdereference" hid-t
-  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5R.html#Reference-Dereference"
-  (dataset  hid-t)
-  (ref-type h5r-type-t)
-  (ref      :pointer))
+(progn
+  (defmacro h5rdereference-gen ()
+    (let ((rm-url "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5R.html#Reference-Dereference")
+          (fn-name-v8 "H5Rdereference")
+          (fn-name-v10 "H5Rdereference2"))
+      (if (cffi:foreign-symbol-pointer fn-name-v10)
+          `(cffi:defcfun (,fn-name-v10 h5rdereference) hid-t
+             ,rm-url
+             (dataset  hid-t)
+             (oapl-id  hid-t)
+             (ref-type h5r-type-t)
+             (ref      :pointer))
+          `(cffi:defcfun (,fn-name-v8 h5rdereference) hid-t
+             ,rm-url
+             (dataset  hid-t)
+             (ref-type h5r-type-t)
+             (ref      :pointer)))))
+  (h5rdereference-gen))
 
 (cffi:defcfun "H5Rget_name" ssize-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5R.html#Reference-GetName"

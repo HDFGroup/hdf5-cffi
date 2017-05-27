@@ -1,4 +1,4 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -73,17 +73,20 @@
 
          (cffi:with-foreign-object (dims 'hsize-t 1)
            (h5sget-simple-extent-dims space dims +NULL+)
-	   (let ((dims[0] (cffi:mem-aref dims 'hsize-t 0)))
-	     ;; Allocate space for integer data.
-	     (cffi:with-foreign-object (rdata 'hobj-ref-t dims[0])
-	       ;; Read the data.
-	       (h5dread dset +H5T-STD-REF-OBJ+ +H5S-ALL+ +H5S-ALL+
+           (let ((dims[0] (cffi:mem-aref dims 'hsize-t 0)))
+             ;; Allocate space for integer data.
+             (cffi:with-foreign-object (rdata 'hobj-ref-t dims[0])
+               ;; Read the data.
+               (h5dread dset +H5T-STD-REF-OBJ+ +H5S-ALL+ +H5S-ALL+
                         +H5P-DEFAULT+ rdata)
-	       ;; Output the data to the screen.
+               ;; Output the data to the screen.
                (dotimes (i dims[0])
                  (format t "~a[~a]:~%  ->" *DATASET* i)
                  (let* ((ptr (cffi:mem-aptr rdata 'hobj-ref-t i))
-                        (obj (h5rdereference dset :H5R-OBJECT ptr)))
+                        (obj (if (= +H5-VERS-MINOR+ 8)
+                                 (h5rdereference dset :H5R-OBJECT ptr)
+                                 (h5rdereference dset +H5P-DEFAULT+ :H5R-OBJECT
+                                                 ptr))))
                    (cffi:with-foreign-object (objtype 'h5o-type-t 1)
                      (h5rget-obj-type2 dset :H5R-OBJECT ptr objtype)
 
@@ -104,7 +107,7 @@
                          (format t ": ~a~%" (cffi:foreign-string-to-lisp name))
                          (cffi:foreign-free name))
 
-                     (h5oclose obj))))))))
+                       (h5oclose obj))))))))
 
          ;; Close and release resources.
          (h5ex:close-handles (list space dset)))

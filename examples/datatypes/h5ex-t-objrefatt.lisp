@@ -1,4 +1,4 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -88,7 +88,10 @@
                (dotimes (i dims[0])
                  (format t "~a[~a]:~%  ->" *ATTRIBUTE* i)
                  (let* ((ptr (cffi:mem-aptr rdata 'hobj-ref-t i))
-                        (obj (h5rdereference dset :H5R-OBJECT ptr)))
+                        (obj (if (= +H5-VERS-MINOR+ 8)
+                                 (h5rdereference dset :H5R-OBJECT ptr)
+                                 (h5rdereference dset +H5P-DEFAULT+ :H5R-OBJECT
+                                                 ptr))))
                    (cffi:with-foreign-object (objtype 'h5o-type-t 1)
                      (h5rget-obj-type2 dset :H5R-OBJECT ptr objtype)
 

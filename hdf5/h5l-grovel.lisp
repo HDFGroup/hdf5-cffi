@@ -10,7 +10,7 @@
 ;;;; If you do not have access to this file, you may request a copy from
 ;;;; help@hdfgroup.org.
 
-(include "hdf5.h")
+(include #.hdf5::*hdf5-header-file*)
 
 (in-package #:hdf5)
 

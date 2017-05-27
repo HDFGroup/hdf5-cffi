@@ -1,4 +1,4 @@
-;;;; Copyright by The HDF Group.                                              
+;;;; Copyright by The HDF Group.
 ;;;; All rights reserved.
 ;;;;
 ;;;; This file is part of hdf5-cffi.
@@ -51,14 +51,14 @@
                    wdata2)
 
          (cffi:with-foreign-object (wdata '(:struct hdset-reg-ref-t) 2)
-           
+
            ;; Create reference to a list of elements in dset2.
            (let ((coords (cffi:foreign-alloc 'hsize-t :count (* 4 2)
                                              :initial-contents
                                              '(0 1 2 11 1 0 2 4))))
              (h5sselect-elements space :H5S-SELECT-SET 4 coords)
              (cffi:foreign-free coords))
-           
+
            (h5rcreate (cffi:mem-aptr wdata '(:struct hdset-reg-ref-t) 0)
                       file *DATASET2* :H5R-DATASET-REGION space)
 
@@ -77,10 +77,10 @@
                    (cffi:mem-aref block 'hsize-t 1) 3)
              (h5sselect-hyperslab space :H5S-SELECT-SET start stride count
                                   block))
-           
+
            (h5rcreate (cffi:mem-aptr wdata '(:struct hdset-reg-ref-t) 1)
                       file *DATASET2* :H5R-DATASET-REGION space)
-           
+
            ;; Create the dataset and write the region references to it.
            (let* ((space (h5ex:create-simple-dataspace `(,*DIM0*)))
                   (dset (h5dcreate2 file *DATASET* +H5T-STD-REF-DSETREG+
@@ -89,11 +89,11 @@
              (h5dwrite dset +H5T-STD-REF-DSETREG+ +H5S-ALL+ +H5S-ALL+
                        +H5P-DEFAULT+ wdata)
              (h5ex:close-handles (list dset space)))
-           
+
            ;; Close and release resources.
            (cffi:foreign-free wdata2)
            (h5ex:close-handles (list dset2 space))))
-    
+
     (h5ex:close-handles (list file fapl))))
 
 ;;; Now we begin the read section of this example.  Here we assume
@@ -124,7 +124,11 @@
                ;; dataspace selection.
                (let* ((rdata[i] (cffi:mem-aptr rdata
                                                '(:struct hdset-reg-ref-t) i))
-                      (dset2 (h5rdereference dset :H5R-DATASET-REGION rdata[i]))
+                      (dset2 (if (= +H5-VERS-MINOR+ 8)
+                                 (h5rdereference dset :H5R-DATASET-REGION
+                                                rdata[i])
+                                 (h5rdereference dset +H5P-DEFAULT+
+                                                 :H5R-DATASET-REGION rdata[i])))
                       (space (h5rget-region dset :H5R-DATASET-REGION rdata[i]))
                       ;; Get the length of the object's name, allocate space,
                       ;; then retrieve the name.

@@ -12,13 +12,38 @@
 
 (in-package #:hdf5)
 
-(cffi:defcstruct _sohm-t
-    (hdr-size  hsize-t)
-  (msgs-info (:struct H5-ih-info-t)))
+(progn
+  (defmacro h5f-info-t-gen ()
+    (if  (cffi:foreign-symbol-pointer "H5Fget_info2")
+         `(progn
+            (cffi:defcstruct _super-t
+              (version        :unsigned-int)
+              (super-size     hsize-t)
+              (super-ext-size hsize-t))
 
-(cffi:defcstruct h5f-info-t
-    (super-ext-size hsize-t)
-  (sohm           (:struct _sohm-t)))
+            (cffi:defcstruct _free-t
+              (version    :unsigned-int)
+              (meta-size  hsize-t)
+              (total-size hsize-t))
+
+            (cffi:defcstruct _sohm2-t
+              (version    :unsigned-int)
+              (hdr-size  hsize-t)
+              (msgs-info (:struct H5-ih-info-t)))
+
+            (cffi:defcstruct h5f-info2-t
+              (super (:struct _super-t))
+              (free  (:struct _free-t))
+              (sohm  (:struct _sohm2-t))))
+         `(progn
+            (cffi:defcstruct _sohm1-t
+              (hdr-size  hsize-t)
+              (msgs-info (:struct H5-ih-info-t)))
+
+            (cffi:defcstruct h5f-info-t
+              (super-ext-size hsize-t)
+              (sohm           (:struct _sohm1-t))))))
+  (h5f-info-t-gen))
 
 (cffi:defcfun "H5Fclear_elink_file_cache" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-ClearELinkFileCache"
@@ -63,10 +88,21 @@
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetFreespace"
   (file-id hid-t))
 
-(cffi:defcfun "H5Fget_info" herr-t
-  "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetInfo"
-  (obj-id    hid-t)
-  (file-info (:pointer (:struct h5f-info-t))))
+(progn
+  (defmacro h5fget-info-gen ()
+    (let ((rm-url "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetInfo")
+          (fn-name-v8 "H5Fget_info")
+          (fn-name-v10 "H5Fget_info2"))
+      (if (cffi:foreign-symbol-pointer fn-name-v10)
+          `(cffi:defcfun (,fn-name-v10 h5fget-info)  herr-t
+             ,rm-url
+             (obj-id    hid-t)
+             (file-info (:pointer (:struct h5f-info2-t))))
+          `(cffi:defcfun (,fn-name-v8 h5fget-info)  herr-t
+             ,rm-url
+             (obj-id    hid-t)
+             (file-info (:pointer (:struct h5f-info-t)))))))
+  (h5fget-info-gen))
 
 (cffi:defcfun "H5Fget_intent" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5F.html#File-GetIntent"

@@ -10,11 +10,11 @@
 ;;;; If you do not have access to this file, you may request a copy from
 ;;;; help@hdfgroup.org.
 
-(include "hdf5.h")
+(include #.hdf5::*hdf5-header-file*)
+
+(cc-flags #.hdf5::*hdf5-cc-flags*)
 
 (in-package #:hdf5)
-
-(cc-flags "-lhdf5")
 
 (constant (+H5F-ACC-RDONLY+  "H5F_ACC_RDONLY"))
 (constant (+H5F-ACC-RDWR+    "H5F_ACC_RDWR"))

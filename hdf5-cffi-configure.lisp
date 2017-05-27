@@ -50,7 +50,7 @@
        ;; Hard-coded paths
        (list #P"/usr/include/hdf5/"))))
   (defparameter *hdf5-lib-path*
-    (let ((truename (or *compile-file-truename* *load-truename*))
+    (let (;(truename (or *compile-file-truename* *load-truename*))
           (h5lib (get-env-value "HDF5_LIB")))
       (append
        ;; Use the stub library if built
@@ -75,6 +75,8 @@
   #.(find-in-path *hdf5-lib-path*
                   #P"libhdf5.so"
                   #P"libhdf5.dylib"))
+
+(defvar *hdf5-cc-flags* "-lhdf5")
 
 (defparameter +NULL+ (cffi:null-pointer))
 
