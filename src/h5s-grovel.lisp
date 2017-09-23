@@ -10,7 +10,9 @@
 ;;;; If you do not have access to this file, you may request a copy from
 ;;;; help@hdfgroup.org.
 
-(include #.hdf5::*hdf5-header-file*)
+(pkg-config-cflags "hdf5" :optional t)
+(define "_H5private_H")    ; See GROVELLER-HACKING-NOTE.md for explanation
+(include "hdf5.h")
 
 (in-package #:hdf5)
 
