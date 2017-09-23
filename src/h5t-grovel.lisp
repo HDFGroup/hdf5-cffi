@@ -111,9 +111,9 @@
        ((:H5T-BKG-YES  "H5T_BKG_YES")))
 
 (cstruct h5t-cdata-t "H5T_cdata_t"
-         (command  "command"  :type hdf5::H5T-cmd-t)
-         (need-bkg "need_bkg" :type hdf5::H5T-bkg-t)
-         (recalc   "recalc"   :type hdf5::hbool-t)
+         (command  "command"  :type H5T-cmd-t)
+         (need-bkg "need_bkg" :type H5T-bkg-t)
+         (recalc   "recalc"   :type hbool-t)
          (priv     "priv"     :type :pointer))
 
 (cenum h5t-pers-t
@@ -141,7 +141,7 @@
        ((:H5T-CONV-HANDLED   "H5T_CONV_HANDLED")))
 
 (cstruct hvl-t "hvl_t"
-         (len "len" :type hdf5::size-t)
+         (len "len" :type size-t)
          (p   "p"   :type :pointer))
 
 (constant (+H5T-VARIABLE+ "H5T_VARIABLE"))

@@ -23,7 +23,7 @@
        ((:H5G-STORAGE-TYPE-DENSE        "H5G_STORAGE_TYPE_DENSE")))
 
 (cstruct h5g-info-t "H5G_info_t"
-         (storage-type "storage_type" :type hdf5::h5g-storage-type-t)
-         (nlinks       "nlinks"       :type hdf5::hsize-t)
+         (storage-type "storage_type" :type h5g-storage-type-t)
+         (nlinks       "nlinks"       :type hsize-t)
          (max-corder   "max_corder"   :type :int64)
-         (mounted      "mounted"      :type hdf5::hbool-t))
+         (mounted      "mounted"      :type hbool-t))

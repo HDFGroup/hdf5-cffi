@@ -17,7 +17,7 @@
 (in-package #:hdf5)
 
 (cstruct h5a-info-t "H5A_info_t"
-         (corder-valid "corder_valid" :type hdf5::hbool-t)
-         (corder       "corder"       :type hdf5::h5o-msg-crt-idx-t)
-         (cset         "cset"         :type hdf5::h5t-cset-t)
-         (data-size    "data_size"    :type hdf5::hsize-t))
+         (corder-valid "corder_valid" :type hbool-t)
+         (corder       "corder"       :type h5o-msg-crt-idx-t)
+         (cset         "cset"         :type h5t-cset-t)
+         (data-size    "data_size"    :type hsize-t))

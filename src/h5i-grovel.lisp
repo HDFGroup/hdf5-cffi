@@ -34,7 +34,7 @@
        ((:H5I-ERROR-STACK "H5I_ERROR_STACK"))
        ((:H5I-NTYPES      "H5I_NTYPES")))
 
-(ctype hdf5::hid-t "hid_t")
+(ctype hid-t "hid_t")
 
 (constant (+H5-SIZEOF-HID-T+ "H5_SIZEOF_HID_T"))
 

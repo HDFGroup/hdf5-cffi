@@ -14,8 +14,8 @@
 
 (include "sys/time.h")
 
-(ctype hdf5::size-t  "size_t")
+(ctype size-t  "size_t")
 
-(ctype hdf5::time-t  "time_t")
+(ctype time-t  "time_t")
 
-(ctype hdf5::off-t  "off_t")
+(ctype off-t  "off_t")

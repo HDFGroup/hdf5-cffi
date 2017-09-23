@@ -49,4 +49,4 @@
        ((:H5O-TYPE-NAMED-DATATYPE "H5O_TYPE_NAMED_DATATYPE"))
        ((:H5O-TYPE-NTYPES         "H5O_TYPE_NTYPES")))
 
-(ctype hdf5::h5o-msg-crt-idx-t "H5O_msg_crt_idx_t")
+(ctype h5o-msg-crt-idx-t "H5O_msg_crt_idx_t")

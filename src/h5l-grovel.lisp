@@ -31,7 +31,7 @@
 
 (cstruct h5l-class-t "H5L_class_t"
          (version "version"         :type :int)
-         (id "id"                   :type hdf5::h5l-type-t)
+         (id "id"                   :type h5l-type-t)
          (comment "comment"         :type (:pointer :char))
          (create-func "create_func" :type :pointer)
          (move-func "move_func"     :type :pointer)

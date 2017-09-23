@@ -20,19 +20,19 @@
 (constant (+H5-VERS-MINOR+   "H5_VERS_MINOR"))
 (constant (+H5-VERS-RELEASE+ "H5_VERS_RELEASE"))
 
-(ctype hdf5::herr-t   "herr_t")
+(ctype herr-t   "herr_t")
 
-(ctype hdf5::hbool-t  "hbool_t")
+(ctype hbool-t  "hbool_t")
 
-(ctype hdf5::htri-t   "htri_t")
+(ctype htri-t   "htri_t")
 
-(ctype hdf5::ssize-t  "ssize_t")
+(ctype ssize-t  "ssize_t")
 
-(ctype hdf5::hsize-t  "hsize_t")
+(ctype hsize-t  "hsize_t")
 
-(ctype hdf5::hssize-t "hssize_t")
+(ctype hssize-t "hssize_t")
 
-(ctype hdf5::haddr-t  "haddr_t")
+(ctype haddr-t  "haddr_t")
 
 (constant (+HADDR-UNDEF+ "HADDR_UNDEF"))
 (constant (+HADDR-MAX+   "HADDR_MAX"))
@@ -55,5 +55,5 @@
        ((:H5-INDEX-N         "H5_INDEX_N")))
 
 (cstruct h5-ih-info-t "H5_ih_info_t"
-         (index-size "index_size" :type hdf5::hsize-t)
-         (heap-size  "heap_size"  :type hdf5::hsize-t))
+         (index-size "index_size" :type hsize-t)
+         (heap-size  "heap_size"  :type hsize-t))
