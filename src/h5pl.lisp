@@ -12,10 +12,10 @@
 
 (in-package #:hdf5)
 
-(cffi:defcfun "H5PLget_loading_state" herr-t
+(defcfun "H5PLget_loading_state" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5PL.html#Plugin-GetLoadingState"
   (plugin-flags (:pointer :int)))
 
-(cffi:defcfun "H5PLset_loading_state" herr-t
+(defcfun "H5PLset_loading_state" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5PL.html#Plugin-SetLoadingState"
   (plugin-type :int))

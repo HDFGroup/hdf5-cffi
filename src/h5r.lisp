@@ -12,7 +12,7 @@
 
 (in-package #:hdf5)
 
-(cffi:defcfun "H5Rcreate" herr-t
+(defcfun "H5Rcreate" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5R.html#Reference-Create"
   (ref      :pointer)
   (loc-id   hid-t)
@@ -25,21 +25,21 @@
     (let ((rm-url "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5R.html#Reference-Dereference")
           (fn-name-v8 "H5Rdereference")
           (fn-name-v10 "H5Rdereference2"))
-      (if (cffi:foreign-symbol-pointer fn-name-v10)
-          `(cffi:defcfun (,fn-name-v10 h5rdereference) hid-t
+      (if (foreign-symbol-pointer fn-name-v10)
+          `(defcfun (,fn-name-v10 h5rdereference) hid-t
              ,rm-url
              (dataset  hid-t)
              (oapl-id  hid-t)
              (ref-type h5r-type-t)
              (ref      :pointer))
-          `(cffi:defcfun (,fn-name-v8 h5rdereference) hid-t
+          `(defcfun (,fn-name-v8 h5rdereference) hid-t
              ,rm-url
              (dataset  hid-t)
              (ref-type h5r-type-t)
              (ref      :pointer)))))
   (h5rdereference-gen))
 
-(cffi:defcfun "H5Rget_name" ssize-t
+(defcfun "H5Rget_name" ssize-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5R.html#Reference-GetName"
   (loc-id   hid-t)
   (ref-type h5r-type-t)
@@ -47,14 +47,14 @@
   (name     (:pointer :char))
   (size     size-t))
 
-(cffi:defcfun "H5Rget_obj_type2" herr-t
+(defcfun "H5Rget_obj_type2" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5R.html#Reference-GetObjType2"
   (loc-id   hid-t)
   (ref-type h5r-type-t)
   (ref      :pointer)
   (obj-type (:pointer h5o-type-t)))
 
-(cffi:defcfun "H5Rget_region" hid-t
+(defcfun "H5Rget_region" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5R.html#Reference-GetRegion"
   (dataset  hid-t)
   (ref-type h5r-type-t)

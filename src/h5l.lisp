@@ -12,18 +12,18 @@
 
 (in-package #:hdf5)
 
-(cffi:defcunion _u-t
+(defcunion _u-t
     (address  haddr-t)
   (val-size size-t))
 
-(cffi:defcstruct h5l-info-t "H5L_info_t"
+(defcstruct h5l-info-t "H5L_info_t"
   (type         h5l-type-t)
   (corder-valid hbool-t)
   (corder       :int64)
   (cset         h5t-cset-t)
   (u            (:union _u-t)))
 
-(cffi:defcfun "H5Lcopy" herr-t
+(defcfun "H5Lcopy" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Copy"
   (src-loc-id  hid-t)
   (src-name    :string)
@@ -32,7 +32,7 @@
   (lcpl-id     hid-t)
   (lapl-id     hid-t))
 
-(cffi:defcfun "H5Lcreate_external" herr-t
+(defcfun "H5Lcreate_external" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-CreateExternal"
   (target-file-name :string)
   (target-obj-name  :string)
@@ -41,7 +41,7 @@
   (lcpl-id          hid-t)
   (lapl-id          hid-t))
 
-(cffi:defcfun "H5Lcreate_hard" herr-t
+(defcfun "H5Lcreate_hard" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-CreateHard"
   (obj-loc-id  hid-t)
   (obj-name    :string)
@@ -50,7 +50,7 @@
   (lcpl-id     hid-t)
   (lapl-id     hid-t))
 
-(cffi:defcfun "H5Lcreate_soft" herr-t
+(defcfun "H5Lcreate_soft" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-CreateSoft"
   (target-path :string)
   (link-loc-id hid-t)
@@ -58,7 +58,7 @@
   (lcpl-id     hid-t)
   (lapl-id     hid-t))
 
-(cffi:defcfun "H5Lcreate_ud" herr-t
+(defcfun "H5Lcreate_ud" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-CreateUD"
   (link-loc-id hid-t)
   (link-name   :string)
@@ -68,13 +68,13 @@
   (lcpl-id     hid-t)
   (lapl-id     hid-t))
 
-(cffi:defcfun "H5Ldelete" herr-t
+(defcfun "H5Ldelete" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Delete"
   (loc-id  hid-t)
   (name    :string)
   (lapl-id hid-t))
 
-(cffi:defcfun "H5Ldelete_by_idx" herr-t
+(defcfun "H5Ldelete_by_idx" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-DeleteByIdx"
   (loc-id      hid-t)
   (group-name  :string)
@@ -83,20 +83,20 @@
   (n           hsize-t)
   (lapl-id     hid-t))
 
-(cffi:defcfun "H5Lexists" htri-t
+(defcfun "H5Lexists" htri-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Exists"
   (loc-id  hid-t)
   (name    :string)
   (lapl-id hid-t))
 
-(cffi:defcfun "H5Lget_info" herr-t
+(defcfun "H5Lget_info" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-GetInfo"
   (link-loc-id hid-t)
   (link-name   :string)
   (link-buff   (:pointer (:struct h5l-info-t)))
   (lapl-id     hid-t))
 
-(cffi:defcfun "H5Lget_info_by_idx" herr-t
+(defcfun "H5Lget_info_by_idx" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-GetInfo"
   (loc-id      hid-t)
   (group-name  :string)
@@ -106,7 +106,7 @@
   (link-val    (:pointer (:struct h5l-info-t)))
   (lapl-id     hid-t))
 
-(cffi:defcfun "H5Lget_name_by_idx" ssize-t
+(defcfun "H5Lget_name_by_idx" ssize-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-GetNameByIdx"
   (link-loc-id hid-t)
   (group-name  :string)
@@ -117,7 +117,7 @@
   (size        size-t)
   (lapl-id     hid-t))
 
-(cffi:defcfun "H5Lget_val" herr-t
+(defcfun "H5Lget_val" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-GetVal"
   (link-loc-id  hid-t)
   (link-name    :string)
@@ -125,7 +125,7 @@
   (size         size-t)
   (lapl-id      hid-t))
 
-(cffi:defcfun "H5Lget_val_by_idx" herr-t
+(defcfun "H5Lget_val_by_idx" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-GetValByIdx"
   (loc-id      hid-t)
   (group-name  :string)
@@ -136,11 +136,11 @@
   (size        size-t)
   (lapl-id     hid-t))
 
-(cffi:defcfun "H5Lis_registered" htri-t
+(defcfun "H5Lis_registered" htri-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-IsRegistered"
   (link-cls-id h5l-type-t))
 
-(cffi:defcfun "H5Literate" herr-t
+(defcfun "H5Literate" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Iterate"
   (group-id   hid-t)
   (index-type h5-index-t)
@@ -149,7 +149,7 @@
   (op         :pointer)
   (op-data    :pointer))
 
-(cffi:defcfun "H5Literate_by_name" herr-t
+(defcfun "H5Literate_by_name" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-IterateByName"
   (loc-id     hid-t)
   (group-name (:pointer :char))
@@ -160,7 +160,7 @@
   (op-data    :pointer)
   (lapl-id    hid-t))
 
-(cffi:defcfun "H5Lmove" herr-t
+(defcfun "H5Lmove" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Move"
   (src-loc-id  hid-t)
   (src-name    :string)
@@ -169,11 +169,11 @@
   (lcpl-id     hid-t)
   (lapl-id     hid-t))
 
-(cffi:defcfun "H5Lregister" herr-t
+(defcfun "H5Lregister" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Register"
   (link-class (:pointer (:struct h5l-class-t))))
 
-(cffi:defcfun "H5Lunpack_elink_val" herr-t
+(defcfun "H5Lunpack_elink_val" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-UnpackELinkVal"
   (ext-link-val (:pointer :char))
   (link-size    size-t)
@@ -181,11 +181,11 @@
   (filename     (:pointer (:pointer :char)))
   (obj-path     (:pointer (:pointer :char))))
 
-(cffi:defcfun "H5Lunregister" herr-t
+(defcfun "H5Lunregister" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Unregister"
   (link-cls-id h5l-type-t))
 
-(cffi:defcfun "H5Lvisit" herr-t
+(defcfun "H5Lvisit" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-Visit"
   (group-id   hid-t)
   (index-type h5-index-t)
@@ -193,7 +193,7 @@
   (op         :pointer)
   (op-data    :pointer))
 
-(cffi:defcfun "H5Lvisit_by_name" herr-t
+(defcfun "H5Lvisit_by_name" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5L.html#Link-VisitByName"
   (loc-id     hid-t)
   (group-name :string)

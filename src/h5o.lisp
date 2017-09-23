@@ -12,17 +12,17 @@
 
 (in-package #:hdf5)
 
-(cffi:defcstruct _space-t
+(defcstruct _space-t
     (total hsize-t)
   (meta  hsize-t)
   (mesg  hsize-t)
   (free  hsize-t))
 
-(cffi:defcstruct _mesg-t
+(defcstruct _mesg-t
     (present :uint64)
   (shared  :uint64))
 
-(cffi:defcstruct h5o-hdr-info-t
+(defcstruct h5o-hdr-info-t
     (version :unsigned-int)
   (nmesgs  :unsigned-int)
   (nchunks :unsigned-int)
@@ -30,11 +30,11 @@
   (space   (:struct _space-t))
   (mesg    (:struct _mesg-t)))
 
-(cffi:defcstruct _meta-t
+(defcstruct _meta-t
     (obj  (:struct h5-ih-info-t))
   (attr (:struct h5-ih-info-t)))
 
-(cffi:defcstruct h5o-info-t
+(defcstruct h5o-info-t
     (fileno    :unsigned-long)
   (addr      haddr-t)
   (type      h5o-type-t)
@@ -47,11 +47,11 @@
   (hdr       (:struct h5o-hdr-info-t))
   (meta-size (:struct _meta-t)))
 
-(cffi:defcfun "H5Oclose" herr-t
+(defcfun "H5Oclose" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-Close"
   (object-id hid-t))
 
-(cffi:defcfun "H5Ocopy" herr-t
+(defcfun "H5Ocopy" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-Copy"
   (src-loc-id hid-t)
   (src-name   :string)
@@ -60,23 +60,23 @@
   (ocpypl-id  hid-t)
   (lcpl-id    hid-t))
 
-(cffi:defcfun "H5Odecr_refcount" herr-t
+(defcfun "H5Odecr_refcount" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-DecrRefCount"
   (object-id hid-t))
 
-(cffi:defcfun "H5Oexists_by_name" htri-t
+(defcfun "H5Oexists_by_name" htri-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-ExistsByName"
   (loc-id  hid-t)
   (name    :string)
   (lapl-id hid-t))
 
-(cffi:defcfun "H5Oget_comment" ssize-t
+(defcfun "H5Oget_comment" ssize-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-GetComment"
   (object-id hid-t)
   (comment   (:pointer :char))
   (bufsize   size-t))
 
-(cffi:defcfun "H5Oget_comment_by_name" ssize-t
+(defcfun "H5Oget_comment_by_name" ssize-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-GetCommentByName"
   (loc-id    hid-t)
   (name      :string)
@@ -84,12 +84,12 @@
   (bufsize   size-t)
   (lapl-id   hid-t))
 
-(cffi:defcfun "H5Oget_info" herr-t
+(defcfun "H5Oget_info" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-GetInfo"
   (object-id   hid-t)
   (object-info (:pointer (:struct H5O-info-t))))
 
-(cffi:defcfun "H5Oget_info_by_idx" herr-t
+(defcfun "H5Oget_info_by_idx" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-GetInfo"
   (loc-id      hid-t)
   (group-name  :string)
@@ -99,18 +99,18 @@
   (object-info (:pointer (:struct H5O-info-t)))
   (lapl-id     hid-t))
 
-(cffi:defcfun "H5Oget_info_by_name" herr-t
+(defcfun "H5Oget_info_by_name" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-GetInfoByName"
   (loc-id      hid-t)
   (object-name :string)
   (object-info (:pointer (:struct H5O-info-t)))
   (lapl-id     hid-t))
 
-(cffi:defcfun "H5Oincr_refcount" herr-t
+(defcfun "H5Oincr_refcount" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-IncrRefCount"
   (object-id hid-t))
 
-(cffi:defcfun "H5Olink" herr-t
+(defcfun "H5Olink" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-Link"
   (object-id     hid-t)
   (new-loc-id    hid-t)
@@ -118,18 +118,18 @@
   (lcpl          hid-t)
   (lapl          hid-t))
 
-(cffi:defcfun "H5Oopen" hid-t
+(defcfun "H5Oopen" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-Open"
   (loc-id  hid-t)
   (name    :string)
   (lapl-id hid-t))
 
-(cffi:defcfun "H5Oopen_by_addr" hid-t
+(defcfun "H5Oopen_by_addr" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-OpenByAddr"
   (loc-id hid-t)
   (addr   haddr-t))
 
-(cffi:defcfun "H5Oopen_by_idx" hid-t
+(defcfun "H5Oopen_by_idx" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-OpenByIdx"
   (loc-id      hid-t)
   (group-name  :string)
@@ -138,7 +138,7 @@
   (n           hsize-t)
   (lapl-id hid-t))
 
-(cffi:defcfun "H5Ovisit" herr-t
+(defcfun "H5Ovisit" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-Visit"
   (object-id  hid-t)
   (index-type h5-index-t)
@@ -146,7 +146,7 @@
   (op         :pointer)
   (op-data    :pointer))
 
-(cffi:defcfun "H5Ovisit_by_name" herr-t
+(defcfun "H5Ovisit_by_name" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5O.html#Object-VisitByName"
   (loc-id      hid-t)
   (object-name :string)
