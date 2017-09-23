@@ -12,7 +12,7 @@
 
 (defpackage #:hdf5
   (:documentation "hdf5-cffi library: Common LISP binding for the HDF5 library")
-  (:use #:cl)
+  (:use #:cl #:cffi)
   (:shadow "OFF-T" "SIZE-T")
   (:export #:load-hdf5-foreign-libraries
            #:+NULL+

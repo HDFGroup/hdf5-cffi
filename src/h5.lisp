@@ -10,13 +10,7 @@
 ;;;; If you do not have access to this file, you may request a copy from
 ;;;; help@hdfgroup.org.
 
-#+sbcl(require 'asdf)
-
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (setf *features* (remove ':newitem *features*))
-  (pushnew :newitem *features*)
-  (hdf5::load-hdf5-foreign-libraries)
-  (in-package #:hdf5))
+(in-package #:hdf5)
 
 (if (cffi:foreign-symbol-pointer "H5allocate_memory")
     (cffi:defcfun "H5allocate_memory" :pointer
