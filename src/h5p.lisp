@@ -250,3 +250,50 @@
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5P.html#Property-SetUserblock"
   (plist hid-t)
   (size  hsize-t))
+
+
+
+;;
+
+;; /*
+;;  * The library's property list classes
+;;  */
+
+(defcvar (#.(lispify "H5P_ROOT" 'constant)             "H5P_CLS_ROOT_ID_g")             hid-t)
+(defcvar (#.(lispify "H5P_OBJECT_CREATE" 'constant)    "H5P_CLS_OBJECT_CREATE_ID_g")    hid-t)
+(defcvar (#.(lispify "H5P_FILE_CREATE" 'constant)      "H5P_CLS_FILE_CREATE_ID_g")      hid-t)
+(defcvar (#.(lispify "H5P_FILE_ACCESS" 'constant)      "H5P_CLS_FILE_ACCESS_ID_g")      hid-t)
+(defcvar (#.(lispify "H5P_DATASET_CREATE" 'constant)   "H5P_CLS_DATASET_CREATE_ID_g")   hid-t)
+(defcvar (#.(lispify "H5P_DATASET_ACCESS" 'constant)   "H5P_CLS_DATASET_ACCESS_ID_g")   hid-t)
+(defcvar (#.(lispify "H5P_DATASET_XFER" 'constant)     "H5P_CLS_DATASET_XFER_ID_g")     hid-t)
+(defcvar (#.(lispify "H5P_FILE_MOUNT" 'constant)       "H5P_CLS_FILE_MOUNT_ID_g")       hid-t)
+(defcvar (#.(lispify "H5P_GROUP_CREATE" 'constant)     "H5P_CLS_GROUP_CREATE_ID_g")     hid-t)
+(defcvar (#.(lispify "H5P_GROUP_ACCESS" 'constant)     "H5P_CLS_GROUP_ACCESS_ID_g")     hid-t)
+(defcvar (#.(lispify "H5P_DATATYPE_CREATE" 'constant)  "H5P_CLS_DATATYPE_CREATE_ID_g")  hid-t)
+(defcvar (#.(lispify "H5P_DATATYPE_ACCESS" 'constant)  "H5P_CLS_DATATYPE_ACCESS_ID_g")  hid-t)
+(defcvar (#.(lispify "H5P_STRING_CREATE" 'constant)    "H5P_CLS_STRING_CREATE_ID_g")    hid-t)
+(defcvar (#.(lispify "H5P_ATTRIBUTE_CREATE" 'constant) "H5P_CLS_ATTRIBUTE_CREATE_ID_g") hid-t)
+(defcvar (#.(lispify "H5P_ATTRIBUTE_ACCESS" 'constant) "H5P_CLS_ATTRIBUTE_ACCESS_ID_g") hid-t)
+(defcvar (#.(lispify "H5P_OBJECT_COPY" 'constant)      "H5P_CLS_OBJECT_COPY_ID_g")      hid-t)
+(defcvar (#.(lispify "H5P_LINK_CREATE" 'constant)      "H5P_CLS_LINK_CREATE_ID_g")      hid-t)
+(defcvar (#.(lispify "H5P_LINK_ACCESS" 'constant)      "H5P_CLS_LINK_ACCESS_ID_g")      hid-t)
+
+;; /*
+;;  * The library's default property lists
+;;  */
+(defcvar (#.(lispify "H5P_FILE_CREATE_DEFAULT" 'constant)      "H5P_LST_FILE_CREATE_ID_g")      hid-t)
+(defcvar (#.(lispify "H5P_FILE_ACCESS_DEFAULT" 'constant)      "H5P_LST_FILE_ACCESS_ID_g")      hid-t)
+(defcvar (#.(lispify "H5P_DATASET_CREATE_DEFAULT" 'constant)   "H5P_LST_DATASET_CREATE_ID_g")   hid-t)
+(defcvar (#.(lispify "H5P_DATASET_ACCESS_DEFAULT" 'constant)   "H5P_LST_DATASET_ACCESS_ID_g")   hid-t)
+(defcvar (#.(lispify "H5P_DATASET_XFER_DEFAULT" 'constant)     "H5P_LST_DATASET_XFER_ID_g")     hid-t)
+(defcvar (#.(lispify "H5P_FILE_MOUNT_DEFAULT" 'constant)       "H5P_LST_FILE_MOUNT_ID_g")       hid-t)
+(defcvar (#.(lispify "H5P_GROUP_CREATE_DEFAULT" 'constant)     "H5P_LST_GROUP_CREATE_ID_g")     hid-t)
+(defcvar (#.(lispify "H5P_GROUP_ACCESS_DEFAULT" 'constant)     "H5P_LST_GROUP_ACCESS_ID_g")     hid-t)
+(defcvar (#.(lispify "H5P_DATATYPE_CREATE_DEFAULT" 'constant)  "H5P_LST_DATATYPE_CREATE_ID_g")  hid-t)
+(defcvar (#.(lispify "H5P_DATATYPE_ACCESS_DEFAULT" 'constant)  "H5P_LST_DATATYPE_ACCESS_ID_g")  hid-t)
+(defcvar (#.(lispify "H5P_ATTRIBUTE_CREATE_DEFAULT" 'constant) "H5P_LST_ATTRIBUTE_CREATE_ID_g") hid-t)
+(defcvar (#.(lispify "H5P_ATTRIBUTE_ACCESS_DEFAULT" 'constant) "H5P_LST_ATTRIBUTE_ACCESS_ID_g") hid-t)
+(defcvar (#.(lispify "H5P_OBJECT_COPY_DEFAULT" 'constant)      "H5P_LST_OBJECT_COPY_ID_g")      hid-t)
+(defcvar (#.(lispify "H5P_LINK_CREATE_DEFAULT" 'constant)      "H5P_LST_LINK_CREATE_ID_g")      hid-t)
+(defcvar (#.(lispify "H5P_LINK_ACCESS_DEFAULT" 'constant)      "H5P_LST_LINK_ACCESS_ID_g")      hid-t)
+

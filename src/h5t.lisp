@@ -348,3 +348,168 @@
 (defcfun "H5Tvlen_create" hid-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5T.html#Datatype-VLCreate"
   (base-type-id hid-t))
+
+;; these are NOT constants; instead, these are alias to the global variables that are set by H5T__init_package() .
+;; For example, H5T_IEEE_F32BE is an alias to H5T_IEEE_F32BE_g .
+
+(defmacro pseudo-constant (name)
+  `(defcvar (,(lispify (subseq name 0 (- (length name) 2)) 'constant) ,name) hid-t))
+
+(pseudo-constant       "H5T_IEEE_F32BE_g")
+(pseudo-constant       "H5T_IEEE_F32LE_g")
+(pseudo-constant       "H5T_IEEE_F64BE_g")
+(pseudo-constant       "H5T_IEEE_F64LE_g")
+
+(pseudo-constant         "H5T_STD_I8BE_g")
+(pseudo-constant         "H5T_STD_I8LE_g")
+(pseudo-constant        "H5T_STD_I16BE_g")
+(pseudo-constant        "H5T_STD_I16LE_g")
+(pseudo-constant        "H5T_STD_I32BE_g")
+(pseudo-constant        "H5T_STD_I32LE_g")
+(pseudo-constant        "H5T_STD_I64BE_g")
+(pseudo-constant        "H5T_STD_I64LE_g")
+(pseudo-constant         "H5T_STD_U8BE_g")
+(pseudo-constant         "H5T_STD_U8LE_g")
+(pseudo-constant        "H5T_STD_U16BE_g")
+(pseudo-constant        "H5T_STD_U16LE_g")
+(pseudo-constant        "H5T_STD_U32BE_g")
+(pseudo-constant        "H5T_STD_U32LE_g")
+(pseudo-constant        "H5T_STD_U64BE_g")
+(pseudo-constant        "H5T_STD_U64LE_g")
+(pseudo-constant         "H5T_STD_B8BE_g")
+(pseudo-constant         "H5T_STD_B8LE_g")
+(pseudo-constant        "H5T_STD_B16BE_g")
+(pseudo-constant        "H5T_STD_B16LE_g")
+(pseudo-constant        "H5T_STD_B32BE_g")
+(pseudo-constant        "H5T_STD_B32LE_g")
+(pseudo-constant        "H5T_STD_B64BE_g")
+(pseudo-constant        "H5T_STD_B64LE_g")
+(pseudo-constant      "H5T_STD_REF_OBJ_g")
+(pseudo-constant  "H5T_STD_REF_DSETREG_g")
+
+(pseudo-constant       "H5T_UNIX_D32BE_g")
+(pseudo-constant       "H5T_UNIX_D32LE_g")
+(pseudo-constant       "H5T_UNIX_D64BE_g")
+(pseudo-constant       "H5T_UNIX_D64LE_g")
+
+(pseudo-constant             "H5T_C_S1_g")
+
+(pseudo-constant       "H5T_FORTRAN_S1_g")
+
+;; /*
+;;  * These types are for Intel CPU's.  They are little endian with IEEE
+;;  * floating point.
+;;  */
+(define-symbol-macro +H5T-INTEL-I8+ +H5T-STD-I8LE+)
+(define-symbol-macro +H5T-INTEL-I16+ +H5T-STD-I16LE+)
+(define-symbol-macro +H5T-INTEL-I32+ +H5T-STD-I32LE+)
+(define-symbol-macro +H5T-INTEL-I64+ +H5T-STD-I64LE+)
+(define-symbol-macro +H5T-INTEL-U8+ +H5T-STD-U8LE+)
+(define-symbol-macro +H5T-INTEL-U16+ +H5T-STD-U16LE+)
+(define-symbol-macro +H5T-INTEL-U32+ +H5T-STD-U32LE+)
+(define-symbol-macro +H5T-INTEL-U64+ +H5T-STD-U64LE+)
+(define-symbol-macro +H5T-INTEL-B8+ +H5T-STD-B8LE+)
+(define-symbol-macro +H5T-INTEL-B16+ +H5T-STD-B16LE+)
+(define-symbol-macro +H5T-INTEL-B32+ +H5T-STD-B32LE+)
+(define-symbol-macro +H5T-INTEL-B64+ +H5T-STD-B64LE+)
+(define-symbol-macro +H5T-INTEL-F32+ +H5T-IEEE-F32LE+)
+(define-symbol-macro +H5T-INTEL-F64+ +H5T-IEEE-F64LE+)
+
+;; /*
+;;  * These types are for DEC Alpha CPU's.  They are little endian with IEEE
+;;  * floating point.
+;;  */
+(define-symbol-macro +H5T-ALPHA-I8+ +H5T-STD-I8LE+)
+(define-symbol-macro +H5T-ALPHA-I16+ +H5T-STD-I16LE+)
+(define-symbol-macro +H5T-ALPHA-I32+ +H5T-STD-I32LE+)
+(define-symbol-macro +H5T-ALPHA-I64+ +H5T-STD-I64LE+)
+(define-symbol-macro +H5T-ALPHA-U8+ +H5T-STD-U8LE+)
+(define-symbol-macro +H5T-ALPHA-U16+ +H5T-STD-U16LE+)
+(define-symbol-macro +H5T-ALPHA-U32+ +H5T-STD-U32LE+)
+(define-symbol-macro +H5T-ALPHA-U64+ +H5T-STD-U64LE+)
+(define-symbol-macro +H5T-ALPHA-B8+ +H5T-STD-B8LE+)
+(define-symbol-macro +H5T-ALPHA-B16+ +H5T-STD-B16LE+)
+(define-symbol-macro +H5T-ALPHA-B32+ +H5T-STD-B32LE+)
+(define-symbol-macro +H5T-ALPHA-B64+ +H5T-STD-B64LE+)
+(define-symbol-macro +H5T-ALPHA-F32+ +H5T-IEEE-F32LE+)
+(define-symbol-macro +H5T-ALPHA-F64+ +H5T-IEEE-F64LE+)
+
+;; /*
+;;  * These types are for MIPS cpu's commonly used in SGI systems. They are big
+;;  * endian with IEEE floating point.
+;;  */
+(define-symbol-macro +H5T-MIPS-I8+ +H5T-STD-I8BE+)
+(define-symbol-macro +H5T-MIPS-I16+ +H5T-STD-I16BE+)
+(define-symbol-macro +H5T-MIPS-I32+ +H5T-STD-I32BE+)
+(define-symbol-macro +H5T-MIPS-I64+ +H5T-STD-I64BE+)
+(define-symbol-macro +H5T-MIPS-U8+ +H5T-STD-U8BE+)
+(define-symbol-macro +H5T-MIPS-U16+ +H5T-STD-U16BE+)
+(define-symbol-macro +H5T-MIPS-U32+ +H5T-STD-U32BE+)
+(define-symbol-macro +H5T-MIPS-U64+ +H5T-STD-U64BE+)
+(define-symbol-macro +H5T-MIPS-B8+ +H5T-STD-B8BE+)
+(define-symbol-macro +H5T-MIPS-B16+ +H5T-STD-B16BE+)
+(define-symbol-macro +H5T-MIPS-B32+ +H5T-STD-B32BE+)
+(define-symbol-macro +H5T-MIPS-B64+ +H5T-STD-B64BE+)
+(define-symbol-macro +H5T-MIPS-F32+ +H5T-IEEE-F32BE+)
+(define-symbol-macro +H5T-MIPS-F64+ +H5T-IEEE-F64BE+)
+
+(pseudo-constant          "H5T_VAX_F32_g")
+(pseudo-constant          "H5T_VAX_F64_g")
+
+(if (not (zerop +char-min+))
+    (define-symbol-macro +h5t-native-char+ +H5T-NATIVE-SCHAR+)
+    (define-symbol-macro +h5t-native-char+ +H5T-NATIVE-UCHAR+))
+
+(pseudo-constant     "H5T_NATIVE_SCHAR_g")
+(pseudo-constant     "H5T_NATIVE_UCHAR_g")
+(pseudo-constant     "H5T_NATIVE_SHORT_g")
+(pseudo-constant    "H5T_NATIVE_USHORT_g")
+(pseudo-constant       "H5T_NATIVE_INT_g")
+(pseudo-constant      "H5T_NATIVE_UINT_g")
+(pseudo-constant      "H5T_NATIVE_LONG_g")
+(pseudo-constant     "H5T_NATIVE_ULONG_g")
+(pseudo-constant     "H5T_NATIVE_LLONG_g")
+(pseudo-constant    "H5T_NATIVE_ULLONG_g")
+(pseudo-constant     "H5T_NATIVE_FLOAT_g")
+(pseudo-constant    "H5T_NATIVE_DOUBLE_g")
+;; disabled at the moment --- where is the definition of H5_SIZEOF_LONG_DOUBLE ?
+;; (if (not (zerop +H5_SIZEOF_LONG_DOUBLE+))
+;; (defcvar (+H5T_NATIVE_LDOUBLE+      "H5T_NATIVE_LDOUBLE_g")      hid-t)
+(pseudo-constant        "H5T_NATIVE_B8_g")
+(pseudo-constant       "H5T_NATIVE_B16_g")
+(pseudo-constant       "H5T_NATIVE_B32_g")
+(pseudo-constant       "H5T_NATIVE_B64_g")
+(pseudo-constant    "H5T_NATIVE_OPAQUE_g")
+(pseudo-constant     "H5T_NATIVE_HADDR_g")
+(pseudo-constant     "H5T_NATIVE_HSIZE_g")
+(pseudo-constant    "H5T_NATIVE_HSSIZE_g")
+(pseudo-constant      "H5T_NATIVE_HERR_g")
+(pseudo-constant     "H5T_NATIVE_HBOOL_g")
+
+(pseudo-constant "H5T_NATIVE_INT8_g")
+(pseudo-constant "H5T_NATIVE_UINT8_g")
+(pseudo-constant "H5T_NATIVE_INT_LEAST8_g")
+(pseudo-constant "H5T_NATIVE_UINT_LEAST8_g")
+(pseudo-constant "H5T_NATIVE_INT_FAST8_g")
+(pseudo-constant "H5T_NATIVE_UINT_FAST8_g")
+
+(pseudo-constant     "H5T_NATIVE_INT16_g")
+(pseudo-constant    "H5T_NATIVE_UINT16_g")
+(pseudo-constant "H5T_NATIVE_INT_LEAST16_g")
+(pseudo-constant "H5T_NATIVE_UINT_LEAST16_g")
+(pseudo-constant "H5T_NATIVE_INT_FAST16_g")
+(pseudo-constant "H5T_NATIVE_UINT_FAST16_g")
+
+(pseudo-constant         "H5T_NATIVE_INT32_g")
+(pseudo-constant        "H5T_NATIVE_UINT32_g")
+(pseudo-constant   "H5T_NATIVE_INT_LEAST32_g")
+(pseudo-constant  "H5T_NATIVE_UINT_LEAST32_g")
+(pseudo-constant    "H5T_NATIVE_INT_FAST32_g")
+(pseudo-constant   "H5T_NATIVE_UINT_FAST32_g")
+
+(pseudo-constant         "H5T_NATIVE_INT64_g")
+(pseudo-constant        "H5T_NATIVE_UINT64_g")
+(pseudo-constant   "H5T_NATIVE_INT_LEAST64_g")
+(pseudo-constant  "H5T_NATIVE_UINT_LEAST64_g")
+(pseudo-constant    "H5T_NATIVE_INT_FAST64_g")
+(pseudo-constant   "H5T_NATIVE_UINT_FAST64_g")
