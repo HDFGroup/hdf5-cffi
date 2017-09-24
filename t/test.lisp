@@ -6,11 +6,6 @@
 (def-suite :hdf5-cffi)
 (in-suite :hdf5-cffi)
 
-(test symbols
-  (do-external-symbols (s (find-package "HDF5"))
-    (print s))
-  (pass))
-
 (defun load* (name)
   (handler-case
       (progn (load (asdf:system-relative-pathname :hdf5-cffi name))
