@@ -1,17 +1,19 @@
 language: common-lisp
 sudo: false
+dist: trusty
 
 addons:
   apt:
     packages:
       - libc6-i386
       - openjdk-7-jre
-      - libhdf5-dev
 
 env:
   global:
     - PATH=~/.roswell/bin:$PATH
     - ROSWELL_INSTALL_DIR=$HOME/.roswell
+    - LD_LIBRARY_PATH=$HOME/hdf5/lib/
+    - CPATH=$HOME/hdf5/include/
   matrix:
     - LISP=sbcl-bin
     - LISP=ccl-bin
@@ -31,11 +33,14 @@ matrix:
 
 install:
   - curl -L https://raw.githubusercontent.com/roswell/roswell/release/scripts/install-for-ci.sh | sh
+  - pwd
+  - test -f "$HOME/hdf5/lib/libhdf5.a" || ( curl -L https://support.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.10.1.tar.gz | tar xz ; cd hdf5-1.10.1; ./configure --prefix=$HOME/hdf5 ; make install )
 
 cache:
   directories:
     - $HOME/.roswell
     - $HOME/.config/common-lisp
+    - $HOME/hdf5
 
 script:
   - echo "hi!"
