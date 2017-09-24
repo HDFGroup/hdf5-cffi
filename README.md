@@ -8,13 +8,15 @@ Bindings for FORTRAN, arguably the oldest high-level programming language, were 
 ## Quick Guide (modern way, 2017)
 
 0. Install the required libs: `libhdf5` and `libsz`.
-   MacOS: `brew tap homebrew/science ; brew install hdf5`
-   Ubuntu: `apt install libhdf5-dev`
+   + MacOS: `brew tap homebrew/science ; brew install hdf5`
+   + Ubuntu: `apt install libhdf5-dev`
 1. Install common lisp: The easiest way is using [roswell](https://github.com/roswell/roswell), a general common lisp implementation manager.
-   MacOS: as simple as `brew install roswell`.
-   Linux instructions are available on https://github.com/roswell/roswell/wiki/Installation
+   + MacOS: as simple as `brew install roswell`.
+   + Linux instructions are available on https://github.com/roswell/roswell/wiki/Installation
 2. `ros install HDFGroup/hdf5-cffi` to install this library
-3. From the REPL, `(asdf:test-system :hdf5-cffi)`
+3. Run the tests. 
+   + From the REPL, `(asdf:test-system :hdf5-cffi)`
+   + From the shell, `./test.ros`
 
 
 ## Old Guide
