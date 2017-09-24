@@ -10,16 +10,17 @@
 ;;;; If you do not have access to this file, you may request a copy from
 ;;;; help@hdfgroup.org.
 
-(defsystem hdf5-test
+(defsystem hdf5-cffi.test
   :serial t
   :description "hdf5-cffi is a CFFI wrapper for the HDF5 library."
   :version "1.8.18"
   :author "Gerd Heber <gheber@hdfgroup.org>"
   :license "BSD"
   :defsystem-depends-on (:cffi-grovel)
-  :depends-on (:cffi)
-  :pathname "t/"
-  :components
-  ())
+  :depends-on (:cffi :hdf5-cffi :fiveam)
+  :components ((:file "examples/common")
+               (:file "t/test"))
+  :perform (test-op :after (op c)
+                    (eval (read-from-string "(5am:run! :hdf5-cffi)"))))
 
 

@@ -50,6 +50,7 @@
    (:cffi-grovel-file "h5z-grovel")
    (:file "h5z")
    (:cffi-grovel-file "h5p-grovel")
-   (:file "h5p")))
+   (:file "h5p"))
+  :in-order-to ((test-op (test-op :hdf5-cffi.test))))
 
 

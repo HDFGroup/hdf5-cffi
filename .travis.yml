@@ -39,3 +39,4 @@ cache:
 
 script:
   - echo "hi!"
+  - ./test.ros

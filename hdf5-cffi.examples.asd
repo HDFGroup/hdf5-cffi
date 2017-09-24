@@ -1,4 +1,4 @@
-(defsystem hdf5-examples
+(defsystem hdf5-cffi.examples
   :serial t
   :description "hdf5-examples contains a collection of simple helper functions."
   :version "0.0.1"

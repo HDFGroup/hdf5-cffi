@@ -1,0 +1,18 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#| <Put a one-line description here>
+exec ros -Q -- $0 "$@"
+|#
+(progn ;;init forms
+  (ros:ensure-asdf)
+  (ql:quickload '(:cffi-grovel :hdf5-cffi.test) :silent t)
+  )
+
+(defpackage :ros.script.test.3715206306
+  (:use :cl))
+(in-package :ros.script.test.3715206306)
+
+(defun main (&rest argv)
+  (declare (ignorable argv))
+  (asdf:test-system :hdf5-cffi))
+;;; vim: set ft=lisp lisp:
