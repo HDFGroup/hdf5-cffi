@@ -17,9 +17,8 @@
   :author "Gerd Heber <gheber@hdfgroup.org>"
   :license "BSD"
   :defsystem-depends-on (:cffi-grovel)
-  :depends-on (:cffi :hdf5-cffi :fiveam)
-  :components ((:file "examples/common")
-               (:file "t/test"))
+  :depends-on (:cffi :hdf5-cffi :hdf5-cffi.examples :fiveam)
+  :components ((:file "t/test"))
   :perform (test-op :after (op c)
                     (eval (read-from-string "(5am:run! :hdf5-cffi)"))))
 
