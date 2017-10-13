@@ -54,6 +54,8 @@
 (defcfun "H5open" herr-t
   "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-Open")
 
+(h5open)                                ;; ensure that this library is initialized.
+
 (if (foreign-symbol-pointer "H5resize_memory")
     (defcfun "H5resize_memory" :pointer
       "http://www.hdfgroup.org/HDF5/doc/RM/RM_H5.html#Library-AllocateMemory"
