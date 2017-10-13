@@ -30,6 +30,7 @@
      (szip-options-mask :uint 1)
      (szip-pixels-per-block :uint 1))
 
+  (print "Create a file.")
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
 	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fcreate *FILE* +H5F-ACC-TRUNC+ +H5P-DEFAULT+ fapl))))
@@ -65,18 +66,21 @@
 		     buf)
 	   (h5ex:close-handles (list dset dcpl shape)))
       (h5ex:close-handles (list file fapl))))
-
+  
+  (print "Now reopen the file and dataset in the file.")
   (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
 	 (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
 		   (h5fopen *FILE* +H5F-ACC-RDONLY+ fapl))))
+    (print "Retrieve filter information.")
     (unwind-protect
 	 (let* ((dset (h5dopen2 file "Compressed_Data" +H5P-DEFAULT+))
 		(plist (h5dget-create-plist dset))
 		(numfilt (H5Pget-nfilters plist)))
-
+           (format t "Number of filters associated with dataset: ~a~%" numfilt)
 	   (dotimes (i numfilt)
 	     (setf (cffi:mem-aref nelmts 'size-t 0) 0)
 	     ;; check the filter type(s)
+             (print "Filter Type: ")
 	     (let ((filter-type (h5pget-filter2 plist i
 						(cffi:mem-aptr flags :uint 0)
 						(cffi:mem-aptr nelmts 'size-t 0)
