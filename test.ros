@@ -14,5 +14,10 @@ exec ros -Q -- $0 "$@"
 
 (defun main (&rest argv)
   (declare (ignorable argv))
-  (asdf:test-system :hdf5-cffi))
+  (uiop:quit (if (handler-case
+                     (5am:run! :hdf5-cffi)
+                   (serious-condition (c)
+                     (describe c)
+                     (uiop:quit 2)))
+                 0 1)))
 ;;; vim: set ft=lisp lisp:
