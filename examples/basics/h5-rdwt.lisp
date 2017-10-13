@@ -18,7 +18,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE* "dset.h5")
+(defparameter *FILE* (namestring (merge-pathnames "dset.h5" *load-pathname*)))
 
 (cffi:with-foreign-object (dset-data :int (* 4 6))
 

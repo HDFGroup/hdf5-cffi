@@ -18,7 +18,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE* "h5ex_g_iterate.h5")
+(defparameter *FILE* (namestring (merge-pathnames "h5ex_g_iterate.h5" *load-pathname*)))
 
 ;;; the callback function
 

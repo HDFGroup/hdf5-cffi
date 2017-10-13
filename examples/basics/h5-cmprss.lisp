@@ -13,7 +13,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE* "cmprss.h5")
+(defparameter *FILE* (namestring (merge-pathnames "cmprss.h5" *load-pathname*)))
 (defparameter *RANK* 2)
 (defparameter *DIM0* 100)
 (defparameter *DIM1* 20)

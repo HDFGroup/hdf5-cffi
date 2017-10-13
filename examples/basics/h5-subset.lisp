@@ -18,7 +18,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE* "subset.h5")
+(defparameter *FILE* (namestring (merge-pathnames "subset.h5" *load-pathname*)))
 (defparameter *DATASETNAME* "IntArray")
 (defparameter *RANK* 2)
 

@@ -17,7 +17,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE* "group.h5")
+(defparameter *FILE* (namestring (merge-pathnames "group.h5" *load-pathname*)))
 
 (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
        (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)

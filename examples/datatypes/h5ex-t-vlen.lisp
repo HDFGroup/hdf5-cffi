@@ -22,7 +22,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE*    "h5ex_t_vlen.h5")
+(defparameter *FILE*    (namestring (merge-pathnames "h5ex_t_vlen.h5" *load-pathname*)))
 (defparameter *DATASET* "DS1")
 (defparameter *LEN0* 3)
 (defparameter *LEN1* 12)

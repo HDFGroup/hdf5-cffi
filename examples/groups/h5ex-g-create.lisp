@@ -18,7 +18,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE* "h5ex_g_create.h5")
+(defparameter *FILE* (namestring (merge-pathnames "h5ex_g_create.h5" *load-pathname*)))
 
 ;;; Create a new file using the default properties.
 

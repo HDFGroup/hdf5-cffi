@@ -24,7 +24,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE* "h5ex_d_nbit.h5")
+(defparameter *FILE* (namestring (merge-pathnames "h5ex_d_nbit.h5" *load-pathname*)))
 (defparameter *DATASET* "DS1")
 (defparameter *DIM0* 32)
 (defparameter *DIM1* 64)

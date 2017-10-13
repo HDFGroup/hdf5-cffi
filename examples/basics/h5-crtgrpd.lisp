@@ -18,7 +18,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE* "groups.h5")
+(defparameter *FILE* (namestring (merge-pathnames "groups.h5" *load-pathname*)))
 
 (cffi:with-foreign-objects
     ((dset1-data :int (* 3 3))

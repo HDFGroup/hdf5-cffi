@@ -24,8 +24,8 @@
 
 (in-package :hdf5)
 
-(defvar *FILE* "h5ex_d_extern.h5")
-(defvar *EXTERNAL* "h5ex_d_extern.data")
+(defvar *FILE* (namestring (merge-pathnames "h5ex_d_extern.h5" *load-pathname*)))
+(defvar *EXTERNAL* (namestring (merge-pathnames "h5ex_d_extern.data" *load-pathname*)))
 (defvar *DATASET* "DS1")
 (defvar *DIM0* 4)
 (defvar *DIM1* 7)

@@ -24,7 +24,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE*     "h5ex_t_regrefatt.h5")
+(defparameter *FILE*     (namestring (merge-pathnames "h5ex_t_regrefatt.h5" *load-pathname*)))
 (defparameter *DATASET*  "DS1")
 (defparameter *DATASET2* "DS2")
 (defparameter *ATTRIBUTE* "A1")

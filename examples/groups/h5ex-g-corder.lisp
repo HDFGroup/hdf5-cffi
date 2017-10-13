@@ -21,7 +21,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE* "h5ex_g_corder.h5")
+(defparameter *FILE* (namestring (merge-pathnames "h5ex_g_corder.h5" *load-pathname*)))
 
 (cffi:with-foreign-object (ginfo '(:struct h5g-info-t) 1)
 

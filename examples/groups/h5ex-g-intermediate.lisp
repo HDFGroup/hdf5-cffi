@@ -19,7 +19,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE* "h5ex_g_intermediate.h5")
+(defparameter *FILE* (namestring (merge-pathnames "h5ex_g_intermediate.h5" *load-pathname*)))
 
 ;;; the callback function for H5Ovisit
 

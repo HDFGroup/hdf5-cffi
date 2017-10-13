@@ -25,7 +25,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE* "h5ex_d_unlimmod.h5")
+(defparameter *FILE* (namestring (merge-pathnames "h5ex_d_unlimmod.h5" *load-pathname*)))
 (defparameter *DATASET* "DS1")
 (defparameter *DIM0* 4)
 (defparameter *DIM1* 7)

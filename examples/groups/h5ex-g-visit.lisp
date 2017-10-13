@@ -17,7 +17,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE* "h5ex_g_visit.h5")
+(defparameter *FILE* (namestring (merge-pathnames "h5ex_g_visit.h5" *load-pathname*)))
 
 ;;; I'm not sure how to invoke a CFFI callback as a LISP function.
 ;;; This is a workaround...

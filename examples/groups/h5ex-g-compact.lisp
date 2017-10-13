@@ -23,8 +23,8 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE1* "h5ex_g_compact1.h5")
-(defparameter *FILE2* "h5ex_g_compact2.h5")
+(defparameter *FILE1* (namestring (merge-pathnames "h5ex_g_compact1.h5" *load-pathname*)))
+(defparameter *FILE2* (namestring (merge-pathnames "h5ex_g_compact2.h5" *load-pathname*)))
 (defparameter *GROUP* "G1")
 
 

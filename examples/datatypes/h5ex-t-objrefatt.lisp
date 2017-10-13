@@ -23,7 +23,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE*    "h5ex_t_objrefatt.h5")
+(defparameter *FILE*    (namestring (merge-pathnames "h5ex_t_objrefatt.h5" *load-pathname*)))
 (defparameter *DATASET* "DS1")
 (defparameter *ATTRIBUTE* "A1")
 (defparameter *DIM0* 2)

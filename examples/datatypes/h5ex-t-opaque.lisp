@@ -22,7 +22,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE*    "h5ex_t_opaque.h5")
+(defparameter *FILE*    (namestring (merge-pathnames "h5ex_t_opaque.h5" *load-pathname*)))
 (defparameter *DATASET* "DS1")
 (defparameter *DIM0* 4)
 (defparameter *LEN* 7)

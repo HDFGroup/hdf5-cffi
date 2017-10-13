@@ -20,7 +20,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE* "h5ex_g_phase.h5")
+(defparameter *FILE* (namestring (merge-pathnames "h5ex_g_phase.h5" *load-pathname*)))
 (defparameter *MAX-GROUPS* 7)
 (defparameter *MAX-COMPACT* 5)
 (defparameter *MIN-DENSE* 3)

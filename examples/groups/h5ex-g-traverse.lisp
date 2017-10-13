@@ -22,7 +22,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILE* "h5ex_g_traverse.h5")
+(defparameter *FILE* (namestring (merge-pathnames "h5ex_g_traverse.h5" *load-pathname*)))
 
 ;;; Define operator data structure type for H5Literate callback.
 ;;; During recursive iteration, these structures will form a

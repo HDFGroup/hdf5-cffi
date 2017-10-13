@@ -18,7 +18,7 @@
 
 (in-package :hdf5)
 
-(defparameter *FILENAME* "extend.h5")
+(defparameter *FILENAME* (namestring (merge-pathnames "extend.h5" *load-pathname*)))
 (defparameter *DATASETNAME* "ExtendibleArray")
 (defparameter *RANK* 2)
 
