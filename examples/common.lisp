@@ -57,7 +57,7 @@
   (hdf5:h5screate :H5S-SCALAR))
 
 (defun create-simple-dataspace (dims &optional maxdims)
-  "Creaxte a simple dataspace"
+  "Create a simple dataspace"
   
   ;; list arguments expected
   (unless (and (consp dims) (listp maxdims))
