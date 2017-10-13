@@ -7,6 +7,7 @@ addons:
     packages:
       - libc6-i386
       - openjdk-7-jre
+      - libsz2
 
 env:
   global:
