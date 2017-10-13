@@ -11,7 +11,9 @@
       (progn (load (asdf:system-relative-pathname :hdf5-cffi name))
              (pass))
     (error (c)
-      (fail "While running test ~a:~%  ~a" name c))))
+      (fail "While running test ~a:~%  ~a" name c)))
+  (finish-output)
+  (finish-output *error-output*))
 
 (test basics
   (load* "examples/basics/h5-cmprss.lisp")
