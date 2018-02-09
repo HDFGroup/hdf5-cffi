@@ -12,13 +12,13 @@
 ;;; It depends on the HDF5 file created by h5-crtgrpar.lisp.
 ;;; http://www.hdfgroup.org/ftp/HDF5/current/src/unpacked/examples/h5_crtgrpd.c
 
-#+sbcl(require 'asdf)
-(asdf:operate 'asdf:load-op 'hdf5-cffi)
-(asdf:operate 'asdf:load-op 'hdf5-examples)
+
+
+
 
 (in-package :hdf5)
 
-(defparameter *FILE* "groups.h5")
+(defparameter *FILE* (namestring (merge-pathnames "groups.h5" *load-pathname*)))
 
 (cffi:with-foreign-objects
     ((dset1-data :int (* 3 3))

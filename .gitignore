@@ -2,3 +2,6 @@
 *.fasl
 *.lisp-temp
 *.*~
+#*
+*.h5
+*.data

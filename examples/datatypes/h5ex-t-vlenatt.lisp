@@ -16,13 +16,13 @@
 
 ;;; http://www.hdfgroup.org/ftp/HDF5/examples/examples-by-api/hdf5-examples/1_8/C/H5T/h5ex_t_vlenatt.c
 
-#+sbcl(require 'asdf)
-(asdf:operate 'asdf:load-op 'hdf5-cffi)
-(asdf:operate 'asdf:load-op 'hdf5-examples)
+
+
+
 
 (in-package :hdf5)
 
-(defparameter *FILE*    "h5ex_t_vlen.h5")
+(defparameter *FILE*    (namestring (merge-pathnames "h5ex_t_vlen.h5" *load-pathname*)))
 (defparameter *DATASET* "DS1")
 (defparameter *ATTRIBUTE* "A1")
 (defparameter *LEN0* 3)

@@ -15,13 +15,9 @@
 
 ;;; http://www.hdfgroup.org/ftp/HDF5/examples/examples-by-api/hdf5-examples/1_8/C/H5G/h5ex_g_visit.c
 
-#+sbcl(require 'asdf)
-(asdf:operate 'asdf:load-op 'hdf5-cffi)
-(asdf:operate 'asdf:load-op 'hdf5-examples)
-
 (in-package :hdf5)
 
-(defparameter *FILE* "h5ex_g_visit.h5")
+(defparameter *FILE* (namestring (merge-pathnames "h5ex_g_visit.h5" *load-pathname*)))
 
 ;;; I'm not sure how to invoke a CFFI callback as a LISP function.
 ;;; This is a workaround...

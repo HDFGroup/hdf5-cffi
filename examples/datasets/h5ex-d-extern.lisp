@@ -18,14 +18,14 @@
 ;;; http://www.hdfgroup.org/ftp/HDF5/examples/examples-by-api/hdf5-examples/1_8/C/H5D/h5ex_d_extern.c
 
 
-#+sbcl(require 'asdf)
-(asdf:operate 'asdf:load-op 'hdf5-cffi)
-(asdf:operate 'asdf:load-op 'hdf5-examples)
+
+
+
 
 (in-package :hdf5)
 
-(defvar *FILE* "h5ex_d_extern.h5")
-(defvar *EXTERNAL* "h5ex_d_extern.data")
+(defvar *FILE* (namestring (merge-pathnames "h5ex_d_extern.h5" *load-pathname*)))
+(defvar *EXTERNAL* (namestring (merge-pathnames "h5ex_d_extern.data" *load-pathname*)))
 (defvar *DATASET* "DS1")
 (defvar *DIM0* 4)
 (defvar *DIM1* 7)

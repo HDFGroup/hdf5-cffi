@@ -16,13 +16,13 @@
 
 ;;; See h5ex_t_vlstring.c at http://www.hdfgroup.org/HDF5/examples/api18-c.html
 
-#+sbcl(require 'asdf)
-(asdf:operate 'asdf:load-op 'hdf5-cffi)
-(asdf:operate 'asdf:load-op 'hdf5-examples)
+
+
+
 
 (in-package :hdf5)
 
-(defparameter *FILE* "h5ex_t_vlstring.h5")
+(defparameter *FILE* (namestring (merge-pathnames "h5ex_t_vlstring.h5" *load-pathname*)))
 (defparameter *DATASET* "DS1")
 (defparameter *ATTRIBUTE* "A1")
 (defparameter *DIM0* 4)

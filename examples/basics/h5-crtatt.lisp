@@ -12,13 +12,13 @@
 ;;; dataset. It depends on the HDF5 file created by h5-crtdat.lisp.
 ;;; http://www.hdfgroup.org/ftp/HDF5/current/src/unpacked/examples/h5_crtatt.c
 
-#+sbcl(require 'asdf)
-(asdf:operate 'asdf:load-op 'hdf5-cffi)
-(asdf:operate 'asdf:load-op 'hdf5-examples)
+
+
+
 
 (in-package :hdf5)
 
-(defparameter *FILE* "dset.h5")
+(defparameter *FILE* (namestring (merge-pathnames "dset.h5" *load-pathname*)))
 
 (cffi:with-foreign-object (attr-data :int 2)
 

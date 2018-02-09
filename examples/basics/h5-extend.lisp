@@ -12,13 +12,13 @@
 ;;; must be chunked in order to be extendible.
 ;;; http://www.hdfgroup.org/ftp/HDF5/current/src/unpacked/examples/h5_extend.c
 
-#+sbcl(require 'asdf)
-(asdf:operate 'asdf:load-op 'hdf5-cffi)
-(asdf:operate 'asdf:load-op 'hdf5-examples)
+
+
+
 
 (in-package :hdf5)
 
-(defparameter *FILENAME* "extend.h5")
+(defparameter *FILENAME* (namestring (merge-pathnames "extend.h5" *load-pathname*)))
 (defparameter *DATASETNAME* "ExtendibleArray")
 (defparameter *RANK* 2)
 

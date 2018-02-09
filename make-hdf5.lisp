@@ -1,5 +1,0 @@
-#+(or ccl sbcl) (require 'asdf)
-(asdf:operate 'asdf:load-op 'hdf5-cffi)
-#+ccl(quit)
-#+cmu(ext:quit)
-#+sbcl(sb-ext:quit)

@@ -17,13 +17,12 @@
 
 ;;; http://www.hdfgroup.org/ftp/HDF5/examples/examples-by-api/hdf5-examples/1_8/C/H5G/h5ex_g_traverse.c
 
-#+sbcl(require 'asdf)
-(asdf:operate 'asdf:load-op 'hdf5-cffi)
-(asdf:operate 'asdf:load-op 'hdf5-examples)
+
+
 
 (in-package :hdf5)
 
-(defparameter *FILE* "h5ex_g_traverse.h5")
+(defparameter *FILE* (namestring (merge-pathnames "h5ex_g_traverse.h5" *load-pathname*)))
 
 ;;; Define operator data structure type for H5Literate callback.
 ;;; During recursive iteration, these structures will form a

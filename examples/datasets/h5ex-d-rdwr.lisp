@@ -17,13 +17,13 @@
 ;;; http://www.hdfgroup.org/ftp/HDF5/examples/examples-by-api/hdf5-examples/1_8/C/H5D/h5ex_d_rdwr.c
 
 
-#+sbcl(require 'asdf)
-(asdf:operate 'asdf:load-op 'hdf5-cffi)
-(asdf:operate 'asdf:load-op 'hdf5-examples)
+
+
+
 
 (in-package :hdf5)
 
-(defparameter *FILE* "h5ex_d_rdwr.h5")
+(defparameter *FILE* (namestring (merge-pathnames "h5ex_d_rdwr.h5" *load-pathname*)))
 (defparameter *DATASET* "DS1")
 (defparameter *DIM0* 4)
 (defparameter *DIM1* 7)

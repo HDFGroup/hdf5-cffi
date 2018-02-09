@@ -11,13 +11,13 @@
 ;;; This example illustrates how to create a dataset that is a 4 x 6 array.
 ;;; http://www.hdfgroup.org/ftp/HDF5/current/src/unpacked/examples/h5_crtdat.c
 
-#+sbcl(require 'asdf)
-(asdf:operate 'asdf:load-op 'hdf5-cffi)
-(asdf:operate 'asdf:load-op 'hdf5-examples)
+
+
+
 
 (in-package :hdf5)
 
-(defparameter *FILE* "dset.h5")
+(defparameter *FILE* (namestring (merge-pathnames "dset.h5" *load-pathname*)))
 
 (let* ((fapl (h5pcreate +H5P-FILE-ACCESS+))
        (file (prog2 (h5pset-fclose-degree fapl :H5F-CLOSE-STRONG)
