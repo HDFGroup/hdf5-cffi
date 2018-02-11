@@ -5,57 +5,19 @@ hdf5-cffi [![Build Status](https://travis-ci.org/HDFGroup/hdf5-cffi.svg?branch=m
 
 Bindings for FORTRAN, arguably the oldest high-level programming language, were introduced in HDF5 1.4.0, which was released about 13 years ago. LISP, "the greatest single programming language ever designed" (Alan Kay), has not gotten the attention it deserves.  This is a first step towards rectifying the situation.
 
-## Quick Guide (modern way, 2017)
+## Quick Guide
 
 0. Install the required libs: `libhdf5` and `libsz`.
    + MacOS: `brew tap homebrew/science ; brew install hdf5`
    + Ubuntu: `apt install libhdf5-dev`
-1. Install common lisp: The easiest way is using [roswell](https://github.com/roswell/roswell), a general common lisp implementation manager.
+1. Install common lisp: The easiest way is using [roswell](https://github.com/roswell/roswell), a general Common Lisp implementation manager.
    + MacOS: as simple as `brew install roswell`.
    + Linux instructions are available on https://github.com/roswell/roswell/wiki/Installation
-2. `ros install HDFGroup/hdf5-cffi` to install this library
-3. Run the tests. 
+2. `ros install cffi` to install the [Common Foreign Function INterface](https://common-lisp.net/project/cffi/) 
+3. `ros install HDFGroup/hdf5-cffi` to install this library
+4. Run the tests. 
    + From the REPL, `(asdf:test-system :hdf5-cffi)`
    + From the shell, `./test.ros`
-
-
-## Old Guide
-
-### Prerequisites
-
-0. A Common Lisp compiler such as SBCL or CCL
-1. [Quicklisp](http://www.quicklisp.org/)
-2. An installation of HDF5 that includes:
-   - The header files
-   - A shared version of the HDF5 library (`libhdf5.so` or `libhdf5.dylib`)
-   - The `h5cc` compilation script (part of the standard installation)
-   - A shared version of the Szip compression library (`libsz.so` or `libsz.dylib`)
-3. Make sure that the directories containing the shared libraries are in your `LD_LIBRARY_PATH`.
-4. GNU `make` and a C-compiler such as GCC
-
-### Build
-
-1. Clone the `hdf5-cffi` repo into the `local-projects` subdirectory of your Quicklisp installation.
-   (Alternatively, create a symbolic link called `hdf5-cffi` in that directory.)
-2. In the `hdf5-cffi` top-level directory:
-   - Edit the `Makefile` and set the `CL` variable for your Lisp compiler
-   - `make hdf5-cffi`
-3. If the build was successful run `make test`.
-
-Check out the examples in the `examples` directory. For example, to run `examples/datasets/h5ex-d-checksum.lisp` with SBCL,
-open a shell and run `sbcl --load examples/datasets/h5ex-d-checksum.lisp`. The output should look like this:
-```
-This is SBCL 1.2.5, an implementation of ANSI Common Lisp.
-More information about SBCL is available at <http://www.sbcl.org/>.
-
-SBCL is free software, provided as is, with absolutely no warranty.
-It is mostly in the public domain; some portions are provided under
-BSD-style licenses.  See the CREDITS and COPYING files in the
-distribution for more information.
-Filter type is: H5Z_FILTER_FLETCHER32
-Maximum value in DS1 is: 1890
-```
-Enjoy!
 
 ## References
 
