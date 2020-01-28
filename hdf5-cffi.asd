@@ -17,7 +17,7 @@
   :author "Gerd Heber <gheber@hdfgroup.org>"
   :license "BSD"
   :defsystem-depends-on (:cffi-grovel)
-  :depends-on (:cffi)
+  :depends-on (:cffi :cffi-grovel)
   :pathname "src/"
   :components
   ((:file "package")
