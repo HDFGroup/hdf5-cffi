@@ -35,7 +35,7 @@ install:
   - curl -L https://raw.githubusercontent.com/roswell/roswell/release/scripts/install-for-ci.sh | sh
   - pwd
   - test -f "$HOME/szip/lib/libsz.so" || ( curl -L https://support.hdfgroup.org/ftp/lib-external/szip/2.1.1/src/szip-2.1.1.tar.gz | tar xz ; cd szip-2.1.1; ./configure --prefix=$HOME/szip ; make install )
-  - test -f "$HOME/hdf5/lib/libhdf5.a" || ( curl -L https://support.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.10.1.tar.gz | tar xz ; cd hdf5-1.10.1; ./configure --prefix=$HOME/hdf5 --with-szlib=$HOME/szip ; make install )
+  - test -f "$HOME/hdf5/lib/libhdf5.a" || ( curl -L https://support.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.10.5.tar.bz2  | tar xj ; cd hdf5-1.10.5; ./configure --prefix=$HOME/hdf5 --with-szlib=$HOME/szip ; make install )
 
 cache:
   directories:
