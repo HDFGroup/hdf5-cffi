@@ -25,7 +25,6 @@
        ((:H5I-DATASPACE   "H5I_DATASPACE"))
        ((:H5I-DATASET     "H5I_DATASET"))
        ((:H5I-ATTR        "H5I_ATTR"))
-       ((:H5I-REFERENCE   "H5I_REFERENCE"))
        ((:H5I-VFL         "H5I_VFL"))
        ((:H5I-GENPROP-CLS "H5I_GENPROP_CLS"))
        ((:H5I-GENPROP-LST "H5I_GENPROP_LST"))
